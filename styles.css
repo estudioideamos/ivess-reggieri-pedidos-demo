@@ -431,38 +431,6 @@ button.secondary {
   color: #d9efff;
 }
 
-.loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(7, 34, 84, 0.42);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.loading-box {
-  min-width: 240px;
-  background: #0b4db6;
-  color: #e8f6ff;
-  border: 1px solid #78cbff;
-  border-radius: 16px;
-  padding: 18px 20px;
-  text-align: center;
-  box-shadow: 0 16px 38px rgba(0, 32, 96, 0.35);
-}
-
-.loading-spinner {
-  width: 34px;
-  height: 34px;
-  margin: 0 auto 10px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.25);
-  border-top-color: #ffffff;
-  animation: spin 0.9s linear infinite;
-}
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }

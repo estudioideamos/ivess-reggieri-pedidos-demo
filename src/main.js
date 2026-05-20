@@ -39,11 +39,7 @@ const commentInput = document.getElementById("comment-input");
 const addressSuggestions = document.getElementById("address-suggestions");
 const lookupSpinner = document.getElementById("lookup-spinner");
 const stepIndicator = document.getElementById("step-indicator");
-const loadingOverlay = document.getElementById("loading-overlay");
-const loadingText = document.getElementById("loading-text");
 let addressBook = [];
-let loadingStartedAt = 0;
-let loadingHideTimer = null;
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -64,27 +60,6 @@ function updateStepIndicator(screenName) {
     confirm: "PASO 4 de 5",
   };
   stepIndicator.textContent = map[screenName] || "PASO 1 de 5";
-}
-
-function setLoading(show, text = "Por favor, espere...") {
-  if (!loadingOverlay) return;
-  if (loadingText) loadingText.textContent = text;
-  if (loadingHideTimer) {
-    clearTimeout(loadingHideTimer);
-    loadingHideTimer = null;
-  }
-  if (show) {
-    loadingStartedAt = Date.now();
-    loadingOverlay.classList.remove("hidden");
-    return;
-  }
-  const elapsed = Date.now() - loadingStartedAt;
-  const minVisible = 550;
-  const wait = Math.max(0, minVisible - elapsed);
-  loadingHideTimer = setTimeout(() => {
-    loadingOverlay.classList.add("hidden");
-    loadingHideTimer = null;
-  }, wait);
 }
 
 function setLookupLoading(show) {
@@ -297,6 +272,7 @@ function orderSummary() {
 }
 
 async function submitOrder() {
+  const submitBtn = document.getElementById("btn-submit");
   const payload = {
     id_cliente: state.cliente.id_cliente,
     direccion: state.cliente.direccion,
@@ -308,11 +284,14 @@ async function submitOrder() {
   };
 
   if (API_BASE_URL) {
-    setLoading(true, "Enviando pedido...");
+    const prev = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Enviando...";
     try {
       await api("createOrder", payload);
     } finally {
-      setLoading(false);
+      submitBtn.disabled = false;
+      submitBtn.textContent = prev;
     }
   }
 
