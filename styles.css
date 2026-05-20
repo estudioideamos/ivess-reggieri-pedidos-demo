@@ -48,6 +48,25 @@ body {
   padding: 18px;
 }
 
+.title-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 10px;
+}
+
+.title-icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #e2f5ff 100%);
+  border: 4px solid #42c3ff;
+  box-shadow: 0 0 0 3px rgba(66, 195, 255, 0.35);
+}
+
 .title {
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 44, 120, 0.18);
@@ -57,6 +76,16 @@ body {
   font-weight: 800;
   line-height: 1.02;
   font-family: "Montserrat", "Manrope", sans-serif;
+  text-transform: uppercase;
+}
+
+.title-divider {
+  width: 64%;
+  height: 6px;
+  margin: 8px auto 14px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #55c9ff 0%, #94deff 100%);
+  opacity: 0.95;
 }
 
 .subtitle {
