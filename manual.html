@@ -6,7 +6,7 @@
   <title>Manual de uso - Ivess Reggieri</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body { margin: 0; background: #e7eef7; font-family: Manrope, sans-serif; color: #113873; }
     .wrap { max-width: 980px; margin: 24px auto; background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.08); overflow: hidden; }
@@ -28,59 +28,59 @@
       <div class="sub">Sistema de pedidos online - Ivess Reggieri</div>
     </header>
     <section class="c">
-      <h2>1. Qué se puede editar</h2>
-      <ul>
-        <li>Clientes</li>
-        <li>Horarios</li>
-        <li>Asignación de horarios por cliente</li>
-        <li>Productos y precios</li>
-      </ul>
+      <h2>1. Estructura de pantallas</h2>
+      <ol>
+        <li>Paso 1 de 4: búsqueda por dirección o teléfono.</li>
+        <li>Paso 2 de 4: selección de horario habilitado del cliente.</li>
+        <li>Paso 3 de 4: carga de productos y comentario.</li>
+        <li>Paso 4 de 4: confirmación del pedido.</li>
+      </ol>
 
-      <h2>2. Hoja de cálculo (Google Sheets)</h2>
-      <div class="box">
-        No cambiar los nombres de pestañas ni los títulos de la fila 1.
-      </div>
+      <h2>2. Hojas que usa el sistema</h2>
+      <div class="box">No cambiar los nombres de pestañas ni los títulos de la fila 1.</div>
       <ul>
-        <li><code>Clientes</code>: alta/baja y datos de cada cliente. Campo <code>activo</code>: 1 habilita, 0 deshabilita.</li>
-        <li>En <code>Clientes</code>, columna <code>lista_precio</code>: usar 1 o 2 segun corresponda.</li>
-        <li><code>Horarios</code>: franjas horarias disponibles. Campo <code>activo</code>: 1 habilita, 0 deshabilita.</li>
-        <li><code>ClienteHorarios</code>: relación entre cliente y horarios permitidos (por ID).</li>
-        <li><code>ProductosPrecios</code>: catálogo con <code>precio_lista_1</code>, <code>precio_lista_2</code>, <code>activo_lista_1</code> y <code>activo_lista_2</code>.</li>
+        <li><code>Clientes</code>: Nro de cliente, Dirección, Localidad, Teléfono, Activo, Lista de precios, Horario 1 a Horario 4.</li>
+        <li><code>Horarios</code>: Nro de horario, Etiqueta, Activo.</li>
+        <li><code>ProductosPrecios</code>: Código producto, Producto, Precio lista 1, Precio lista 2, Activo lista 1, Activo lista 2, Imagen URL.</li>
         <li><code>Pedidos</code>: se completa automáticamente desde la web.</li>
       </ul>
 
-      <h2>3. Flujo operativo</h2>
-      <ol>
-        <li>El cliente ingresa dirección o teléfono.</li>
-        <li>La web identifica al cliente en la hoja <code>Clientes</code>.</li>
-        <li>Muestra solo horarios asignados en <code>ClienteHorarios</code>.</li>
-        <li>El cliente arma pedido y confirma.</li>
-        <li>El pedido se guarda en <code>Pedidos</code>.</li>
-      </ol>
+      <h2>3. Criterios de carga</h2>
+      <ul>
+        <li>Campos tipo sí/no: usar valores de lista desplegable (<code>si</code> o <code>no</code>).</li>
+        <li>Direcciones: guardar en texto claro, con numeración.</li>
+        <li>Horarios por cliente: completar columnas Horario 1, 2, 3 y 4 con números de horario existentes.</li>
+        <li>Lista de precios por cliente: usar 1 o 2.</li>
+      </ul>
 
-      <h2>4. Cambiar precios</h2>
-      <ol>
-        <li>Entrar a <code>ProductosPrecios</code>.</li>
-        <li>Editar columna <code>precio</code>.</li>
-        <li>Guardar: el cambio impacta en la web automáticamente.</li>
-      </ol>
+      <h2>4. Productos por lista</h2>
+      <ul>
+        <li>Si un producto debe aparecer en una lista y no en la otra, usar <code>Activo lista 1</code> y <code>Activo lista 2</code>.</li>
+        <li>Ejemplo: visible solo en lista 1: <code>Activo lista 1 = si</code> y <code>Activo lista 2 = no</code>.</li>
+      </ul>
 
-      <h2>4.1 Mostrar/ocultar por lista</h2>
-      <ol>
-        <li>En <code>ProductosPrecios</code>, usar <code>activo_lista_1</code> y <code>activo_lista_2</code>.</li>
-        <li>Valor <code>1</code>: se muestra en esa lista.</li>
-        <li>Valor <code>0</code>: se oculta en esa lista.</li>
-      </ol>
+      <h2>5. WhatsApp de asesor</h2>
+      <ul>
+        <li>Está disponible en todas las pantallas.</li>
+        <li>Número configurado: <code>+54 9 11 3305-3315</code>.</li>
+        <li>Mensaje predefinido: “Hola Ivess Reggieri, me gustaría hacer una consulta...”.</li>
+      </ul>
 
-      <h2>5. Alta de cliente nuevo</h2>
-      <ol>
-        <li>Crear fila en <code>Clientes</code> con ID único.</li>
-        <li>Cargar dirección y teléfono completos.</li>
-        <li>Poner <code>activo = 1</code>.</li>
-        <li>Asignar horarios en <code>ClienteHorarios</code>.</li>
-      </ol>
+      <h2>6. Cómo eliminar pedidos</h2>
+      <ul>
+        <li>Ir a la hoja <code>Pedidos</code>.</li>
+        <li>Seleccionar la fila completa del pedido.</li>
+        <li>Clic derecho → Eliminar fila.</li>
+      </ul>
 
-      <h2>6. Soporte</h2>
+      <h2>7. URL del sistema</h2>
+      <ul>
+        <li>Landing inicial: <code>/index.html</code>.</li>
+        <li>App de pedidos: <code>/pedidos.html</code>.</li>
+        <li>Página base de altas: <code>/altas.html</code>.</li>
+      </ul>
+
+      <h2>8. Soporte</h2>
       <div class="box">DESARROLLO DE <strong>ESTUDIO IDEAMOS</strong> © 2026</div>
     </section>
   </main>

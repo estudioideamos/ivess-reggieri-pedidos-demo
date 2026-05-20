@@ -1,0 +1,82 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ivess Reggieri - Pedidos</title>
+  <link rel="icon" type="image/x-icon" href="./assets/favicon-somoselagua.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <main class="app">
+      <header class="header">
+        <img class="logo" src="https://ivessreggieri.com.ar/wp-content/uploads/2021/08/LOGO-FINAL.png" alt="Ivess Reggieri" />
+        <div id="step-indicator" class="step-indicator">PASO 1 de 4</div>
+      </header>
+
+      <section class="content" id="screen-lookup">
+        <div class="title-icon-wrap">
+          <div class="title-icon">
+            <svg class="title-icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 21.5S5.8 16.4 5.8 10a6.2 6.2 0 1 1 12.4 0c0 6.4-6.2 11.5-6.2 11.5z"></path>
+              <circle cx="12" cy="10" r="2.35"></circle>
+            </svg>
+          </div>
+        </div>
+        <h1 class="title">INGRESA TU<br />DIRECCIÓN</h1>
+        <div class="title-divider"></div>
+        <p class="subtitle">Buscamos tu cliente y horarios habilitados</p>
+        <div class="address-wrap">
+          <input id="address-input" class="input" autocomplete="off" placeholder="Dirección completa o teléfono" />
+          <span id="lookup-spinner" class="lookup-spinner hidden" aria-hidden="true"></span>
+        </div>
+        <div class="actions">
+          <button id="btn-find" style="width:100%">Buscar cliente</button>
+        </div>
+        <a class="advisor-link" href="https://wa.me/5491133053315?text=Hola%20Ivess%20Reggieri%2C%20me%20gustar%C3%ADa%20hacer%20una%20consulta..." target="_blank" rel="noopener noreferrer"><img src="./assets/whatsapp.svg" alt="" class="advisor-link-icon" /> Hablar con un asesor</a>
+      </section>
+
+      <section class="content hidden" id="screen-schedule">
+        <h1 class="title">SELECCIONA EL HORARIO</h1>
+        <p class="subtitle" id="customer-label"></p>
+        <div id="schedule-loading" class="schedule-loading hidden">
+          <span class="schedule-loading-spinner" aria-hidden="true"></span>
+          <span class="schedule-loading-text">Cargando productos...</span>
+        </div>
+        <div id="schedule-list"></div>
+        <div class="actions">
+          <button id="btn-back-lookup" class="secondary" style="width:100%">Volver</button>
+        </div>
+        <a class="advisor-link" href="https://wa.me/5491133053315?text=Hola%20Ivess%20Reggieri%2C%20me%20gustar%C3%ADa%20hacer%20una%20consulta..." target="_blank" rel="noopener noreferrer"><img src="./assets/whatsapp.svg" alt="" class="advisor-link-icon" /> Hablar con un asesor</a>
+      </section>
+
+      <section class="content hidden" id="screen-products">
+        <h1 class="title">Tu pedido</h1>
+        <div id="products-list"></div>
+        <textarea id="comment-input" rows="3" placeholder="Comentarios para entrega"></textarea>
+        <div class="footer-total">Total: <span id="total-label">$0</span></div>
+        <div class="actions">
+          <button id="btn-back-schedule" class="secondary" style="flex:1">Volver</button>
+          <button id="btn-submit" style="flex:2">Enviar pedido</button>
+        </div>
+        <a class="advisor-link" href="https://wa.me/5491133053315?text=Hola%20Ivess%20Reggieri%2C%20me%20gustar%C3%ADa%20hacer%20una%20consulta..." target="_blank" rel="noopener noreferrer"><img src="./assets/whatsapp.svg" alt="" class="advisor-link-icon" /> Hablar con un asesor</a>
+      </section>
+
+      <section class="content hidden" id="screen-confirm">
+        <h1 class="title">Pedido confirmado</h1>
+        <div class="confirm" id="confirm-box"></div>
+        <div class="actions">
+          <button id="btn-new-order" style="width:100%">Hacer otro pedido</button>
+        </div>
+        <a class="advisor-link" href="https://wa.me/5491133053315?text=Hola%20Ivess%20Reggieri%2C%20me%20gustar%C3%ADa%20hacer%20una%20consulta..." target="_blank" rel="noopener noreferrer"><img src="./assets/whatsapp.svg" alt="" class="advisor-link-icon" /> Hablar con un asesor</a>
+      </section>
+      <footer class="dev-credit">DESARROLLO DE <strong>ESTUDIO IDEAMOS</strong> © 2026</footer>
+    </main>
+  </div>
+  <script type="module" src="./src/main.js?v=20260520-27"></script>
+</body>
+</html>
