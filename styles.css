@@ -686,13 +686,12 @@ button.secondary {
 
   #screen-lookup:not(.hidden) {
     max-width: 1240px;
-    display: grid;
-    grid-template-columns: minmax(420px, 1fr) minmax(520px, 1fr);
-    column-gap: 44px;
+    display: flex;
+    gap: 44px;
     align-items: center;
-    min-height: 0;
-    padding-top: 8px;
-    padding-bottom: 8px;
+    min-height: 520px;
+    padding-top: 18px;
+    padding-bottom: 18px;
   }
 
   .title {
@@ -714,17 +713,17 @@ button.secondary {
 
   #screen-lookup .lookup-left,
   #screen-lookup .lookup-right {
-    width: 100%;
+    flex: 1;
   }
 
   #screen-lookup .lookup-left {
-    max-width: 520px;
-    margin: 0 auto;
+    max-width: 560px;
+    margin: 0;
   }
 
   #screen-lookup .lookup-right {
     max-width: 640px;
-    margin: 0 auto;
+    margin: 0;
   }
 
   #screen-lookup .actions {
@@ -737,34 +736,35 @@ button.secondary {
 
   #screen-lookup .title-icon-wrap {
     justify-content: flex-start;
-    margin: 0;
+    margin: 14px 0 10px;
   }
 
   #screen-lookup .title {
     text-align: left;
-    margin-bottom: 8px;
+    margin: 0 0 8px;
   }
 
   #screen-lookup .title-divider {
-    margin: 0 0 3px;
+    margin: 0 0 10px;
     width: 72%;
   }
 
   #screen-lookup .subtitle {
     text-align: left;
-    margin-top: -8px;
     margin-bottom: 0;
     max-width: 520px;
+    font-size: 18px;
+    line-height: 1.2;
   }
 
   #screen-lookup .title-icon {
-    width: 66px;
-    height: 66px;
+    width: 62px;
+    height: 62px;
   }
 
   #screen-lookup .title-icon-svg {
-    width: 33px;
-    height: 33px;
+    width: 30px;
+    height: 30px;
   }
 
   #screen-schedule #schedule-list,
