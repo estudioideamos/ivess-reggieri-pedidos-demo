@@ -166,7 +166,7 @@ function renderSchedules() {
   scheduleList.innerHTML = "";
   const fragment = document.createDocumentFragment();
   const accentClasses = ["accent-blue", "accent-green", "accent-violet", "accent-orange", "accent-cyan"];
-  const options = [...state.cliente.horarios, "Ninguno, hablar con un asesor"];
+  const options = [...state.cliente.horarios];
   options.forEach((h, idx) => {
     const btn = document.createElement("button");
     const accent = accentClasses[idx % accentClasses.length];
