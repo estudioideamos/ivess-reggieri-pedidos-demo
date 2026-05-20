@@ -23,7 +23,8 @@
         <h1 class="title">INGRESA TU DIRECCIÓN</h1>
         <div class="title-divider"></div>
         <p class="subtitle">Buscamos tu cliente y horarios habilitados</p>
-        <input id="address-input" class="input" placeholder="Dirección completa o teléfono" />
+        <input id="address-input" class="input" list="address-suggestions" placeholder="Dirección completa o teléfono" />
+        <datalist id="address-suggestions"></datalist>
         <div class="actions">
           <button id="btn-find" style="width:100%">Buscar cliente</button>
         </div>
@@ -60,6 +61,6 @@
     </main>
   </div>
 
-  <script type="module" src="./src/main.js"></script>
+  <script type="module" src="./src/main.js?v=20260520-1"></script>
 </body>
 </html>

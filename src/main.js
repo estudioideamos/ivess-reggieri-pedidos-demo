@@ -1,4 +1,4 @@
-﻿import { API_BASE_URL, MOCK_CLIENTS, MOCK_PRODUCTS } from "./config.js";
+﻿import { API_BASE_URL, MOCK_CLIENTS, MOCK_PRODUCTS } from "./config.js?v=20260520-1";
 
 const state = {
   cliente: null,
@@ -93,6 +93,7 @@ async function loadAddressSuggestions() {
     .filter((v, i, arr) => arr.indexOf(v) === i)
     .sort((a, b) => a.localeCompare(b, "es"));
 
+  if (!addressSuggestions) return;
   addressSuggestions.innerHTML = "";
   unique.forEach((a) => {
     const option = document.createElement("option");
@@ -235,3 +236,4 @@ document.getElementById("btn-new-order").onclick = () => {
 
 showScreen("lookup");
 loadAddressSuggestions();
+
