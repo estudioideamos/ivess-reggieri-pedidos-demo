@@ -648,36 +648,139 @@ button.secondary {
   body {
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 20px;
+    padding: 24px;
   }
 
   .layout {
     width: 100%;
-    max-width: 620px;
+    max-width: 1360px;
   }
 
   .app {
-    max-width: 620px;
+    max-width: none;
+    width: 100%;
     border-radius: 22px;
     overflow: hidden;
-    min-height: 700px;
+    min-height: calc(100vh - 48px);
     box-shadow: 0 20px 60px rgba(0, 37, 104, 0.2);
     background: #0a53c8;
   }
 
+  .header {
+    padding: 24px 28px 18px;
+  }
+
   .content {
-    padding: 24px;
+    padding: 28px;
+  }
+
+  #screen-lookup,
+  #screen-schedule,
+  #screen-products,
+  #screen-confirm {
+    max-width: 960px;
+    margin: 0 auto;
   }
 
   .title {
-    font-size: 38px;
+    font-size: 44px;
     margin-top: 6px;
   }
 
+  .subtitle {
+    font-size: 24px;
+    margin-bottom: 18px;
+  }
+
+  #screen-lookup .address-wrap,
+  #screen-lookup .actions,
+  #screen-lookup .advisor-link {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #screen-schedule #schedule-list,
+  #screen-schedule .actions,
+  #screen-schedule .advisor-link {
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #screen-products #products-list,
+  #screen-products textarea,
+  #screen-products .footer-total,
+  #screen-products .actions,
+  #screen-products .advisor-link {
+    max-width: 980px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #screen-confirm .confirm,
+  #screen-confirm .actions,
+  #screen-confirm .advisor-link {
+    max-width: 860px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .title-icon {
+    width: 96px;
+    height: 96px;
+  }
+
+  .title-icon-svg {
+    width: 48px;
+    height: 48px;
+  }
+
   #products-list {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .product h3 {
+    font-size: 22px;
+    min-height: 58px;
+  }
+
+  .product-media {
+    height: 152px;
+  }
+
+  .product-image {
+    max-height: 146px;
+  }
+
+  .product-price {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .qty span {
+    font-size: 30px;
+  }
+
+  .card-schedule {
+    min-height: 96px;
+    padding: 16px 20px;
+  }
+
+  .schedule-text {
+    font-size: 30px;
+  }
+
+  .schedule-arrow {
+    font-size: 42px;
+  }
+
+  .dev-credit {
+    font-size: 13px;
+    padding-bottom: 18px;
   }
 }
 
