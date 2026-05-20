@@ -6,6 +6,8 @@ const state = {
   items: {},
   products: [],
 };
+const catalogCache = new Map();
+let productsPromise = null;
 
 const currency = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -138,21 +140,25 @@ function renderAddressSuggestions(query) {
 
 async function getProductsForClient(cliente) {
   const lista = Number(cliente?.lista_precio || 1) === 2 ? 2 : 1;
+  if (catalogCache.has(lista)) return catalogCache.get(lista);
   if (API_BASE_URL) {
     try {
       const live = await api("getCatalog", { lista_precio: lista });
       if (live?.ok && Array.isArray(live.productos)) {
+        catalogCache.set(lista, live.productos);
         return live.productos;
       }
     } catch (err) {
       console.warn("Fallo getCatalog en backend, uso catalogo local temporal.", err);
     }
   }
-  return MOCK_PRODUCTS.map((p) => ({
+  const fallback = MOCK_PRODUCTS.map((p) => ({
     sku: p.sku,
     nombre: p.nombre,
     precio: lista === 2 ? Number(p.precio_lista_2 || 0) : Number(p.precio_lista_1 || 0),
   }));
+  catalogCache.set(lista, fallback);
+  return fallback;
 }
 
 function renderSchedules() {
@@ -176,9 +182,17 @@ function renderSchedules() {
       <span class="schedule-arrow">›</span>
     `;
     btn.onclick = () => {
-      state.horario = h;
-      renderProducts();
-      showScreen("products");
+      const openProducts = async () => {
+        state.horario = h;
+        if ((!state.products || !state.products.length) && productsPromise) {
+          await productsPromise;
+        } else if (!state.products || !state.products.length) {
+          state.products = await getProductsForClient(state.cliente);
+        }
+        renderProducts();
+        showScreen("products");
+      };
+      openProducts();
     };
     scheduleList.appendChild(btn);
   });
@@ -255,18 +269,30 @@ async function submitOrder() {
 }
 
 document.getElementById("btn-find").onclick = async () => {
+  const btn = document.getElementById("btn-find");
   const query = addressInput.value.trim();
   if (!query) return;
+  const prev = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Buscando...";
   const found = await findClient(query);
   if (!found) {
+    btn.disabled = false;
+    btn.textContent = prev;
     alert("No encontramos cliente con esa dirección/teléfono.");
     return;
   }
   state.cliente = found;
-  state.products = await getProductsForClient(found);
+  state.products = [];
+  productsPromise = getProductsForClient(found).then((catalog) => {
+    state.products = catalog;
+    return catalog;
+  });
   customerLabel.textContent = `Nro ${found.id_cliente} - ${found.direccion}`;
   renderSchedules();
   showScreen("schedule");
+  btn.disabled = false;
+  btn.textContent = prev;
 };
 
 document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
