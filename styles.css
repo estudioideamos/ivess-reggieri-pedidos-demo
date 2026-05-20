@@ -285,15 +285,24 @@ button.secondary {
 .schedule-icon-wrap {
   width: 48px;
   height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  aspect-ratio: 1 / 1;
+  flex: 0 0 48px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .schedule-icon {
   width: 23px;
   height: 23px;
+  min-width: 23px;
+  min-height: 23px;
+  object-fit: contain;
+  display: block;
   filter: brightness(0) invert(1);
 }
 
