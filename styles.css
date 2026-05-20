@@ -736,12 +736,12 @@ button.secondary {
   #screen-lookup .title-divider { grid-area: lookup-divider; }
   #screen-lookup .subtitle { grid-area: lookup-subtitle; }
   #screen-lookup .address-wrap { grid-area: lookup-input; align-self: end; margin-top: 0; }
-  #screen-lookup .actions { grid-area: lookup-actions; align-self: start; }
+  #screen-lookup .actions { grid-area: lookup-actions; align-self: center; }
   #screen-lookup .advisor-link { grid-area: lookup-advisor; align-self: start; }
 
   #screen-lookup .title-icon-wrap {
     justify-content: flex-start;
-    margin: 18px 0 0;
+    margin: 0;
   }
 
   #screen-lookup .title {
@@ -756,7 +756,7 @@ button.secondary {
 
   #screen-lookup .subtitle {
     text-align: left;
-    margin-top: -22px;
+    margin-top: -16px;
     margin-bottom: 0;
     max-width: 520px;
   }
