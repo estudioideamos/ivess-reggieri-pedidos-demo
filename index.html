@@ -7,49 +7,62 @@
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
-  <main class="app">
-    <header class="header">
-      <div class="logo">Ivess</div>
-      <div class="menu">≡</div>
-    </header>
+  <div class="layout">
+    <main class="app">
+      <header class="header">
+        <img class="logo" src="https://estudioideamos.github.io/clientes-recurrentes/assets/images/logo-ivess-reggieri.png" alt="Ivess Reggieri" />
+        <div class="menu">≡</div>
+      </header>
 
-    <section class="content" id="screen-lookup">
-      <h1 class="title">Ingresa tu direccion</h1>
-      <p class="subtitle">Buscamos tu cliente y horarios habilitados</p>
-      <input id="address-input" class="input" placeholder="Direccion completa o telefono" />
-      <div class="actions">
-        <button id="btn-find" style="width:100%">Buscar cliente</button>
-      </div>
-    </section>
+      <section class="content" id="screen-lookup">
+        <h1 class="title">Ingresa tu direccion</h1>
+        <p class="subtitle">Buscamos tu cliente y horarios habilitados</p>
+        <input id="address-input" class="input" placeholder="Direccion completa o telefono" />
+        <div class="actions">
+          <button id="btn-find" style="width:100%">Buscar cliente</button>
+        </div>
+      </section>
 
-    <section class="content hidden" id="screen-schedule">
-      <h1 class="title">Selecciona horario</h1>
-      <p class="subtitle" id="customer-label"></p>
-      <div id="schedule-list"></div>
-      <div class="actions">
-        <button id="btn-back-lookup" class="secondary" style="width:100%">Volver</button>
-      </div>
-    </section>
+      <section class="content hidden" id="screen-schedule">
+        <h1 class="title">Selecciona horario</h1>
+        <p class="subtitle" id="customer-label"></p>
+        <div id="schedule-list"></div>
+        <div class="actions">
+          <button id="btn-back-lookup" class="secondary" style="width:100%">Volver</button>
+        </div>
+      </section>
 
-    <section class="content hidden" id="screen-products">
-      <h1 class="title">Tu pedido</h1>
-      <div id="products-list"></div>
-      <textarea id="comment-input" rows="3" placeholder="Comentarios para entrega"></textarea>
-      <div class="footer-total">Total: <span id="total-label">$0</span></div>
-      <div class="actions">
-        <button id="btn-back-schedule" class="secondary" style="flex:1">Volver</button>
-        <button id="btn-submit" style="flex:2">Enviar pedido</button>
-      </div>
-    </section>
+      <section class="content hidden" id="screen-products">
+        <h1 class="title">Tu pedido</h1>
+        <div id="products-list"></div>
+        <textarea id="comment-input" rows="3" placeholder="Comentarios para entrega"></textarea>
+        <div class="footer-total">Total: <span id="total-label">$0</span></div>
+        <div class="actions">
+          <button id="btn-back-schedule" class="secondary" style="flex:1">Volver</button>
+          <button id="btn-submit" style="flex:2">Enviar pedido</button>
+        </div>
+      </section>
 
-    <section class="content hidden" id="screen-confirm">
-      <h1 class="title">Pedido confirmado</h1>
-      <div class="confirm" id="confirm-box"></div>
-      <div class="actions">
-        <button id="btn-new-order" style="width:100%">Hacer otro pedido</button>
-      </div>
-    </section>
-  </main>
+      <section class="content hidden" id="screen-confirm">
+        <h1 class="title">Pedido confirmado</h1>
+        <div class="confirm" id="confirm-box"></div>
+        <div class="actions">
+          <button id="btn-new-order" style="width:100%">Hacer otro pedido</button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="desktop-panel">
+      <h2>Pedidos Online</h2>
+      <p>Experiencia optimizada para escritorio y celular.</p>
+      <ul>
+        <li>Identificacion por direccion o telefono</li>
+        <li>Horarios personalizados por cliente</li>
+        <li>Carga de productos en pocos pasos</li>
+        <li>Confirmacion clara del pedido</li>
+      </ul>
+    </aside>
+  </div>
 
   <script type="module" src="./src/main.js"></script>
 </body>

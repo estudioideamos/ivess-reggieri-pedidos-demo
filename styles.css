@@ -15,6 +15,11 @@ body {
   color: var(--text);
 }
 
+.layout {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
 .app {
   max-width: 480px;
   margin: 0 auto;
@@ -31,9 +36,9 @@ body {
 }
 
 .logo {
-  font-size: 48px;
-  font-weight: 800;
-  letter-spacing: -1px;
+  height: 64px;
+  width: auto;
+  object-fit: contain;
 }
 
 .menu {
@@ -46,10 +51,11 @@ body {
 
 .title {
   color: white;
-  font-size: 40px;
+  font-size: 48px;
   text-align: center;
-  margin: 6px 0 18px;
+  margin: 12px 0 18px;
   font-weight: 800;
+  line-height: 1.02;
 }
 
 .subtitle {
@@ -98,6 +104,12 @@ button.secondary {
   text-align: left;
 }
 
+#products-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
 .product h3 {
   margin: 0 0 6px;
   font-size: 24px;
@@ -132,7 +144,76 @@ button.secondary {
 
 .confirm p { margin: 7px 0; }
 
-@media (max-width: 420px) {
+.desktop-panel {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 26px;
+  }
+
+  .layout {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(420px, 540px) minmax(320px, 1fr);
+    gap: 26px;
+    align-items: stretch;
+  }
+
+  .app {
+    max-width: none;
+    border-radius: 22px;
+    overflow: hidden;
+    min-height: 760px;
+    box-shadow: 0 26px 80px rgba(0, 37, 104, 0.26);
+  }
+
+  .content {
+    padding: 24px;
+  }
+
+  .title {
+    font-size: 54px;
+  }
+
+  #products-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .desktop-panel {
+    display: block;
+    align-self: stretch;
+    border-radius: 22px;
+    padding: 34px;
+    background: linear-gradient(180deg, #f8fbff 0%, #dcebff 58%, #cae2ff 100%);
+    border: 1px solid #c5dfff;
+    color: #15449a;
+  }
+
+  .desktop-panel h2 {
+    margin: 0 0 12px;
+    font-size: 42px;
+    line-height: 1.05;
+  }
+
+  .desktop-panel p {
+    margin: 0 0 20px;
+    font-size: 20px;
+  }
+
+  .desktop-panel ul {
+    margin: 0;
+    padding-left: 22px;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: 520px) {
   .title { font-size: 34px; }
-  .logo { font-size: 40px; }
+  .logo { height: 52px; }
 }
