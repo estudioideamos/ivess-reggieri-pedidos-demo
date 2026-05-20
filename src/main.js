@@ -42,6 +42,7 @@ const loadingOverlay = document.getElementById("loading-overlay");
 const loadingText = document.getElementById("loading-text");
 let addressBook = [];
 let loadingStartedAt = 0;
+let loadingHideTimer = null;
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -67,6 +68,10 @@ function updateStepIndicator(screenName) {
 function setLoading(show, text = "Por favor, espere...") {
   if (!loadingOverlay) return;
   if (loadingText) loadingText.textContent = text;
+  if (loadingHideTimer) {
+    clearTimeout(loadingHideTimer);
+    loadingHideTimer = null;
+  }
   if (show) {
     loadingStartedAt = Date.now();
     loadingOverlay.classList.remove("hidden");
@@ -75,7 +80,10 @@ function setLoading(show, text = "Por favor, espere...") {
   const elapsed = Date.now() - loadingStartedAt;
   const minVisible = 550;
   const wait = Math.max(0, minVisible - elapsed);
-  setTimeout(() => loadingOverlay.classList.add("hidden"), wait);
+  loadingHideTimer = setTimeout(() => {
+    loadingOverlay.classList.add("hidden");
+    loadingHideTimer = null;
+  }, wait);
 }
 
 function normalize(value) {
@@ -324,26 +332,29 @@ document.getElementById("btn-find").onclick = async () => {
   btn.disabled = true;
   btn.textContent = "Buscando...";
   setLoading(true, "Buscando cliente y horarios...");
-  const found = await findClient(query);
-  if (!found) {
+  try {
+    const found = await findClient(query);
+    if (!found) {
+      alert("No encontramos cliente con esa dirección/teléfono.");
+      return;
+    }
+    state.cliente = found;
+    state.products = [];
+    productsPromise = getProductsForClient(found).then((catalog) => {
+      state.products = catalog;
+      return catalog;
+    });
+    customerLabel.textContent = `Nro ${found.id_cliente} - ${found.direccion}`;
+    renderSchedules();
+    showScreen("schedule");
+  } catch (err) {
+    console.error(err);
+    alert("Hubo un error buscando el cliente. Probá nuevamente.");
+  } finally {
     btn.disabled = false;
     btn.textContent = prev;
     setLoading(false);
-    alert("No encontramos cliente con esa dirección/teléfono.");
-    return;
   }
-  state.cliente = found;
-  state.products = [];
-  productsPromise = getProductsForClient(found).then((catalog) => {
-    state.products = catalog;
-    return catalog;
-  });
-  customerLabel.textContent = `Nro ${found.id_cliente} - ${found.direccion}`;
-  renderSchedules();
-  showScreen("schedule");
-  btn.disabled = false;
-  btn.textContent = prev;
-  setLoading(false);
 };
 
 document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
