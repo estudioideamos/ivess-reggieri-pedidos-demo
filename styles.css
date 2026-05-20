@@ -51,9 +51,9 @@ body {
 .title {
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 44, 120, 0.18);
-  font-size: 48px;
+  font-size: 42px;
   text-align: center;
-  margin: 12px 0 18px;
+  margin: 10px 0 16px;
   font-weight: 800;
   line-height: 1.02;
   font-family: "Montserrat", "Manrope", sans-serif;
@@ -197,7 +197,7 @@ button.secondary {
   }
 
   .title {
-    font-size: 50px;
+    font-size: 44px;
     margin-top: 6px;
   }
 
