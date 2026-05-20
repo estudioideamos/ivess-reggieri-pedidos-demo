@@ -32,7 +32,11 @@ let addressBook = [];
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
-  screens[name].classList.remove("hidden");
+  const target = screens[name];
+  target.classList.remove("hidden");
+  target.classList.remove("screen-enter");
+  void target.offsetWidth;
+  target.classList.add("screen-enter");
 }
 
 function normalize(value) {
@@ -48,7 +52,7 @@ async function api(path, payload) {
   if (!API_BASE_URL) return null;
   const res = await fetch(`${API_BASE_URL}?path=${encodeURIComponent(path)}`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
     body: JSON.stringify(payload),
   });
   if (!res.ok) throw new Error("Error API");
@@ -159,6 +163,7 @@ function renderSchedules() {
     const btn = document.createElement("button");
     const accent = accentClasses[idx % accentClasses.length];
     btn.className = `card card-schedule ${accent}`;
+    btn.style.animationDelay = `${0.06 * idx}s`;
     const isAdvisor = normalize(h).includes("ASESOR");
     const icon = isAdvisor ? "./assets/asesor.svg" : "./assets/agenda.svg";
     btn.innerHTML = `
@@ -185,6 +190,7 @@ function renderProducts() {
     if (!state.items[p.sku]) state.items[p.sku] = 0;
     const card = document.createElement("div");
     card.className = "card product";
+    card.style.animationDelay = `${0.05 * productsList.children.length}s`;
     card.innerHTML = `
       <h3>${p.nombre}</h3>
       <p>${currency.format(p.precio)}</p>

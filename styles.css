@@ -8,6 +8,7 @@
 }
 
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: "Manrope", "Segoe UI", Tahoma, sans-serif;
@@ -27,6 +28,18 @@ body {
   background: #0a53c8;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.app::before {
+  content: "";
+  position: absolute;
+  inset: -40% -20% auto -20%;
+  height: 300px;
+  background: radial-gradient(ellipse at center, rgba(122, 214, 255, 0.18), rgba(122, 214, 255, 0));
+  pointer-events: none;
+  animation: driftGlow 12s ease-in-out infinite;
 }
 
 .header {
@@ -46,6 +59,8 @@ body {
 
 .content {
   padding: 18px;
+  position: relative;
+  z-index: 1;
 }
 
 .title-icon-wrap {
@@ -61,21 +76,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #e2f5ff 100%);
+  background: radial-gradient(circle at 35% 30%, #ffffff 0%, #e8f8ff 100%);
   border: 4px solid #42c3ff;
   box-shadow: 0 0 0 3px rgba(66, 195, 255, 0.35);
+  animation: pulseRing 2.6s ease-in-out infinite;
 }
 
-.title-icon-img {
+.title-icon-svg {
   width: 44px;
   height: 44px;
-  object-fit: contain;
+  fill: #0f4fc2;
 }
 
 .title {
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 44, 120, 0.18);
-  font-size: 42px;
+  font-size: 34px;
   text-align: center;
   margin: 10px 0 16px;
   font-weight: 800;
@@ -91,6 +107,7 @@ body {
   border-radius: 999px;
   background: linear-gradient(90deg, #55c9ff 0%, #94deff 100%);
   opacity: 0.95;
+  animation: dividerSweep 3.2s ease-in-out infinite;
 }
 
 .subtitle {
@@ -106,10 +123,18 @@ body {
   border-radius: 14px;
   border: 2px solid #a7d7ff;
   padding: 16px;
-  font-size: 20px;
+  font-size: 16px;
   font-family: "Montserrat", "Manrope", sans-serif;
   font-weight: 600;
   color: #17439a;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+}
+
+.input:focus, textarea:focus {
+  outline: none;
+  border-color: #6fd2ff;
+  box-shadow: 0 0 0 4px rgba(111, 210, 255, 0.2);
+  transform: translateY(-1px);
 }
 
 .address-wrap {
@@ -137,7 +162,7 @@ body {
   border-radius: 0;
   background: #fff;
   color: #1d4394;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   padding: 11px 14px;
   cursor: pointer;
@@ -159,10 +184,21 @@ button {
   background: linear-gradient(90deg, #3fa9f5, #6bc6ff);
   color: white;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 16px;
   padding: 14px;
   cursor: pointer;
   font-family: "Montserrat", "Manrope", sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(64, 170, 240, 0.3);
+  filter: saturate(1.06);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 button.secondary {
@@ -178,6 +214,7 @@ button.secondary {
   border: 2px solid #cfe8ff;
   padding: 16px;
   margin-bottom: 12px;
+  animation: cardIn 0.42s cubic-bezier(0.2, 0.75, 0.2, 1) both;
 }
 
 .card-schedule {
@@ -265,6 +302,23 @@ button.secondary {
 
 .hidden { display: none; }
 
+.screen-enter .title-icon-wrap,
+.screen-enter .title,
+.screen-enter .title-divider,
+.screen-enter .subtitle,
+.screen-enter .address-wrap,
+.screen-enter .actions,
+.screen-enter #schedule-list,
+.screen-enter #products-list,
+.screen-enter .confirm {
+  animation: fadeUp 0.46s cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+
+.screen-enter .title { animation-delay: 0.04s; }
+.screen-enter .subtitle { animation-delay: 0.08s; }
+.screen-enter .address-wrap, .screen-enter #schedule-list, .screen-enter #products-list, .screen-enter .confirm { animation-delay: 0.12s; }
+.screen-enter .actions { animation-delay: 0.16s; }
+
 .confirm {
   background: rgba(255,255,255,0.1);
   border: 2px solid #73c7ff;
@@ -291,6 +345,43 @@ button.secondary {
 .dev-credit strong {
   font-weight: 800;
   color: #d9efff;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseRing {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(66, 195, 255, 0.35); }
+  50% { box-shadow: 0 0 0 6px rgba(66, 195, 255, 0.2); }
+}
+
+@keyframes dividerSweep {
+  0%, 100% { opacity: 0.85; transform: scaleX(0.98); }
+  50% { opacity: 1; transform: scaleX(1.02); }
+}
+
+@keyframes driftGlow {
+  0%, 100% { transform: translateX(-3%) translateY(0); }
+  50% { transform: translateX(3%) translateY(8px); }
 }
 
 @media (min-width: 1024px) {
@@ -321,7 +412,7 @@ button.secondary {
   }
 
   .title {
-    font-size: 44px;
+    font-size: 38px;
     margin-top: 6px;
   }
 
@@ -331,6 +422,12 @@ button.secondary {
 }
 
 @media (max-width: 520px) {
-  .title { font-size: 34px; }
+  .title { font-size: 30px; line-height: 1.05; }
   .logo { height: 52px; }
+  .input, textarea { font-size: 15px; padding: 14px; }
+  button { font-size: 15px; padding: 12px; }
+  .subtitle { font-size: 15px; }
+  .address-suggestion { font-size: 13px; }
+  .title-icon { width: 78px; height: 78px; }
+  .title-icon-svg { width: 40px; height: 40px; }
 }
