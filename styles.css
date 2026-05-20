@@ -24,7 +24,7 @@ body {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
-  background: linear-gradient(180deg, #f4f9ff 0%, #d9ecff 34%, #0b57d0 62%, #0040aa 100%);
+  background: linear-gradient(180deg, #f2f8ff 0%, #d9ecff 28%, #0a53c8 54%, #003c9e 100%);
 }
 
 .header {
@@ -50,7 +50,8 @@ body {
 }
 
 .title {
-  color: white;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 44, 120, 0.18);
   font-size: 48px;
   text-align: center;
   margin: 12px 0 18px;
@@ -59,9 +60,10 @@ body {
 }
 
 .subtitle {
-  color: #bce3ff;
+  color: #d8efff;
   text-align: center;
   margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .input, textarea {
@@ -170,7 +172,7 @@ button.secondary {
     overflow: hidden;
     min-height: 760px;
     box-shadow: 0 26px 80px rgba(0, 37, 104, 0.26);
-    background: linear-gradient(180deg, #f4f9ff 0%, #d9ecff 42%, #0b57d0 74%, #0040aa 100%);
+    background: linear-gradient(180deg, #f2f8ff 0%, #d7ebff 32%, #0a53c8 60%, #003c9e 100%);
   }
 
   .content {
