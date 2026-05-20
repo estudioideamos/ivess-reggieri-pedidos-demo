@@ -27,6 +27,7 @@ const productsList = document.getElementById("products-list");
 const totalLabel = document.getElementById("total-label");
 const confirmBox = document.getElementById("confirm-box");
 const commentInput = document.getElementById("comment-input");
+const addressSuggestions = document.getElementById("address-suggestions");
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -59,10 +60,45 @@ async function findClient(query) {
     (c) => normalize(c.direccion).includes(normalized) || normalize(c.telefono) === normalized
   );
   if (API_BASE_URL) {
-    const live = await api("findClient", { query });
-    if (live?.found) return live.client;
+    try {
+      const live = await api("findClient", { query });
+      if (live?.found) return live.client;
+    } catch (err) {
+      console.warn("Fallo findClient en backend, uso datos locales temporales.", err);
+    }
   }
   return byMock || null;
+}
+
+async function loadAddressSuggestions() {
+  let addresses = [];
+  if (API_BASE_URL) {
+    try {
+      const live = await api("getAddressBook", {});
+      if (live?.ok && Array.isArray(live.direcciones)) {
+        addresses = live.direcciones;
+      }
+    } catch (err) {
+      console.warn("Fallo getAddressBook en backend, uso sugerencias locales.", err);
+    }
+  }
+
+  if (!addresses.length) {
+    addresses = MOCK_CLIENTS.map((c) => c.direccion);
+  }
+
+  const unique = addresses
+    .map((a) => String(a || "").trim())
+    .filter(Boolean)
+    .filter((v, i, arr) => arr.indexOf(v) === i)
+    .sort((a, b) => a.localeCompare(b, "es"));
+
+  addressSuggestions.innerHTML = "";
+  unique.forEach((a) => {
+    const option = document.createElement("option");
+    option.value = a;
+    addressSuggestions.appendChild(option);
+  });
 }
 
 async function getProductsForClient(cliente) {
@@ -198,3 +234,4 @@ document.getElementById("btn-new-order").onclick = () => {
 };
 
 showScreen("lookup");
+loadAddressSuggestions();
