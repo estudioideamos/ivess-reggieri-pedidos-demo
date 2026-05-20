@@ -42,6 +42,17 @@ function normalize_(v) {
     .trim();
 }
 
+function isEnabled_(value) {
+  const v = normalize_(value);
+  if (v === '' || v === '1' || v === 'SI' || v === 'SÍ' || v === 'TRUE' || v === 'VERDADERO') {
+    return true;
+  }
+  if (v === '0' || v === 'NO' || v === 'FALSE' || v === 'FALSO') {
+    return false;
+  }
+  return true;
+}
+
 function getSheet_(name) {
   const sh = SpreadsheetApp.getActive().getSheetByName(name);
   if (!sh) throw new Error('No existe hoja: ' + name);
@@ -110,7 +121,7 @@ function findClient_(query) {
   const clienteHorarios = mapByHeaders_(getSheet_(SHEETS.CLIENTE_HORARIOS));
 
   const client = clientes.find((c) => {
-    return normalize_(c.direccion).includes(q) || normalize_(c.telefono) === q;
+    return isEnabled_(c.activo) && (normalize_(c.direccion).includes(q) || normalize_(c.telefono) === q);
   });
 
   if (!client) return { found: false };
@@ -120,7 +131,7 @@ function findClient_(query) {
     .map((ch) => String(ch.id_horario));
 
   const etiquetas = horarios
-    .filter((h) => ids.includes(String(h.id_horario)) && String(h.activo) !== '0')
+    .filter((h) => ids.includes(String(h.id_horario)) && isEnabled_(h.activo))
     .map((h) => h.etiqueta);
 
   return {
@@ -146,9 +157,9 @@ function getCatalog_(listaPrecio) {
     .filter((p) => {
       const activoLista = p[activoPorListaCol];
       if (activoLista !== '' && activoLista !== null && activoLista !== undefined) {
-        return String(activoLista) !== '0';
+        return isEnabled_(activoLista);
       }
-      return String(p.activo || '1') !== '0';
+      return isEnabled_(p.activo);
     })
     .map((p) => ({
       sku: String(p.sku || ''),
