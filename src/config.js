@@ -7,6 +7,7 @@ export const MOCK_CLIENTS = [
     direccion: "BARADERO 6140",
     localidad: "WILDE",
     telefono: "1162625858",
+    lista_precio: 1,
     horarios: ["Lunes 8 am", "Martes 8 am", "Miercoles 8 am"],
   },
   {
@@ -15,15 +16,16 @@ export const MOCK_CLIENTS = [
     direccion: "AV LAS FLORES 883",
     localidad: "WILDE",
     telefono: "1162625859",
+    lista_precio: 2,
     horarios: ["Lunes 9 am", "Martes 9 am", "Miercoles 9 am"],
   },
 ];
 
 export const MOCK_PRODUCTS = [
-  { sku: "BOT20", nombre: "Botellon 20 litros", precio: 10000 },
-  { sku: "BOT12", nombre: "Botellon 12 litros", precio: 7000 },
-  { sku: "BJS12", nombre: "Botellon 12 litros bajo sodio", precio: 8000 },
-  { sku: "SODA", nombre: "Sifon de soda", precio: 1200 },
-  { sku: "SAB15", nombre: "Agua saborizada 1.5 litros", precio: 2500 },
+  { sku: "BOT20", nombre: "Botellon 20 litros", precio_lista_1: 10000, precio_lista_2: 9000 },
+  { sku: "BOT12", nombre: "Botellon 12 litros", precio_lista_1: 7000, precio_lista_2: 6000 },
+  { sku: "BJS12", nombre: "Botellon 12 litros bajo sodio", precio_lista_1: 8000, precio_lista_2: 7000 },
+  { sku: "SODA", nombre: "Sifon de soda", precio_lista_1: 1200, precio_lista_2: 1200 },
+  { sku: "SAB15", nombre: "Agua saborizada 1.5 litros", precio_lista_1: 2500, precio_lista_2: 2200 },
 ];
 

@@ -4,6 +4,7 @@ const state = {
   cliente: null,
   horario: "",
   items: {},
+  products: [],
 };
 
 const currency = new Intl.NumberFormat("es-AR", {
@@ -64,6 +65,21 @@ async function findClient(query) {
   return byMock || null;
 }
 
+async function getProductsForClient(cliente) {
+  const lista = Number(cliente?.lista_precio || 1) === 2 ? 2 : 1;
+  if (API_BASE_URL) {
+    const live = await api("getCatalog", { lista_precio: lista });
+    if (live?.ok && Array.isArray(live.productos)) {
+      return live.productos;
+    }
+  }
+  return MOCK_PRODUCTS.map((p) => ({
+    sku: p.sku,
+    nombre: p.nombre,
+    precio: lista === 2 ? Number(p.precio_lista_2 || 0) : Number(p.precio_lista_1 || 0),
+  }));
+}
+
 function renderSchedules() {
   scheduleList.innerHTML = "";
   state.cliente.horarios.forEach((h) => {
@@ -81,7 +97,7 @@ function renderSchedules() {
 
 function renderProducts() {
   productsList.innerHTML = "";
-  MOCK_PRODUCTS.forEach((p) => {
+  state.products.forEach((p) => {
     if (!state.items[p.sku]) state.items[p.sku] = 0;
     const card = document.createElement("div");
     card.className = "card product";
@@ -109,7 +125,7 @@ function renderProducts() {
 }
 
 function calcTotal() {
-  return MOCK_PRODUCTS.reduce((acc, p) => acc + p.precio * (state.items[p.sku] || 0), 0);
+  return state.products.reduce((acc, p) => acc + p.precio * (state.items[p.sku] || 0), 0);
 }
 
 function updateTotal() {
@@ -117,7 +133,7 @@ function updateTotal() {
 }
 
 function orderSummary() {
-  const lines = MOCK_PRODUCTS
+  const lines = state.products
     .filter((p) => (state.items[p.sku] || 0) > 0)
     .map((p) => `${state.items[p.sku]} x ${p.nombre}`);
   return lines.length ? lines.join(", ") : "Sin productos";
@@ -131,6 +147,7 @@ async function submitOrder() {
     items: state.items,
     comentario: commentInput.value.trim(),
     total: calcTotal(),
+    lista_precio: Number(state.cliente?.lista_precio || 1),
   };
 
   if (API_BASE_URL) {
@@ -156,6 +173,7 @@ document.getElementById("btn-find").onclick = async () => {
     return;
   }
   state.cliente = found;
+  state.products = await getProductsForClient(found);
   customerLabel.textContent = `${found.nombre} - ${found.direccion}`;
   renderSchedules();
   showScreen("schedule");
@@ -169,6 +187,7 @@ document.getElementById("btn-new-order").onclick = () => {
   state.cliente = null;
   state.horario = "";
   state.items = {};
+  state.products = [];
   commentInput.value = "";
   addressInput.value = "";
   showScreen("lookup");

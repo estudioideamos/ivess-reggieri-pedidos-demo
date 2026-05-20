@@ -18,6 +18,10 @@ function doPost(e) {
     if (path === 'createOrder') {
       return jsonResponse(createOrder_(body));
     }
+    
+    if (path === 'getCatalog') {
+      return jsonResponse(getCatalog_(body.lista_precio));
+    }
 
     return jsonResponse({ error: 'Ruta invalida' }, 400);
   } catch (err) {
@@ -82,9 +86,26 @@ function findClient_(query) {
       direccion: String(client.direccion || ''),
       localidad: String(client.localidad || ''),
       telefono: String(client.telefono || ''),
+      lista_precio: Number(client.lista_precio || 1),
       horarios: etiquetas,
     },
   };
+}
+
+function getCatalog_(listaPrecio) {
+  const productos = mapByHeaders_(getSheet_(SHEETS.PRODUCTOS));
+  const lista = Number(listaPrecio || 1) === 2 ? 2 : 1;
+  const precioCol = lista === 2 ? 'precio_lista_2' : 'precio_lista_1';
+
+  const catalogo = productos
+    .filter((p) => String(p.activo || '1') !== '0')
+    .map((p) => ({
+      sku: String(p.sku || ''),
+      nombre: String(p.producto || ''),
+      precio: Number(p[precioCol] || 0),
+    }));
+
+  return { ok: true, lista_precio: lista, productos: catalogo };
 }
 
 function createOrder_(payload) {
