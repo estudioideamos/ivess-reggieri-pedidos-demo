@@ -68,9 +68,13 @@ async function findClient(query) {
 async function getProductsForClient(cliente) {
   const lista = Number(cliente?.lista_precio || 1) === 2 ? 2 : 1;
   if (API_BASE_URL) {
-    const live = await api("getCatalog", { lista_precio: lista });
-    if (live?.ok && Array.isArray(live.productos)) {
-      return live.productos;
+    try {
+      const live = await api("getCatalog", { lista_precio: lista });
+      if (live?.ok && Array.isArray(live.productos)) {
+        return live.productos;
+      }
+    } catch (err) {
+      console.warn("Fallo getCatalog en backend, uso catalogo local temporal.", err);
     }
   }
   return MOCK_PRODUCTS.map((p) => ({
@@ -155,7 +159,7 @@ async function submitOrder() {
   }
 
   confirmBox.innerHTML = `
-    <p><strong>Cliente:</strong> ${state.cliente.nombre}</p>
+    <p><strong>Nro de cliente:</strong> ${state.cliente.id_cliente}</p>
     <p><strong>Direccion:</strong> ${state.cliente.direccion}</p>
     <p><strong>Horario:</strong> ${state.horario}</p>
     <p><strong>Pedido:</strong> ${orderSummary()}</p>
@@ -174,7 +178,7 @@ document.getElementById("btn-find").onclick = async () => {
   }
   state.cliente = found;
   state.products = await getProductsForClient(found);
-  customerLabel.textContent = `${found.nombre} - ${found.direccion}`;
+  customerLabel.textContent = `Nro ${found.id_cliente} - ${found.direccion}`;
   renderSchedules();
   showScreen("schedule");
 };

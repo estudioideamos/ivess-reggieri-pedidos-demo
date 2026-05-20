@@ -53,9 +53,54 @@ function mapByHeaders_(sheet) {
   const headers = values.shift().map(String);
   return values.map((row) => {
     const obj = {};
-    headers.forEach((h, i) => (obj[h] = row[i]));
+    headers.forEach((h, i) => {
+      const key = normalizeHeader_(h);
+      obj[key] = row[i];
+    });
     return obj;
   });
+}
+
+function normalizeHeader_(h) {
+  const raw = String(h || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const map = {
+    'id_cliente': 'id_cliente',
+    'nro de cliente': 'id_cliente',
+    'numero de cliente': 'id_cliente',
+    'cliente id': 'id_cliente',
+    'nombre': 'nombre',
+    'direccion': 'direccion',
+    'localidad': 'localidad',
+    'telefono': 'telefono',
+    'activo': 'activo',
+    'lista_precio': 'lista_precio',
+    'lista de precio': 'lista_precio',
+    'lista de precios': 'lista_precio',
+    'id_horario': 'id_horario',
+    'nro de horario': 'id_horario',
+    'numero de horario': 'id_horario',
+    'etiqueta': 'etiqueta',
+    'franja horaria': 'etiqueta',
+    'sku': 'sku',
+    'codigo producto': 'sku',
+    'producto': 'producto',
+    'precio_lista_1': 'precio_lista_1',
+    'precio lista 1': 'precio_lista_1',
+    'precio_lista_2': 'precio_lista_2',
+    'precio lista 2': 'precio_lista_2',
+    'activo_lista_1': 'activo_lista_1',
+    'activo lista 1': 'activo_lista_1',
+    'activo_lista_2': 'activo_lista_2',
+    'activo lista 2': 'activo_lista_2',
+  };
+
+  return map[raw] || raw.replace(/\s+/g, '_');
 }
 
 function findClient_(query) {
@@ -82,7 +127,6 @@ function findClient_(query) {
     found: true,
     client: {
       id_cliente: String(client.id_cliente),
-      nombre: String(client.nombre || ''),
       direccion: String(client.direccion || ''),
       localidad: String(client.localidad || ''),
       telefono: String(client.telefono || ''),
