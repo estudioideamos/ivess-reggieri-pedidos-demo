@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manual de uso - Ivess Reggieri</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #e7eef7; font-family: Manrope, sans-serif; color: #113873; }
+    .wrap { max-width: 980px; margin: 24px auto; background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.08); overflow: hidden; }
+    .head { background: linear-gradient(120deg,#0a4fb8,#1aa5e2); color: #fff; padding: 28px; }
+    h1 { margin: 0; font: 800 34px/1.1 Montserrat, sans-serif; }
+    .sub { margin-top: 8px; opacity: .95; }
+    .c { padding: 24px 28px 30px; }
+    h2 { font: 700 20px Montserrat, sans-serif; margin: 20px 0 10px; color: #0a4fb8; }
+    ol, ul { margin: 0 0 0 20px; padding: 0; }
+    li { margin: 8px 0; }
+    .box { background: #f1f7ff; border: 1px solid #d4e6ff; border-radius: 12px; padding: 14px; margin: 12px 0; }
+    code { background: #edf3fb; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="head">
+      <h1>MANUAL DE USO</h1>
+      <div class="sub">Sistema de pedidos online - Ivess Reggieri</div>
+    </header>
+    <section class="c">
+      <h2>1. Qué se puede editar</h2>
+      <ul>
+        <li>Clientes</li>
+        <li>Horarios</li>
+        <li>Asignación de horarios por cliente</li>
+        <li>Productos y precios</li>
+      </ul>
+
+      <h2>2. Hoja de cálculo (Google Sheets)</h2>
+      <div class="box">
+        No cambiar los nombres de pestañas ni los títulos de la fila 1.
+      </div>
+      <ul>
+        <li><code>Clientes</code>: alta/baja y datos de cada cliente. Campo <code>activo</code>: 1 habilita, 0 deshabilita.</li>
+        <li><code>Horarios</code>: franjas horarias disponibles. Campo <code>activo</code>: 1 habilita, 0 deshabilita.</li>
+        <li><code>ClienteHorarios</code>: relación entre cliente y horarios permitidos (por ID).</li>
+        <li><code>ProductosPrecios</code>: catálogo, precios y estado de publicación.</li>
+        <li><code>Pedidos</code>: se completa automáticamente desde la web.</li>
+      </ul>
+
+      <h2>3. Flujo operativo</h2>
+      <ol>
+        <li>El cliente ingresa dirección o teléfono.</li>
+        <li>La web identifica al cliente en la hoja <code>Clientes</code>.</li>
+        <li>Muestra solo horarios asignados en <code>ClienteHorarios</code>.</li>
+        <li>El cliente arma pedido y confirma.</li>
+        <li>El pedido se guarda en <code>Pedidos</code>.</li>
+      </ol>
+
+      <h2>4. Cambiar precios</h2>
+      <ol>
+        <li>Entrar a <code>ProductosPrecios</code>.</li>
+        <li>Editar columna <code>precio</code>.</li>
+        <li>Guardar: el cambio impacta en la web automáticamente.</li>
+      </ol>
+
+      <h2>5. Alta de cliente nuevo</h2>
+      <ol>
+        <li>Crear fila en <code>Clientes</code> con ID único.</li>
+        <li>Cargar dirección y teléfono completos.</li>
+        <li>Poner <code>activo = 1</code>.</li>
+        <li>Asignar horarios en <code>ClienteHorarios</code>.</li>
+      </ol>
+
+      <h2>6. Soporte</h2>
+      <div class="box">DESARROLLO DE <strong>ESTUDIO IDEAMOS</strong> © 2026</div>
+    </section>
+  </main>
+</body>
+</html>
