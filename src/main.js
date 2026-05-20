@@ -28,6 +28,7 @@ const totalLabel = document.getElementById("total-label");
 const confirmBox = document.getElementById("confirm-box");
 const commentInput = document.getElementById("comment-input");
 const addressSuggestions = document.getElementById("address-suggestions");
+let addressBook = [];
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -87,19 +88,48 @@ async function loadAddressSuggestions() {
     addresses = MOCK_CLIENTS.map((c) => c.direccion);
   }
 
-  const unique = addresses
+  addressBook = addresses
     .map((a) => String(a || "").trim())
     .filter(Boolean)
     .filter((v, i, arr) => arr.indexOf(v) === i)
     .sort((a, b) => a.localeCompare(b, "es"));
+  renderAddressSuggestions("");
+}
 
+function renderAddressSuggestions(query) {
   if (!addressSuggestions) return;
+  const q = normalize(query);
+  if (!q) {
+    addressSuggestions.classList.add("hidden");
+    addressSuggestions.innerHTML = "";
+    return;
+  }
+
+  const filtered = addressBook
+    .filter((a) => normalize(a).includes(q))
+    .slice(0, 8);
+
+  if (!filtered.length) {
+    addressSuggestions.classList.add("hidden");
+    addressSuggestions.innerHTML = "";
+    return;
+  }
+
   addressSuggestions.innerHTML = "";
-  unique.forEach((a) => {
-    const option = document.createElement("option");
-    option.value = a;
-    addressSuggestions.appendChild(option);
+  filtered.forEach((a) => {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "address-suggestion";
+    item.textContent = a;
+    item.onclick = () => {
+      addressInput.value = a;
+      addressSuggestions.classList.add("hidden");
+      addressSuggestions.innerHTML = "";
+      addressInput.focus();
+    };
+    addressSuggestions.appendChild(item);
   });
+  addressSuggestions.classList.remove("hidden");
 }
 
 async function getProductsForClient(cliente) {
@@ -129,10 +159,12 @@ function renderSchedules() {
     const btn = document.createElement("button");
     const accent = accentClasses[idx % accentClasses.length];
     btn.className = `card card-schedule ${accent}`;
+    const isAdvisor = normalize(h).includes("ASESOR");
+    const icon = isAdvisor ? "./assets/asesor.svg" : "./assets/agenda.svg";
     btn.innerHTML = `
       <span class="schedule-left">
         <span class="schedule-icon-wrap">
-          <img src="./assets/agenda.svg" alt="" class="schedule-icon" />
+          <img src="${icon}" alt="" class="schedule-icon" />
         </span>
         <span class="schedule-text">${h}</span>
       </span>
@@ -208,7 +240,7 @@ async function submitOrder() {
 
   confirmBox.innerHTML = `
     <p><strong>Nro de cliente:</strong> ${state.cliente.id_cliente}</p>
-    <p><strong>Direccion:</strong> ${state.cliente.direccion}</p>
+    <p><strong>Dirección:</strong> ${state.cliente.direccion}</p>
     <p><strong>Horario:</strong> ${state.horario}</p>
     <p><strong>Pedido:</strong> ${orderSummary()}</p>
     <p><strong>Total:</strong> ${currency.format(calcTotal())}</p>
@@ -221,7 +253,7 @@ document.getElementById("btn-find").onclick = async () => {
   if (!query) return;
   const found = await findClient(query);
   if (!found) {
-    alert("No encontramos cliente con esa direccion/telefono.");
+    alert("No encontramos cliente con esa dirección/teléfono.");
     return;
   }
   state.cliente = found;
@@ -244,6 +276,22 @@ document.getElementById("btn-new-order").onclick = () => {
   addressInput.value = "";
   showScreen("lookup");
 };
+
+if (addressInput) {
+  addressInput.addEventListener("input", (e) => {
+    renderAddressSuggestions(e.target.value || "");
+  });
+  addressInput.addEventListener("focus", () => {
+    renderAddressSuggestions(addressInput.value || "");
+  });
+  addressInput.addEventListener("blur", () => {
+    setTimeout(() => {
+      if (addressSuggestions) {
+        addressSuggestions.classList.add("hidden");
+      }
+    }, 120);
+  });
+}
 
 showScreen("lookup");
 loadAddressSuggestions();

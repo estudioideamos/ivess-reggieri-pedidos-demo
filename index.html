@@ -18,20 +18,24 @@
 
       <section class="content" id="screen-lookup">
         <div class="title-icon-wrap">
-          <div class="title-icon">📍</div>
+          <div class="title-icon">
+            <img src="./assets/mapas-y-banderas.svg" alt="" class="title-icon-img" />
+          </div>
         </div>
         <h1 class="title">INGRESA TU DIRECCIÓN</h1>
         <div class="title-divider"></div>
         <p class="subtitle">Buscamos tu cliente y horarios habilitados</p>
-        <input id="address-input" class="input" list="address-suggestions" placeholder="Dirección completa o teléfono" />
-        <datalist id="address-suggestions"></datalist>
+        <div class="address-wrap">
+          <input id="address-input" class="input" autocomplete="off" placeholder="Dirección completa o teléfono" />
+          <div id="address-suggestions" class="address-suggestions hidden"></div>
+        </div>
         <div class="actions">
           <button id="btn-find" style="width:100%">Buscar cliente</button>
         </div>
       </section>
 
       <section class="content hidden" id="screen-schedule">
-        <h1 class="title">Selecciona horario</h1>
+        <h1 class="title">SELECCIONA EL HORARIO</h1>
         <p class="subtitle" id="customer-label"></p>
         <div id="schedule-list"></div>
         <div class="actions">
@@ -61,6 +65,6 @@
     </main>
   </div>
 
-  <script type="module" src="./src/main.js?v=20260520-1"></script>
+  <script type="module" src="./src/main.js?v=20260520-2"></script>
 </body>
 </html>
