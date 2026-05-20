@@ -1,0 +1,39 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EEF7FF"/>
+      <stop offset="1" stop-color="#D6EBFF"/>
+    </linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#1F64C8"/>
+      <stop offset="1" stop-color="#46B3F4"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="420" rx="24" fill="url(#bg)"/>
+
+  <rect x="56" y="76" width="460" height="268" rx="20" fill="#FFFFFF" stroke="#B7D8F8" stroke-width="4"/>
+  <rect x="86" y="106" width="340" height="120" rx="16" fill="#E9F4FF"/>
+  <text x="102" y="153" fill="#0E4EBA" font-family="Montserrat, Arial, sans-serif" font-size="52" font-weight="800">PROMOCIONES</text>
+  <text x="102" y="202" fill="#1A74D3" font-family="Montserrat, Arial, sans-serif" font-size="34" font-weight="700">ENVÍO GRATIS</text>
+  <text x="88" y="274" fill="#0E4EBA" font-family="Montserrat, Arial, sans-serif" font-size="26" font-weight="700">Consultá por zonas y días de reparto</text>
+  <text x="88" y="310" fill="#2A5FA5" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="600">Ivess Reggieri</text>
+
+  <ellipse cx="840" cy="316" rx="170" ry="26" fill="#BBD9F4" opacity=".48"/>
+
+  <circle cx="870" cy="118" r="44" fill="#F4C8A8"/>
+  <path d="M827 101C832 62 912 62 915 106C899 98 881 94 871 96C858 98 845 108 827 101Z" fill="#1C3F75"/>
+  <circle cx="856" cy="118" r="4" fill="#1C3F75"/>
+  <circle cx="884" cy="118" r="4" fill="#1C3F75"/>
+  <path d="M856 134C866 142 876 142 886 134" stroke="#BA6E5E" stroke-width="4" stroke-linecap="round"/>
+
+  <path d="M786 244C792 184 829 160 870 160C911 160 948 184 954 244L964 314H776L786 244Z" fill="url(#shirt)"/>
+  <rect x="826" y="186" width="88" height="42" rx="12" fill="#FFFFFF" opacity=".92"/>
+  <text x="840" y="214" fill="#0E4EBA" font-family="Montserrat, Arial, sans-serif" font-size="24" font-weight="800">ivess</text>
+
+  <rect x="740" y="256" width="60" height="22" rx="11" fill="#F4C8A8" transform="rotate(-18 740 256)"/>
+  <rect x="940" y="256" width="60" height="22" rx="11" fill="#F4C8A8" transform="rotate(18 940 256)"/>
+
+  <circle cx="1038" cy="146" r="68" fill="#1E8FDE" opacity=".16"/>
+  <circle cx="1088" cy="212" r="42" fill="#1E8FDE" opacity=".12"/>
+</svg>
