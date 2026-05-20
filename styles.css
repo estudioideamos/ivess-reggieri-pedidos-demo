@@ -463,6 +463,36 @@ button.secondary {
   background: rgba(5, 51, 138, 0.45);
 }
 
+.confirm-row {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  align-items: start;
+  column-gap: 10px;
+  margin-bottom: 6px;
+}
+
+.confirm-row p {
+  margin: 0;
+}
+
+.confirm-icon-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: #89d7ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 38px;
+}
+
+.confirm-row-icon {
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(20%) sepia(57%) saturate(2621%) hue-rotate(202deg) brightness(98%) contrast(96%);
+}
+
 .confirm-note {
   margin-top: 12px;
   text-align: center;

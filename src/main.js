@@ -316,8 +316,14 @@ async function submitOrder() {
   confirmBox.innerHTML = `
     <div class="confirm-status">Muchas gracias. Pedido realizado con exito.</div>
     <div class="confirm-card">
-      <p><strong>Pedido:</strong> ${orderSummary().length ? orderSummary().join(" | ") : "Sin productos"}</p>
-      <p><strong>Direccion de entrega:</strong> ${state.cliente.direccion}</p>
+      <div class="confirm-row">
+        <span class="confirm-icon-circle"><img src="./assets/logistica.svg" alt="" class="confirm-row-icon" /></span>
+        <p><strong>Pedido:</strong> ${orderSummary().length ? orderSummary().join(" | ") : "Sin productos"}</p>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-icon-circle"><img src="./assets/mapas-y-banderas-confirm.svg" alt="" class="confirm-row-icon" /></span>
+        <p><strong>Dirección de entrega:</strong> ${state.cliente.direccion}</p>
+      </div>
       <p><strong>Horario de entrega:</strong> ${state.horario}</p>
       <p><strong>Monto total:</strong> ${currency.format(calcTotal())}</p>
       <p><strong>Nro de cliente:</strong> ${state.cliente.id_cliente}</p>
