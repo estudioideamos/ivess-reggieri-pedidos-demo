@@ -198,12 +198,23 @@ body {
   padding: 12px;
   font-family: "Montserrat", "Manrope", sans-serif;
   transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .advisor-link:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 18px rgba(34, 150, 84, 0.34);
   filter: saturate(1.06);
+}
+
+.advisor-link-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 button {

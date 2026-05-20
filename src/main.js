@@ -90,6 +90,21 @@ function canonicalAddress(value) {
   return tokens.filter((t) => !stop.has(t)).join(" ");
 }
 
+function addressMatches(inputAddress, storedAddress) {
+  const query = canonicalAddress(inputAddress);
+  const full = canonicalAddress(storedAddress);
+  if (!query || !full) return false;
+  if (query === full) return true;
+  const qTokens = query.split(" ").filter(Boolean);
+  const fTokens = full.split(" ").filter(Boolean);
+  const qNums = qTokens.filter((t) => /^\d+[A-Z]?$/.test(t));
+  if (!qNums.length) return false;
+  const hasAllNums = qNums.every((n) => fTokens.includes(n));
+  if (!hasAllNums) return false;
+  const qWords = qTokens.filter((t) => !/^\d+[A-Z]?$/.test(t));
+  return qWords.every((w) => fTokens.includes(w));
+}
+
 function beautifyProductName(name) {
   return String(name || "")
     .replace(/Botellon/gi, "Botellón")
@@ -109,9 +124,8 @@ async function api(path, payload) {
 
 async function findClient(query) {
   const normalized = normalize(query);
-  const canonical = canonicalAddress(query);
   const byMock = MOCK_CLIENTS.find(
-    (c) => canonicalAddress(c.direccion) === canonical || normalize(c.telefono) === normalized
+    (c) => addressMatches(query, c.direccion) || normalize(c.telefono) === normalized
   );
   if (API_BASE_URL) {
     try {
@@ -325,8 +339,7 @@ document.getElementById("btn-find").onclick = async () => {
       return;
     }
     const q = normalize(query);
-    const cq = canonicalAddress(query);
-    const exactAddress = canonicalAddress(found.direccion) === cq;
+    const exactAddress = addressMatches(query, found.direccion);
     const exactPhone = normalize(found.telefono) === q;
     if (!exactAddress && !exactPhone) {
       alert("Ingresá la dirección completa o el teléfono exacto para continuar.");

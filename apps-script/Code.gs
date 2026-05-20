@@ -57,6 +57,22 @@ function canonicalAddress_(v) {
     .join(' ');
 }
 
+function addressMatches_(inputAddress, storedAddress) {
+  var query = canonicalAddress_(inputAddress);
+  var full = canonicalAddress_(storedAddress);
+  if (!query || !full) return false;
+  if (query === full) return true;
+  var qTokens = query.split(' ').filter(function (t) { return t; });
+  var fTokens = full.split(' ').filter(function (t) { return t; });
+  var numRegex = /^\d+[A-Z]?$/;
+  var qNums = qTokens.filter(function (t) { return numRegex.test(t); });
+  if (!qNums.length) return false;
+  var hasAllNums = qNums.every(function (n) { return fTokens.indexOf(n) !== -1; });
+  if (!hasAllNums) return false;
+  var qWords = qTokens.filter(function (t) { return !numRegex.test(t); });
+  return qWords.every(function (w) { return fTokens.indexOf(w) !== -1; });
+}
+
 function isEnabled_(value) {
   const v = normalize_(value);
   if (v === '' || v === '1' || v === 'SI' || v === 'SÍ' || v === 'TRUE' || v === 'VERDADERO') {
@@ -146,12 +162,11 @@ function normalizeHeader_(h) {
 
 function findClient_(query) {
   const q = normalize_(query);
-  const cq = canonicalAddress_(query);
   const clientes = mapByHeaders_(getSheet_(SHEETS.CLIENTES));
   const horarios = mapByHeaders_(getSheet_(SHEETS.HORARIOS));
 
   const client = clientes.find((c) => {
-    return isEnabled_(c.activo) && (canonicalAddress_(c.direccion) === cq || normalize_(c.telefono) === q);
+    return isEnabled_(c.activo) && (addressMatches_(query, c.direccion) || normalize_(c.telefono) === q);
   });
 
   if (!client) return { found: false };
