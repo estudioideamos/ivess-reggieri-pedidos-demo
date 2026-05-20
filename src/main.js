@@ -41,6 +41,8 @@ const addressSuggestions = document.getElementById("address-suggestions");
 const lookupSpinner = document.getElementById("lookup-spinner");
 const stepIndicator = document.getElementById("step-indicator");
 let addressBook = [];
+let addressBookNormalized = [];
+let suggestionRenderTimer = null;
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -315,29 +317,26 @@ async function submitOrder() {
 
   confirmBox.innerHTML = `
     <div class="confirm-status">Muchas gracias. Pedido realizado con exito.</div>
-    <div class="confirm-card">
-      <div class="confirm-row">
-        <span class="confirm-icon-circle"><img src="./assets/logistica.svg" alt="" class="confirm-row-icon" /></span>
-        <p><strong>Pedido:</strong> ${orderSummary().length ? orderSummary().join(" | ") : "Sin productos"}</p>
-      </div>
-      <div class="confirm-row">
-        <span class="confirm-icon-circle"><img src="./assets/mapas-y-banderas-confirm.svg" alt="" class="confirm-row-icon" /></span>
-        <p><strong>Dirección de entrega:</strong> ${state.cliente.direccion}</p>
-      </div>
-      <div class="confirm-row">
-        <span class="confirm-icon-circle"><img src="./assets/reloj-circular.svg" alt="" class="confirm-row-icon" /></span>
-        <p><strong>Horario de entrega:</strong> ${state.horario}</p>
-      </div>
-      <div class="confirm-row">
-        <span class="confirm-icon-circle"><img src="./assets/billete-de-banco.svg" alt="" class="confirm-row-icon" /></span>
-        <p><strong>Monto total:</strong> ${currency.format(calcTotal())}</p>
-      </div>
-      <p><strong>Nro de cliente:</strong> ${state.cliente.id_cliente}</p>
-      <div class="confirm-payline"></div>
-      <div class="confirm-pay-row">
-        <p class="confirm-pay-text">Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
-        <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
-      </div>
+    <div class="confirm-row">
+      <span class="confirm-icon-circle"><img src="./assets/logistica.svg" alt="" class="confirm-row-icon" /></span>
+      <p><span class="confirm-label">Pedido:</span><br /><span class="confirm-value">${orderSummary().length ? orderSummary().join(" | ") : "Sin productos"}</span></p>
+    </div>
+    <div class="confirm-row">
+      <span class="confirm-icon-circle"><img src="./assets/mapas-y-banderas-confirm.svg" alt="" class="confirm-row-icon" /></span>
+      <p><span class="confirm-label">Dirección de entrega:</span><br /><span class="confirm-value">${state.cliente.direccion}</span></p>
+    </div>
+    <div class="confirm-row">
+      <span class="confirm-icon-circle"><img src="./assets/reloj-circular.svg" alt="" class="confirm-row-icon" /></span>
+      <p><span class="confirm-label">Horario de entrega:</span><br /><span class="confirm-value">${state.horario}</span></p>
+    </div>
+    <div class="confirm-row">
+      <span class="confirm-icon-circle"><img src="./assets/billete-de-banco.svg" alt="" class="confirm-row-icon" /></span>
+      <p><span class="confirm-label">Monto total:</span><br /><span class="confirm-value">${currency.format(calcTotal())}</span></p>
+    </div>
+    <div class="confirm-payline"></div>
+    <div class="confirm-pay-row">
+      <p class="confirm-pay-text">Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
+      <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
     </div>
     <div class="confirm-note">Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</div>
   `;
