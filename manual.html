@@ -45,7 +45,7 @@
         <li>En <code>Clientes</code>, columna <code>lista_precio</code>: usar 1 o 2 segun corresponda.</li>
         <li><code>Horarios</code>: franjas horarias disponibles. Campo <code>activo</code>: 1 habilita, 0 deshabilita.</li>
         <li><code>ClienteHorarios</code>: relación entre cliente y horarios permitidos (por ID).</li>
-        <li><code>ProductosPrecios</code>: catálogo con <code>precio_lista_1</code>, <code>precio_lista_2</code> y estado de publicación.</li>
+        <li><code>ProductosPrecios</code>: catálogo con <code>precio_lista_1</code>, <code>precio_lista_2</code>, <code>activo_lista_1</code> y <code>activo_lista_2</code>.</li>
         <li><code>Pedidos</code>: se completa automáticamente desde la web.</li>
       </ul>
 
@@ -63,6 +63,13 @@
         <li>Entrar a <code>ProductosPrecios</code>.</li>
         <li>Editar columna <code>precio</code>.</li>
         <li>Guardar: el cambio impacta en la web automáticamente.</li>
+      </ol>
+
+      <h2>4.1 Mostrar/ocultar por lista</h2>
+      <ol>
+        <li>En <code>ProductosPrecios</code>, usar <code>activo_lista_1</code> y <code>activo_lista_2</code>.</li>
+        <li>Valor <code>1</code>: se muestra en esa lista.</li>
+        <li>Valor <code>0</code>: se oculta en esa lista.</li>
       </ol>
 
       <h2>5. Alta de cliente nuevo</h2>

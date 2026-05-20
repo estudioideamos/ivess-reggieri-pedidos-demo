@@ -96,9 +96,16 @@ function getCatalog_(listaPrecio) {
   const productos = mapByHeaders_(getSheet_(SHEETS.PRODUCTOS));
   const lista = Number(listaPrecio || 1) === 2 ? 2 : 1;
   const precioCol = lista === 2 ? 'precio_lista_2' : 'precio_lista_1';
+  const activoPorListaCol = lista === 2 ? 'activo_lista_2' : 'activo_lista_1';
 
   const catalogo = productos
-    .filter((p) => String(p.activo || '1') !== '0')
+    .filter((p) => {
+      const activoLista = p[activoPorListaCol];
+      if (activoLista !== '' && activoLista !== null && activoLista !== undefined) {
+        return String(activoLista) !== '0';
+      }
+      return String(p.activo || '1') !== '0';
+    })
     .map((p) => ({
       sku: String(p.sku || ''),
       nombre: String(p.producto || ''),

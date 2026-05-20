@@ -26,7 +26,7 @@ id_horario | etiqueta | activo
 id_cliente | id_horario
 
 ### ProductosPrecios
-sku | producto | precio_lista_1 | precio_lista_2 | activo
+sku | producto | precio_lista_1 | precio_lista_2 | activo_lista_1 | activo_lista_2
 
 ### Pedidos
 timestamp | id_pedido | id_cliente | direccion | horario | items_json | total | comentario | estado
