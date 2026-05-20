@@ -37,6 +37,9 @@ const totalLabel = document.getElementById("total-label");
 const confirmBox = document.getElementById("confirm-box");
 const commentInput = document.getElementById("comment-input");
 const addressSuggestions = document.getElementById("address-suggestions");
+const stepIndicator = document.getElementById("step-indicator");
+const loadingOverlay = document.getElementById("loading-overlay");
+const loadingText = document.getElementById("loading-text");
 let addressBook = [];
 
 function showScreen(name) {
@@ -46,6 +49,24 @@ function showScreen(name) {
   target.classList.remove("screen-enter");
   void target.offsetWidth;
   target.classList.add("screen-enter");
+  updateStepIndicator(name);
+}
+
+function updateStepIndicator(screenName) {
+  if (!stepIndicator) return;
+  const map = {
+    lookup: "PASO 1 de 5",
+    schedule: "PASO 2 de 5",
+    products: "PASO 3 de 5",
+    confirm: "PASO 4 de 5",
+  };
+  stepIndicator.textContent = map[screenName] || "PASO 1 de 5";
+}
+
+function setLoading(show, text = "Por favor, espere...") {
+  if (!loadingOverlay) return;
+  if (loadingText) loadingText.textContent = text;
+  loadingOverlay.classList.toggle("hidden", !show);
 }
 
 function normalize(value) {
@@ -264,7 +285,12 @@ async function submitOrder() {
   };
 
   if (API_BASE_URL) {
-    await api("createOrder", payload);
+    setLoading(true, "Enviando pedido...");
+    try {
+      await api("createOrder", payload);
+    } finally {
+      setLoading(false);
+    }
   }
 
   confirmBox.innerHTML = `
@@ -288,10 +314,12 @@ document.getElementById("btn-find").onclick = async () => {
   const prev = btn.textContent;
   btn.disabled = true;
   btn.textContent = "Buscando...";
+  setLoading(true, "Buscando cliente y horarios...");
   const found = await findClient(query);
   if (!found) {
     btn.disabled = false;
     btn.textContent = prev;
+    setLoading(false);
     alert("No encontramos cliente con esa dirección/teléfono.");
     return;
   }
@@ -306,6 +334,7 @@ document.getElementById("btn-find").onclick = async () => {
   showScreen("schedule");
   btn.disabled = false;
   btn.textContent = prev;
+  setLoading(false);
 };
 
 document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
