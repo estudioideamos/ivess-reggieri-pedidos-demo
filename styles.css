@@ -684,6 +684,17 @@ button.secondary {
     margin: 0 auto;
   }
 
+  #screen-lookup {
+    max-width: 1080px;
+    display: grid;
+    grid-template-columns: minmax(360px, 1fr) minmax(420px, 1fr);
+    column-gap: 44px;
+    align-items: center;
+    min-height: 560px;
+    padding-top: 34px;
+    padding-bottom: 34px;
+  }
+
   .title {
     font-size: 44px;
     margin-top: 6px;
@@ -697,9 +708,50 @@ button.secondary {
   #screen-lookup .address-wrap,
   #screen-lookup .actions,
   #screen-lookup .advisor-link {
-    max-width: 760px;
-    margin-left: auto;
-    margin-right: auto;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  #screen-lookup .title-icon-wrap,
+  #screen-lookup .title,
+  #screen-lookup .title-divider,
+  #screen-lookup .subtitle {
+    grid-column: 1;
+  }
+
+  #screen-lookup .address-wrap,
+  #screen-lookup .actions,
+  #screen-lookup .advisor-link {
+    grid-column: 2;
+  }
+
+  #screen-lookup .title-icon-wrap {
+    justify-content: flex-start;
+    margin-bottom: 6px;
+  }
+
+  #screen-lookup .title {
+    text-align: left;
+    margin-bottom: 14px;
+  }
+
+  #screen-lookup .title-divider {
+    margin: 4px 0 14px;
+    width: 72%;
+  }
+
+  #screen-lookup .subtitle {
+    text-align: left;
+    margin-bottom: 12px;
+    max-width: 620px;
+  }
+
+  #screen-lookup .actions {
+    margin-top: 12px;
+  }
+
+  #screen-lookup .advisor-link {
+    margin-top: 10px;
   }
 
   #screen-schedule #schedule-list,
