@@ -813,6 +813,10 @@ button.secondary {
     margin-right: 0;
   }
 
+  #screen-schedule #schedule-list {
+    margin-top: -20px;
+  }
+
   #screen-schedule .title {
     font-size: 34px;
     line-height: 1.05;
