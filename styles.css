@@ -169,6 +169,19 @@ body {
   position: relative;
 }
 
+.lookup-spinner {
+  position: absolute;
+  right: 14px;
+  top: 17px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(15, 78, 160, 0.22);
+  border-top-color: #0f4ea0;
+  animation: spin 0.7s linear infinite;
+  z-index: 3;
+}
+
 .address-suggestions {
   position: static;
   margin-top: 8px;

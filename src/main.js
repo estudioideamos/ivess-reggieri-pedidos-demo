@@ -37,6 +37,7 @@ const totalLabel = document.getElementById("total-label");
 const confirmBox = document.getElementById("confirm-box");
 const commentInput = document.getElementById("comment-input");
 const addressSuggestions = document.getElementById("address-suggestions");
+const lookupSpinner = document.getElementById("lookup-spinner");
 const stepIndicator = document.getElementById("step-indicator");
 const loadingOverlay = document.getElementById("loading-overlay");
 const loadingText = document.getElementById("loading-text");
@@ -84,6 +85,11 @@ function setLoading(show, text = "Por favor, espere...") {
     loadingOverlay.classList.add("hidden");
     loadingHideTimer = null;
   }, wait);
+}
+
+function setLookupLoading(show) {
+  if (!lookupSpinner) return;
+  lookupSpinner.classList.toggle("hidden", !show);
 }
 
 function normalize(value) {
@@ -331,7 +337,7 @@ document.getElementById("btn-find").onclick = async () => {
   const prev = btn.textContent;
   btn.disabled = true;
   btn.textContent = "Buscando...";
-  setLoading(true, "Buscando cliente y horarios...");
+  setLookupLoading(true);
   try {
     const found = await findClient(query);
     if (!found) {
@@ -353,7 +359,7 @@ document.getElementById("btn-find").onclick = async () => {
   } finally {
     btn.disabled = false;
     btn.textContent = prev;
-    setLoading(false);
+    setLookupLoading(false);
   }
 };
 
