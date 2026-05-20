@@ -324,7 +324,7 @@ async function submitOrder() {
   showScreen("confirm");
 }
 
-document.getElementById("btn-find").onclick = async () => {
+const handleFindClient = async () => {
   const btn = document.getElementById("btn-find");
   const query = addressInput.value.trim();
   if (!query) return;
@@ -363,6 +363,13 @@ document.getElementById("btn-find").onclick = async () => {
     setLookupLoading(false);
   }
 };
+document.getElementById("btn-find").onclick = handleFindClient;
+addressInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    handleFindClient();
+  }
+});
 
 document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
 document.getElementById("btn-back-schedule").onclick = () => showScreen("schedule");
