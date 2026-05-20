@@ -52,6 +52,7 @@ body {
   padding: 24px 20px 18px;
   background: #d7e5ef;
   border-bottom: 1px solid #c7d9e8;
+  position: relative;
 }
 
 .logo {
@@ -62,12 +63,22 @@ body {
 }
 
 .step-indicator {
-  color: #0f4ea0;
+  color: #ffffff;
   font-family: "Montserrat", "Manrope", sans-serif;
   font-weight: 700;
-  font-size: 18px;
+  font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.4px;
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  background: #0f4ea0;
+  border: 1px solid #3e8dd8;
+  border-radius: 999px;
+  padding: 6px 10px;
+  line-height: 1;
+  box-shadow: 0 6px 14px rgba(15, 78, 160, 0.25);
+  z-index: 2;
 }
 
 .content {
@@ -526,7 +537,7 @@ button.secondary {
   .address-suggestion { font-size: 13px; }
   .title-icon { width: 78px; height: 78px; }
   .title-icon-svg { width: 40px; height: 40px; }
-  .step-indicator { font-size: 14px; }
+  .step-indicator { font-size: 12px; right: 12px; top: 10px; padding: 6px 9px; }
   #products-list { grid-template-columns: 1fr 1fr; }
   .product h3 { font-size: 16px; min-height: 44px; }
   .product-media { height: 96px; }

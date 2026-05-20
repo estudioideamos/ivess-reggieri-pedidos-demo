@@ -41,6 +41,7 @@ const stepIndicator = document.getElementById("step-indicator");
 const loadingOverlay = document.getElementById("loading-overlay");
 const loadingText = document.getElementById("loading-text");
 let addressBook = [];
+let loadingStartedAt = 0;
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -66,7 +67,15 @@ function updateStepIndicator(screenName) {
 function setLoading(show, text = "Por favor, espere...") {
   if (!loadingOverlay) return;
   if (loadingText) loadingText.textContent = text;
-  loadingOverlay.classList.toggle("hidden", !show);
+  if (show) {
+    loadingStartedAt = Date.now();
+    loadingOverlay.classList.remove("hidden");
+    return;
+  }
+  const elapsed = Date.now() - loadingStartedAt;
+  const minVisible = 550;
+  const wait = Math.max(0, minVisible - elapsed);
+  setTimeout(() => loadingOverlay.classList.add("hidden"), wait);
 }
 
 function normalize(value) {
