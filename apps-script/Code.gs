@@ -2,7 +2,6 @@
   CLIENTES: 'Clientes',
   PRODUCTOS: 'ProductosPrecios',
   PEDIDOS: 'Pedidos',
-  CLIENTE_HORARIOS: 'ClienteHorarios',
   HORARIOS: 'Horarios',
 };
 
@@ -109,6 +108,18 @@ function normalizeHeader_(h) {
     'activo lista 1': 'activo_lista_1',
     'activo_lista_2': 'activo_lista_2',
     'activo lista 2': 'activo_lista_2',
+    'horario_1': 'horario_1',
+    'horario_2': 'horario_2',
+    'horario_3': 'horario_3',
+    'horario_4': 'horario_4',
+    'horario 1': 'horario_1',
+    'horario 2': 'horario_2',
+    'horario 3': 'horario_3',
+    'horario 4': 'horario_4',
+    'nro horario 1': 'horario_1',
+    'nro horario 2': 'horario_2',
+    'nro horario 3': 'horario_3',
+    'nro horario 4': 'horario_4',
   };
 
   return map[raw] || raw.replace(/\s+/g, '_');
@@ -118,7 +129,6 @@ function findClient_(query) {
   const q = normalize_(query);
   const clientes = mapByHeaders_(getSheet_(SHEETS.CLIENTES));
   const horarios = mapByHeaders_(getSheet_(SHEETS.HORARIOS));
-  const clienteHorarios = mapByHeaders_(getSheet_(SHEETS.CLIENTE_HORARIOS));
 
   const client = clientes.find((c) => {
     return isEnabled_(c.activo) && (normalize_(c.direccion).includes(q) || normalize_(c.telefono) === q);
@@ -126,9 +136,9 @@ function findClient_(query) {
 
   if (!client) return { found: false };
 
-  const ids = clienteHorarios
-    .filter((ch) => String(ch.id_cliente) === String(client.id_cliente))
-    .map((ch) => String(ch.id_horario));
+  const ids = ['horario_1', 'horario_2', 'horario_3', 'horario_4']
+    .map((k) => String(client[k] || '').trim())
+    .filter((v) => v && v !== '0');
 
   const etiquetas = horarios
     .filter((h) => ids.includes(String(h.id_horario)) && isEnabled_(h.activo))
