@@ -688,10 +688,11 @@ button.secondary {
     max-width: 1240px;
     display: flex;
     gap: 44px;
-    align-items: center;
-    min-height: 520px;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 0;
+    padding-top: 30px;
+    padding-bottom: 8px;
   }
 
   .title {
@@ -717,12 +718,12 @@ button.secondary {
   }
 
   #screen-lookup .lookup-left {
-    max-width: 560px;
+    max-width: 48%;
     margin: 0;
   }
 
   #screen-lookup .lookup-right {
-    max-width: 640px;
+    max-width: 48%;
     margin: 0;
   }
 
@@ -736,7 +737,7 @@ button.secondary {
 
   #screen-lookup .title-icon-wrap {
     justify-content: flex-start;
-    margin: 14px 0 10px;
+    margin: 8px 0 10px;
   }
 
   #screen-lookup .title {
