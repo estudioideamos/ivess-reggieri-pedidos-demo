@@ -756,6 +756,7 @@ button.secondary {
 
   #screen-lookup .subtitle {
     text-align: left;
+    margin-top: -22px;
     margin-bottom: 0;
     max-width: 520px;
   }
