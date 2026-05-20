@@ -335,10 +335,10 @@ async function submitOrder() {
     </div>
     <div class="confirm-payline"></div>
     <div class="confirm-pay-row">
-      <p class="confirm-pay-text">Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
+      <p class="confirm-pay-text"><img src="./assets/billetera.svg" alt="" class="confirm-pay-icon" /> Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
       <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
     </div>
-    <div class="confirm-note">Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</div>
+    <div class="confirm-note"><span>Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</span></div>
   `;
   const copyBtn = document.getElementById("btn-copy-alias");
   if (copyBtn) {
