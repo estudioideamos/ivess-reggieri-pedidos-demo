@@ -32,6 +32,7 @@ const screens = {
 const addressInput = document.getElementById("address-input");
 const customerLabel = document.getElementById("customer-label");
 const scheduleList = document.getElementById("schedule-list");
+const scheduleLoading = document.getElementById("schedule-loading");
 const productsList = document.getElementById("products-list");
 const totalLabel = document.getElementById("total-label");
 const confirmBox = document.getElementById("confirm-box");
@@ -65,6 +66,11 @@ function updateStepIndicator(screenName) {
 function setLookupLoading(show) {
   if (!lookupSpinner) return;
   lookupSpinner.classList.toggle("hidden", !show);
+}
+
+function setScheduleLoading(show) {
+  if (!scheduleLoading) return;
+  scheduleLoading.classList.toggle("hidden", !show);
 }
 
 function normalize(value) {
@@ -217,13 +223,18 @@ function renderSchedules() {
     btn.onclick = () => {
       const openProducts = async () => {
         state.horario = h;
-        if ((!state.products || !state.products.length) && productsPromise) {
-          await productsPromise;
-        } else if (!state.products || !state.products.length) {
-          state.products = await getProductsForClient(state.cliente);
+        setScheduleLoading(true);
+        try {
+          if ((!state.products || !state.products.length) && productsPromise) {
+            await productsPromise;
+          } else if (!state.products || !state.products.length) {
+            state.products = await getProductsForClient(state.cliente);
+          }
+          renderProducts();
+          showScreen("products");
+        } finally {
+          setScheduleLoading(false);
         }
-        renderProducts();
-        showScreen("products");
       };
       openProducts();
     };
