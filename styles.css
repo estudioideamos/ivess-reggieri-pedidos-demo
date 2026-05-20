@@ -688,13 +688,7 @@ button.secondary {
     max-width: 1240px;
     display: grid;
     grid-template-columns: minmax(420px, 1fr) minmax(520px, 1fr);
-    grid-template-areas:
-      "lookup-icon lookup-input"
-      "lookup-title lookup-input"
-      "lookup-divider lookup-actions"
-      "lookup-subtitle lookup-advisor";
     column-gap: 44px;
-    row-gap: 10px;
     align-items: center;
     min-height: 0;
     padding-top: 8px;
@@ -718,26 +712,28 @@ button.secondary {
     margin: 0;
   }
 
-  #screen-lookup .title-icon-wrap,
-  #screen-lookup .title,
-  #screen-lookup .title-divider,
-  #screen-lookup .subtitle {
-    grid-column: 1;
+  #screen-lookup .lookup-left,
+  #screen-lookup .lookup-right {
+    width: 100%;
   }
 
-  #screen-lookup .address-wrap,
-  #screen-lookup .actions,
+  #screen-lookup .lookup-left {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  #screen-lookup .lookup-right {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  #screen-lookup .actions {
+    margin-top: 10px;
+  }
+
   #screen-lookup .advisor-link {
-    grid-column: 2;
+    margin-top: 8px;
   }
-
-  #screen-lookup .title-icon-wrap { grid-area: lookup-icon; }
-  #screen-lookup .title { grid-area: lookup-title; }
-  #screen-lookup .title-divider { grid-area: lookup-divider; }
-  #screen-lookup .subtitle { grid-area: lookup-subtitle; }
-  #screen-lookup .address-wrap { grid-area: lookup-input; align-self: end; margin-top: 0; }
-  #screen-lookup .actions { grid-area: lookup-actions; align-self: center; }
-  #screen-lookup .advisor-link { grid-area: lookup-advisor; align-self: start; }
 
   #screen-lookup .title-icon-wrap {
     justify-content: flex-start;
@@ -756,7 +752,7 @@ button.secondary {
 
   #screen-lookup .subtitle {
     text-align: left;
-    margin-top: -16px;
+    margin-top: -8px;
     margin-bottom: 0;
     max-width: 520px;
   }
@@ -769,14 +765,6 @@ button.secondary {
   #screen-lookup .title-icon-svg {
     width: 33px;
     height: 33px;
-  }
-
-  #screen-lookup .actions {
-    margin-top: 10px;
-  }
-
-  #screen-lookup .advisor-link {
-    margin-top: 8px;
   }
 
   #screen-schedule #schedule-list,
