@@ -12,7 +12,10 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: "Manrope", "Segoe UI", Tahoma, sans-serif;
-  background: #dfe8f3;
+  background:
+    radial-gradient(1200px 500px at 15% 10%, rgba(96, 141, 181, 0.28) 0%, rgba(96, 141, 181, 0) 60%),
+    radial-gradient(900px 480px at 88% 82%, rgba(120, 171, 204, 0.22) 0%, rgba(120, 171, 204, 0) 58%),
+    linear-gradient(135deg, #e8edf3 0%, #d4dee8 45%, #c5d2df 100%);
   color: var(--text);
 }
 
