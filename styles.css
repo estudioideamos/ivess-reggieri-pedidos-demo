@@ -734,7 +734,7 @@ button.secondary {
   #screen-lookup .title { grid-area: lookup-title; }
   #screen-lookup .title-divider { grid-area: lookup-divider; }
   #screen-lookup .subtitle { grid-area: lookup-subtitle; }
-  #screen-lookup .address-wrap { grid-area: lookup-input; align-self: start; margin-top: 8px; }
+  #screen-lookup .address-wrap { grid-area: lookup-input; align-self: start; margin-top: 72px; }
   #screen-lookup .actions { grid-area: lookup-actions; align-self: start; }
   #screen-lookup .advisor-link { grid-area: lookup-advisor; align-self: start; }
 
