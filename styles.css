@@ -342,11 +342,19 @@ button.secondary {
 .product-price {
   font-size: 18px;
   font-weight: 900;
+  color: #083b98;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
   margin: 0 0 10px;
   text-align: center;
 }
 
-.qty { display: flex; gap: 10px; align-items: center; }
+.qty {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
 .qty button {
   width: 42px;
   height: 42px;
@@ -354,7 +362,14 @@ button.secondary {
   font-size: 28px;
   line-height: 1;
 }
-.qty span { font-size: 24px; min-width: 24px; text-align: center; }
+.qty span {
+  font-size: 34px;
+  min-width: 30px;
+  text-align: center;
+  font-weight: 800;
+  color: #0b3ea8;
+  line-height: 1;
+}
 
 .footer-total {
   margin: 10px 0;

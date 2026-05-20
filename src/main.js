@@ -76,6 +76,12 @@ function normalize(value) {
     .trim();
 }
 
+function beautifyProductName(name) {
+  return String(name || "")
+    .replace(/Botellon/gi, "Botellón")
+    .replace(/Sifon/gi, "Sifón");
+}
+
 async function api(path, payload) {
   if (!API_BASE_URL) return null;
   const res = await fetch(`${API_BASE_URL}?path=${encodeURIComponent(path)}`, {
@@ -230,12 +236,13 @@ function renderProducts() {
   state.products.forEach((p) => {
     if (!state.items[p.sku]) state.items[p.sku] = 0;
     const imageUrl = p.image_url || PRODUCT_IMAGE_BY_SKU[p.sku] || "";
+    const displayName = beautifyProductName(p.nombre);
     const card = document.createElement("div");
     card.className = "card product";
     card.style.animationDelay = `${0.05 * productsList.children.length}s`;
     card.innerHTML = `
-      <div class="product-media">${imageUrl ? `<img src="${imageUrl}" alt="${p.nombre}" class="product-image" />` : ""}</div>
-      <h3>${p.nombre}</h3>
+      <div class="product-media">${imageUrl ? `<img src="${imageUrl}" alt="${displayName}" class="product-image" />` : ""}</div>
+      <h3>${displayName}</h3>
       <p class="product-price">${currency.format(p.precio)}</p>
       <div class="qty">
         <button data-delta="-1">-</button>
@@ -268,7 +275,7 @@ function updateTotal() {
 function orderSummary() {
   return state.products
     .filter((p) => (state.items[p.sku] || 0) > 0)
-    .map((p) => `${state.items[p.sku]} x ${p.nombre}`);
+    .map((p) => `${state.items[p.sku]} x ${beautifyProductName(p.nombre)}`);
 }
 
 async function submitOrder() {
