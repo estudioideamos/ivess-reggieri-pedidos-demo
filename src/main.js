@@ -324,12 +324,36 @@ async function submitOrder() {
         <span class="confirm-icon-circle"><img src="./assets/mapas-y-banderas-confirm.svg" alt="" class="confirm-row-icon" /></span>
         <p><strong>Dirección de entrega:</strong> ${state.cliente.direccion}</p>
       </div>
-      <p><strong>Horario de entrega:</strong> ${state.horario}</p>
-      <p><strong>Monto total:</strong> ${currency.format(calcTotal())}</p>
+      <div class="confirm-row">
+        <span class="confirm-icon-circle"><img src="./assets/reloj-circular.svg" alt="" class="confirm-row-icon" /></span>
+        <p><strong>Horario de entrega:</strong> ${state.horario}</p>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-icon-circle"><img src="./assets/billete-de-banco.svg" alt="" class="confirm-row-icon" /></span>
+        <p><strong>Monto total:</strong> ${currency.format(calcTotal())}</p>
+      </div>
       <p><strong>Nro de cliente:</strong> ${state.cliente.id_cliente}</p>
+      <div class="confirm-payline"></div>
+      <div class="confirm-pay-row">
+        <p class="confirm-pay-text">Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
+        <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
+      </div>
     </div>
-    <div class="confirm-note">Ante cualquier consulta, podes hablar con un asesor.</div>
+    <div class="confirm-note">Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</div>
   `;
+  const copyBtn = document.getElementById("btn-copy-alias");
+  if (copyBtn) {
+    copyBtn.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText("Reggieri.SA");
+        copyBtn.textContent = "Alias copiado";
+        setTimeout(() => { copyBtn.textContent = "Copiar alias"; }, 1300);
+      } catch (_) {
+        copyBtn.textContent = "No se pudo copiar";
+        setTimeout(() => { copyBtn.textContent = "Copiar alias"; }, 1300);
+      }
+    };
+  }
   showScreen("confirm");
 }
 

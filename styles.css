@@ -500,6 +500,37 @@ button.secondary {
   font-weight: 600;
 }
 
+.confirm-payline {
+  height: 1px;
+  background: rgba(124, 205, 255, 0.8);
+  margin: 10px 0 10px;
+}
+
+.confirm-pay-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.confirm-pay-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.confirm-copy-btn {
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(172, 223, 255, 0.8);
+  background: rgba(10, 82, 191, 0.5);
+  color: #e8f6ff;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .dev-credit {
   margin-top: auto;
   text-align: center;
@@ -612,4 +643,6 @@ button.secondary {
   .product-image { max-height: 94px; }
   .qty button { width: 36px; height: 36px; font-size: 24px; }
   .qty span { font-size: 20px; }
+  .confirm-pay-row { grid-template-columns: 1fr; }
+  .confirm-copy-btn { width: 100%; }
 }
