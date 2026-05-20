@@ -1,0 +1,138 @@
+﻿:root {
+  --blue-dark: #003ea8;
+  --blue-mid: #0b57d0;
+  --blue-soft: #46b5ff;
+  --white: #ffffff;
+  --bg: #eaf4ff;
+  --text: #0a2f7f;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  background: radial-gradient(circle at top, #f7fbff 10%, var(--bg) 60%);
+  color: var(--text);
+}
+
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f4f9ff 0%, #d9ecff 28%, #0b57d0 28%, #0040aa 100%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 20px 18px;
+  color: var(--blue-mid);
+}
+
+.logo {
+  font-size: 48px;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.menu {
+  font-size: 32px;
+}
+
+.content {
+  padding: 18px;
+}
+
+.title {
+  color: white;
+  font-size: 40px;
+  text-align: center;
+  margin: 6px 0 18px;
+  font-weight: 800;
+}
+
+.subtitle {
+  color: #bce3ff;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.input, textarea {
+  width: 100%;
+  border-radius: 14px;
+  border: 2px solid #a7d7ff;
+  padding: 16px;
+  font-size: 20px;
+}
+
+.actions { display: flex; gap: 10px; margin-top: 14px; }
+
+button {
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #3fa9f5, #6bc6ff);
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+  padding: 14px;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: transparent;
+  border: 2px solid #9ad1ff;
+}
+
+.card {
+  width: 100%;
+  background: white;
+  color: #0b3ea8;
+  border-radius: 18px;
+  border: 2px solid #cfe8ff;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.card-schedule {
+  text-align: left;
+}
+
+.product h3 {
+  margin: 0 0 6px;
+  font-size: 24px;
+}
+
+.qty { display: flex; gap: 10px; align-items: center; }
+.qty button {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  font-size: 28px;
+  line-height: 1;
+}
+.qty span { font-size: 24px; min-width: 24px; text-align: center; }
+
+.footer-total {
+  margin: 10px 0;
+  color: white;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.hidden { display: none; }
+
+.confirm {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid #73c7ff;
+  border-radius: 14px;
+  color: #e2f4ff;
+  padding: 14px;
+}
+
+.confirm p { margin: 7px 0; }
+
+@media (max-width: 420px) {
+  .title { font-size: 34px; }
+  .logo { font-size: 40px; }
+}

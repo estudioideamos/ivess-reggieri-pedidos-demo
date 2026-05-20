@@ -1,0 +1,177 @@
+﻿import { API_BASE_URL, MOCK_CLIENTS, MOCK_PRODUCTS } from "./config.js";
+
+const state = {
+  cliente: null,
+  horario: "",
+  items: {},
+};
+
+const currency = new Intl.NumberFormat("es-AR", {
+  style: "currency",
+  currency: "ARS",
+  maximumFractionDigits: 0,
+});
+
+const screens = {
+  lookup: document.getElementById("screen-lookup"),
+  schedule: document.getElementById("screen-schedule"),
+  products: document.getElementById("screen-products"),
+  confirm: document.getElementById("screen-confirm"),
+};
+
+const addressInput = document.getElementById("address-input");
+const customerLabel = document.getElementById("customer-label");
+const scheduleList = document.getElementById("schedule-list");
+const productsList = document.getElementById("products-list");
+const totalLabel = document.getElementById("total-label");
+const confirmBox = document.getElementById("confirm-box");
+const commentInput = document.getElementById("comment-input");
+
+function showScreen(name) {
+  Object.values(screens).forEach((el) => el.classList.add("hidden"));
+  screens[name].classList.remove("hidden");
+}
+
+function normalize(value) {
+  return (value || "")
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+async function api(path, payload) {
+  if (!API_BASE_URL) return null;
+  const res = await fetch(`${API_BASE_URL}?path=${encodeURIComponent(path)}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error("Error API");
+  return res.json();
+}
+
+async function findClient(query) {
+  const normalized = normalize(query);
+  const byMock = MOCK_CLIENTS.find(
+    (c) => normalize(c.direccion).includes(normalized) || normalize(c.telefono) === normalized
+  );
+  if (API_BASE_URL) {
+    const live = await api("findClient", { query });
+    if (live?.found) return live.client;
+  }
+  return byMock || null;
+}
+
+function renderSchedules() {
+  scheduleList.innerHTML = "";
+  state.cliente.horarios.forEach((h) => {
+    const btn = document.createElement("button");
+    btn.className = "card card-schedule";
+    btn.textContent = h;
+    btn.onclick = () => {
+      state.horario = h;
+      renderProducts();
+      showScreen("products");
+    };
+    scheduleList.appendChild(btn);
+  });
+}
+
+function renderProducts() {
+  productsList.innerHTML = "";
+  MOCK_PRODUCTS.forEach((p) => {
+    if (!state.items[p.sku]) state.items[p.sku] = 0;
+    const card = document.createElement("div");
+    card.className = "card product";
+    card.innerHTML = `
+      <h3>${p.nombre}</h3>
+      <p>${currency.format(p.precio)}</p>
+      <div class="qty">
+        <button data-delta="-1">-</button>
+        <span id="qty-${p.sku}">${state.items[p.sku]}</span>
+        <button data-delta="1">+</button>
+      </div>
+    `;
+    const buttons = card.querySelectorAll("button");
+    buttons.forEach((b) => {
+      b.onclick = () => {
+        const delta = Number(b.dataset.delta);
+        state.items[p.sku] = Math.max(0, state.items[p.sku] + delta);
+        document.getElementById(`qty-${p.sku}`).textContent = state.items[p.sku];
+        updateTotal();
+      };
+    });
+    productsList.appendChild(card);
+  });
+  updateTotal();
+}
+
+function calcTotal() {
+  return MOCK_PRODUCTS.reduce((acc, p) => acc + p.precio * (state.items[p.sku] || 0), 0);
+}
+
+function updateTotal() {
+  totalLabel.textContent = currency.format(calcTotal());
+}
+
+function orderSummary() {
+  const lines = MOCK_PRODUCTS
+    .filter((p) => (state.items[p.sku] || 0) > 0)
+    .map((p) => `${state.items[p.sku]} x ${p.nombre}`);
+  return lines.length ? lines.join(", ") : "Sin productos";
+}
+
+async function submitOrder() {
+  const payload = {
+    id_cliente: state.cliente.id_cliente,
+    direccion: state.cliente.direccion,
+    horario: state.horario,
+    items: state.items,
+    comentario: commentInput.value.trim(),
+    total: calcTotal(),
+  };
+
+  if (API_BASE_URL) {
+    await api("createOrder", payload);
+  }
+
+  confirmBox.innerHTML = `
+    <p><strong>Cliente:</strong> ${state.cliente.nombre}</p>
+    <p><strong>Direccion:</strong> ${state.cliente.direccion}</p>
+    <p><strong>Horario:</strong> ${state.horario}</p>
+    <p><strong>Pedido:</strong> ${orderSummary()}</p>
+    <p><strong>Total:</strong> ${currency.format(calcTotal())}</p>
+  `;
+  showScreen("confirm");
+}
+
+document.getElementById("btn-find").onclick = async () => {
+  const query = addressInput.value.trim();
+  if (!query) return;
+  const found = await findClient(query);
+  if (!found) {
+    alert("No encontramos cliente con esa direccion/telefono.");
+    return;
+  }
+  state.cliente = found;
+  customerLabel.textContent = `${found.nombre} - ${found.direccion}`;
+  renderSchedules();
+  showScreen("schedule");
+};
+
+document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
+document.getElementById("btn-back-schedule").onclick = () => showScreen("schedule");
+document.getElementById("btn-submit").onclick = submitOrder;
+
+document.getElementById("btn-new-order").onclick = () => {
+  state.cliente = null;
+  state.horario = "";
+  state.items = {};
+  commentInput.value = "";
+  addressInput.value = "";
+  showScreen("lookup");
+};
+
+showScreen("lookup");

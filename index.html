@@ -1,0 +1,56 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ivess Reggieri - Pedidos</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="logo">Ivess</div>
+      <div class="menu">≡</div>
+    </header>
+
+    <section class="content" id="screen-lookup">
+      <h1 class="title">Ingresa tu direccion</h1>
+      <p class="subtitle">Buscamos tu cliente y horarios habilitados</p>
+      <input id="address-input" class="input" placeholder="Direccion completa o telefono" />
+      <div class="actions">
+        <button id="btn-find" style="width:100%">Buscar cliente</button>
+      </div>
+    </section>
+
+    <section class="content hidden" id="screen-schedule">
+      <h1 class="title">Selecciona horario</h1>
+      <p class="subtitle" id="customer-label"></p>
+      <div id="schedule-list"></div>
+      <div class="actions">
+        <button id="btn-back-lookup" class="secondary" style="width:100%">Volver</button>
+      </div>
+    </section>
+
+    <section class="content hidden" id="screen-products">
+      <h1 class="title">Tu pedido</h1>
+      <div id="products-list"></div>
+      <textarea id="comment-input" rows="3" placeholder="Comentarios para entrega"></textarea>
+      <div class="footer-total">Total: <span id="total-label">$0</span></div>
+      <div class="actions">
+        <button id="btn-back-schedule" class="secondary" style="flex:1">Volver</button>
+        <button id="btn-submit" style="flex:2">Enviar pedido</button>
+      </div>
+    </section>
+
+    <section class="content hidden" id="screen-confirm">
+      <h1 class="title">Pedido confirmado</h1>
+      <div class="confirm" id="confirm-box"></div>
+      <div class="actions">
+        <button id="btn-new-order" style="width:100%">Hacer otro pedido</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
