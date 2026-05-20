@@ -22,10 +22,10 @@ export const MOCK_CLIENTS = [
 ];
 
 export const MOCK_PRODUCTS = [
-  { sku: "BOT20", nombre: "Botellon 20 litros", precio_lista_1: 10000, precio_lista_2: 9000 },
-  { sku: "BOT12", nombre: "Botellon 12 litros", precio_lista_1: 7000, precio_lista_2: 6000 },
-  { sku: "BJS12", nombre: "Botellon 12 litros bajo sodio", precio_lista_1: 8000, precio_lista_2: 7000 },
-  { sku: "SODA", nombre: "Sifon de soda", precio_lista_1: 1200, precio_lista_2: 1200 },
-  { sku: "SAB15", nombre: "Agua saborizada 1.5 litros", precio_lista_1: 2500, precio_lista_2: 2200 },
+  { sku: "BOT20", nombre: "Botellon 20 litros", precio_lista_1: 10000, precio_lista_2: 9000, image_url: "./assets/products/bot20.jpeg" },
+  { sku: "BOT12", nombre: "Botellon 12 litros", precio_lista_1: 7000, precio_lista_2: 6000, image_url: "./assets/products/bot12.jpeg" },
+  { sku: "BJS12", nombre: "Botellon 12 litros bajo sodio", precio_lista_1: 8000, precio_lista_2: 7000, image_url: "./assets/products/bot12_bajo_sodio.jpg" },
+  { sku: "SODA", nombre: "Sifon de soda", precio_lista_1: 1200, precio_lista_2: 1200, image_url: "./assets/products/soda.png" },
+  { sku: "SAB15", nombre: "Agua saborizada 1.5 litros", precio_lista_1: 2500, precio_lista_2: 2200, image_url: "./assets/products/sab15.jpeg" },
 ];
 

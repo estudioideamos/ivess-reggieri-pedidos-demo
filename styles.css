@@ -47,14 +47,15 @@ body {
   justify-content: flex-start;
   align-items: center;
   padding: 24px 20px 18px;
-  background: linear-gradient(135deg, #0a4ab3 0%, #1da9e9 100%);
+  background: #d7e5ef;
+  border-bottom: 1px solid #c7d9e8;
 }
 
 .logo {
-  height: 62px;
+  height: 52px;
   width: auto;
   object-fit: contain;
-  filter: drop-shadow(0 4px 10px rgba(0, 27, 92, 0.28));
+  filter: none;
 }
 
 .content {
@@ -282,7 +283,29 @@ button.secondary {
 
 .product h3 {
   margin: 0 0 6px;
-  font-size: 24px;
+  font-size: 18px;
+  min-height: 48px;
+}
+
+.product-media {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 118px;
+  object-fit: contain;
+}
+
+.product-price {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 10px;
 }
 
 .qty { display: flex; gap: 10px; align-items: center; }
@@ -330,6 +353,27 @@ button.secondary {
 }
 
 .confirm p { margin: 7px 0; }
+
+.confirm-status {
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.confirm-card {
+  border: 1px solid rgba(152, 212, 255, 0.75);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(5, 51, 138, 0.45);
+}
+
+.confirm-note {
+  margin-top: 12px;
+  text-align: center;
+  color: #bfe4ff;
+  font-weight: 600;
+}
 
 .dev-credit {
   margin-top: auto;
@@ -425,11 +469,17 @@ button.secondary {
 
 @media (max-width: 520px) {
   .title { font-size: 30px; line-height: 1.05; }
-  .logo { height: 52px; }
+  .logo { height: 48px; }
   .input, textarea { font-size: 15px; padding: 14px; }
   button { font-size: 15px; padding: 12px; }
   .subtitle { font-size: 15px; }
   .address-suggestion { font-size: 13px; }
   .title-icon { width: 78px; height: 78px; }
   .title-icon-svg { width: 40px; height: 40px; }
+  #products-list { grid-template-columns: 1fr 1fr; }
+  .product h3 { font-size: 16px; min-height: 44px; }
+  .product-media { height: 96px; }
+  .product-image { max-height: 94px; }
+  .qty button { width: 36px; height: 36px; font-size: 24px; }
+  .qty span { font-size: 20px; }
 }

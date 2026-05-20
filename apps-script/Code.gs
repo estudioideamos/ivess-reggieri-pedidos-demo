@@ -21,6 +21,10 @@ function doPost(e) {
     if (path === 'getCatalog') {
       return jsonResponse(getCatalog_(body.lista_precio));
     }
+    
+    if (path === 'getAddressBook') {
+      return jsonResponse(getAddressBook_());
+    }
 
     return jsonResponse({ error: 'Ruta invalida' }, 400);
   } catch (err) {
@@ -100,6 +104,9 @@ function normalizeHeader_(h) {
     'sku': 'sku',
     'codigo producto': 'sku',
     'producto': 'producto',
+    'imagen_url': 'imagen_url',
+    'imagen url': 'imagen_url',
+    'imagen': 'imagen_url',
     'precio_lista_1': 'precio_lista_1',
     'precio lista 1': 'precio_lista_1',
     'precio_lista_2': 'precio_lista_2',
@@ -175,6 +182,7 @@ function getCatalog_(listaPrecio) {
       sku: String(p.sku || ''),
       nombre: String(p.producto || ''),
       precio: Number(p[precioCol] || 0),
+      image_url: String(p.imagen_url || ''),
     }));
 
   return { ok: true, lista_precio: lista, productos: catalogo };
@@ -182,20 +190,56 @@ function getCatalog_(listaPrecio) {
 
 function createOrder_(payload) {
   const sh = getSheet_(SHEETS.PEDIDOS);
-  const idPedido = Utilities.getUuid();
+  const idPedido = buildOrderNumber_();
+  const itemsRaw = payload.items || {};
+  const itemsPretty = formatItemsForSheet_(itemsRaw);
   sh.appendRow([
     new Date(),
     idPedido,
     payload.id_cliente || '',
     payload.direccion || '',
     payload.horario || '',
-    JSON.stringify(payload.items || {}),
+    itemsPretty,
     Number(payload.total || 0),
     payload.comentario || '',
     'NUEVO',
   ]);
 
   return { ok: true, id_pedido: idPedido };
+}
+
+function buildOrderNumber_() {
+  const now = new Date();
+  const tz = Session.getScriptTimeZone();
+  const stamp = Utilities.formatDate(now, tz, 'yyMMdd-HHmmss');
+  const rand = Math.floor(100 + Math.random() * 900);
+  return 'PED-' + stamp + '-' + rand;
+}
+
+function formatItemsForSheet_(items) {
+  const productos = mapByHeaders_(getSheet_(SHEETS.PRODUCTOS));
+  const bySku = {};
+  productos.forEach((p) => {
+    const sku = String(p.sku || '').trim();
+    if (sku) bySku[sku] = String(p.producto || sku).trim();
+  });
+
+  const lines = Object.keys(items)
+    .map((sku) => ({ sku: String(sku), qty: Number(items[sku] || 0) }))
+    .filter((x) => x.qty > 0)
+    .map((x) => `${x.qty} x ${bySku[x.sku] || x.sku}`);
+
+  return lines.length ? lines.join(' | ') : 'Sin productos';
+}
+
+function getAddressBook_() {
+  const clientes = mapByHeaders_(getSheet_(SHEETS.CLIENTES))
+    .filter((c) => isEnabled_(c.activo))
+    .map((c) => String(c.direccion || '').trim())
+    .filter((v) => v);
+
+  const unique = clientes.filter((v, i, arr) => arr.indexOf(v) === i);
+  return { ok: true, direcciones: unique };
 }
 
 function jsonResponse(data, statusCode) {

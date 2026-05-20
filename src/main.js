@@ -8,6 +8,13 @@ const state = {
 };
 const catalogCache = new Map();
 let productsPromise = null;
+const PRODUCT_IMAGE_BY_SKU = {
+  BOT20: "./assets/products/bot20.jpeg",
+  BOT12: "./assets/products/bot12.jpeg",
+  BJS12: "./assets/products/bot12_bajo_sodio.jpg",
+  SODA: "./assets/products/soda.png",
+  SAB15: "./assets/products/sab15.jpeg",
+};
 
 const currency = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -156,6 +163,7 @@ async function getProductsForClient(cliente) {
     sku: p.sku,
     nombre: p.nombre,
     precio: lista === 2 ? Number(p.precio_lista_2 || 0) : Number(p.precio_lista_1 || 0),
+    image_url: p.image_url || PRODUCT_IMAGE_BY_SKU[p.sku] || "",
   }));
   catalogCache.set(lista, fallback);
   return fallback;
@@ -202,12 +210,14 @@ function renderProducts() {
   productsList.innerHTML = "";
   state.products.forEach((p) => {
     if (!state.items[p.sku]) state.items[p.sku] = 0;
+    const imageUrl = p.image_url || PRODUCT_IMAGE_BY_SKU[p.sku] || "";
     const card = document.createElement("div");
     card.className = "card product";
     card.style.animationDelay = `${0.05 * productsList.children.length}s`;
     card.innerHTML = `
+      <div class="product-media">${imageUrl ? `<img src="${imageUrl}" alt="${p.nombre}" class="product-image" />` : ""}</div>
       <h3>${p.nombre}</h3>
-      <p>${currency.format(p.precio)}</p>
+      <p class="product-price">${currency.format(p.precio)}</p>
       <div class="qty">
         <button data-delta="-1">-</button>
         <span id="qty-${p.sku}">${state.items[p.sku]}</span>
@@ -237,10 +247,9 @@ function updateTotal() {
 }
 
 function orderSummary() {
-  const lines = state.products
+  return state.products
     .filter((p) => (state.items[p.sku] || 0) > 0)
     .map((p) => `${state.items[p.sku]} x ${p.nombre}`);
-  return lines.length ? lines.join(", ") : "Sin productos";
 }
 
 async function submitOrder() {
@@ -259,11 +268,15 @@ async function submitOrder() {
   }
 
   confirmBox.innerHTML = `
-    <p><strong>Nro de cliente:</strong> ${state.cliente.id_cliente}</p>
-    <p><strong>Dirección:</strong> ${state.cliente.direccion}</p>
-    <p><strong>Horario:</strong> ${state.horario}</p>
-    <p><strong>Pedido:</strong> ${orderSummary()}</p>
-    <p><strong>Total:</strong> ${currency.format(calcTotal())}</p>
+    <div class="confirm-status">Muchas gracias. Pedido realizado con exito.</div>
+    <div class="confirm-card">
+      <p><strong>Pedido:</strong> ${orderSummary().length ? orderSummary().join(" | ") : "Sin productos"}</p>
+      <p><strong>Direccion de entrega:</strong> ${state.cliente.direccion}</p>
+      <p><strong>Horario de entrega:</strong> ${state.horario}</p>
+      <p><strong>Monto total:</strong> ${currency.format(calcTotal())}</p>
+      <p><strong>Nro de cliente:</strong> ${state.cliente.id_cliente}</p>
+    </div>
+    <div class="confirm-note">Ante cualquier consulta, podes hablar con un asesor.</div>
   `;
   showScreen("confirm");
 }
