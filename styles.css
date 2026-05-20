@@ -741,7 +741,7 @@ button.secondary {
 
   #screen-lookup .title-icon-wrap {
     justify-content: flex-start;
-    margin: 10px 0 2px;
+    margin: 18px 0 0;
   }
 
   #screen-lookup .title {
@@ -750,7 +750,7 @@ button.secondary {
   }
 
   #screen-lookup .title-divider {
-    margin: 2px 0 8px;
+    margin: 0 0 3px;
     width: 72%;
   }
 
@@ -762,13 +762,13 @@ button.secondary {
   }
 
   #screen-lookup .title-icon {
-    width: 74px;
-    height: 74px;
+    width: 66px;
+    height: 66px;
   }
 
   #screen-lookup .title-icon-svg {
-    width: 38px;
-    height: 38px;
+    width: 33px;
+    height: 33px;
   }
 
   #screen-lookup .actions {
