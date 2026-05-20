@@ -1,4 +1,4 @@
-﻿export const API_BASE_URL = "";
+﻿export const API_BASE_URL = "https://script.google.com/macros/s/AKfycbwiiniCuBWPeSe34hZCOvHR43MR3OdwocANhNwrklN5YkKGINJoEFY7trSdHHnj86U/exec";
 
 export const MOCK_CLIENTS = [
   {
@@ -26,3 +26,4 @@ export const MOCK_PRODUCTS = [
   { sku: "SODA", nombre: "Sifon de soda", precio: 1200 },
   { sku: "SAB15", nombre: "Agua saborizada 1.5 litros", precio: 2500 },
 ];
+
