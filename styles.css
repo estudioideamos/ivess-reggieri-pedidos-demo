@@ -182,39 +182,6 @@ body {
   z-index: 3;
 }
 
-.address-suggestions {
-  position: static;
-  margin-top: 8px;
-  z-index: 4;
-  background: #ffffff;
-  border: 1px solid #a7d7ff;
-  border-radius: 14px;
-  box-shadow: 0 10px 18px rgba(9, 46, 128, 0.2);
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.address-suggestion {
-  width: 100%;
-  text-align: left;
-  border: 0;
-  border-radius: 0;
-  background: #fff;
-  color: #0f3f99;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 10px 14px;
-  cursor: pointer;
-}
-
-.address-suggestion + .address-suggestion {
-  border-top: 1px solid #e6f2ff;
-}
-
-.address-suggestion:hover {
-  background: #ecf6ff;
-}
-
 .actions { display: flex; gap: 10px; margin-top: 14px; }
 
 button {
@@ -449,11 +416,42 @@ button.secondary {
 
 .confirm p { margin: 0; }
 
+.confirm-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.confirm-top-icon-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 3px solid #66cbff;
+  box-shadow: 0 0 0 3px rgba(102, 203, 255, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.confirm-top-icon {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: brightness(0) saturate(100%) invert(23%) sepia(86%) saturate(1841%) hue-rotate(205deg) brightness(95%) contrast(97%);
+}
+
 .confirm-status {
   font-weight: 800;
   text-transform: uppercase;
   text-align: center;
-  margin-bottom: 14px;
+  font-size: 30px;
+  line-height: 1.05;
+  color: #f1fbff;
+  text-shadow: 0 2px 8px rgba(3, 38, 110, 0.25);
+  margin-bottom: 2px;
 }
 
 .confirm-row {
@@ -604,6 +602,15 @@ button.secondary {
   50% { transform: translateX(3%) translateY(8px); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 @media (min-width: 1024px) {
   body {
     min-height: 100vh;
@@ -647,7 +654,6 @@ button.secondary {
   .input, textarea { font-size: 15px; padding: 14px; }
   button { font-size: 15px; padding: 12px; }
   .subtitle { font-size: 15px; }
-  .address-suggestion { font-size: 13px; }
   .title-icon { width: 78px; height: 78px; }
   .title-icon-svg { width: 40px; height: 40px; }
   .step-indicator { font-size: 12px; right: 12px; top: 10px; padding: 6px 9px; }
@@ -659,4 +665,7 @@ button.secondary {
   .qty span { font-size: 20px; }
   .confirm-pay-row { grid-template-columns: 1fr; }
   .confirm-copy-btn { width: 100%; }
+  .confirm-status { font-size: 24px; }
+  .confirm-top-icon-wrap { width: 62px; height: 62px; }
+  .confirm-top-icon { width: 28px; height: 28px; }
 }

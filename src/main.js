@@ -37,12 +37,8 @@ const productsList = document.getElementById("products-list");
 const totalLabel = document.getElementById("total-label");
 const confirmBox = document.getElementById("confirm-box");
 const commentInput = document.getElementById("comment-input");
-const addressSuggestions = document.getElementById("address-suggestions");
 const lookupSpinner = document.getElementById("lookup-spinner");
 const stepIndicator = document.getElementById("step-indicator");
-let addressBook = [];
-let addressBookNormalized = [];
-let suggestionRenderTimer = null;
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -117,67 +113,6 @@ async function findClient(query) {
   return byMock || null;
 }
 
-async function loadAddressSuggestions() {
-  let addresses = [];
-  if (API_BASE_URL) {
-    try {
-      const live = await api("getAddressBook", {});
-      if (live?.ok && Array.isArray(live.direcciones)) {
-        addresses = live.direcciones;
-      }
-    } catch (err) {
-      console.warn("Fallo getAddressBook en backend, uso sugerencias locales.", err);
-    }
-  }
-
-  if (!addresses.length) {
-    addresses = MOCK_CLIENTS.map((c) => c.direccion);
-  }
-
-  addressBook = addresses
-    .map((a) => String(a || "").trim())
-    .filter(Boolean)
-    .filter((v, i, arr) => arr.indexOf(v) === i)
-    .sort((a, b) => a.localeCompare(b, "es"));
-  renderAddressSuggestions("");
-}
-
-function renderAddressSuggestions(query) {
-  if (!addressSuggestions) return;
-  const q = normalize(query);
-  if (!q) {
-    addressSuggestions.classList.add("hidden");
-    addressSuggestions.innerHTML = "";
-    return;
-  }
-
-  const filtered = addressBook
-    .filter((a) => normalize(a).includes(q))
-    .slice(0, 8);
-
-  if (!filtered.length) {
-    addressSuggestions.classList.add("hidden");
-    addressSuggestions.innerHTML = "";
-    return;
-  }
-
-  addressSuggestions.innerHTML = "";
-  filtered.forEach((a) => {
-    const item = document.createElement("button");
-    item.type = "button";
-    item.className = "address-suggestion";
-    item.textContent = a;
-    item.onclick = () => {
-      addressInput.value = a;
-      addressSuggestions.classList.add("hidden");
-      addressSuggestions.innerHTML = "";
-      addressInput.focus();
-    };
-    addressSuggestions.appendChild(item);
-  });
-  addressSuggestions.classList.remove("hidden");
-}
-
 async function getProductsForClient(cliente) {
   const lista = Number(cliente?.lista_precio || 1) === 2 ? 2 : 1;
   if (catalogCache.has(lista)) return catalogCache.get(lista);
@@ -204,6 +139,7 @@ async function getProductsForClient(cliente) {
 
 function renderSchedules() {
   scheduleList.innerHTML = "";
+  const fragment = document.createDocumentFragment();
   const accentClasses = ["accent-blue", "accent-green", "accent-violet", "accent-orange", "accent-cyan"];
   const options = [...state.cliente.horarios, "Ninguno, hablar con un asesor"];
   options.forEach((h, idx) => {
@@ -240,12 +176,14 @@ function renderSchedules() {
       };
       openProducts();
     };
-    scheduleList.appendChild(btn);
+    fragment.appendChild(btn);
   });
+  scheduleList.appendChild(fragment);
 }
 
 function renderProducts() {
   productsList.innerHTML = "";
+  const fragment = document.createDocumentFragment();
   state.products.forEach((p) => {
     if (!state.items[p.sku]) state.items[p.sku] = 0;
     const imageUrl = p.image_url || PRODUCT_IMAGE_BY_SKU[p.sku] || "";
@@ -268,12 +206,14 @@ function renderProducts() {
       b.onclick = () => {
         const delta = Number(b.dataset.delta);
         state.items[p.sku] = Math.max(0, state.items[p.sku] + delta);
-        document.getElementById(`qty-${p.sku}`).textContent = state.items[p.sku];
+        const qtyEl = document.getElementById(`qty-${p.sku}`);
+        if (qtyEl) qtyEl.textContent = state.items[p.sku];
         updateTotal();
       };
     });
-    productsList.appendChild(card);
+    fragment.appendChild(card);
   });
+  productsList.appendChild(fragment);
   updateTotal();
 }
 
@@ -316,7 +256,10 @@ async function submitOrder() {
   }
 
   confirmBox.innerHTML = `
-    <div class="confirm-status">Muchas gracias. Pedido realizado con exito.</div>
+    <div class="confirm-top">
+      <span class="confirm-top-icon-wrap"><img src="./assets/marca-de-verificacion.svg" alt="" class="confirm-top-icon" /></span>
+      <div class="confirm-status">Muchas gracias.<br />Pedido realizado con exito.</div>
+    </div>
     <div class="confirm-row">
       <span class="confirm-icon-circle"><img src="./assets/logistica.svg" alt="" class="confirm-row-icon" /></span>
       <p><span class="confirm-label">Pedido:</span><br /><span class="confirm-value">${orderSummary().length ? orderSummary().join(" | ") : "Sin productos"}</span></p>
@@ -403,22 +346,5 @@ document.getElementById("btn-new-order").onclick = () => {
   showScreen("lookup");
 };
 
-if (addressInput) {
-  addressInput.addEventListener("input", (e) => {
-    renderAddressSuggestions(e.target.value || "");
-  });
-  addressInput.addEventListener("focus", () => {
-    renderAddressSuggestions(addressInput.value || "");
-  });
-  addressInput.addEventListener("blur", () => {
-    setTimeout(() => {
-      if (addressSuggestions) {
-        addressSuggestions.classList.add("hidden");
-      }
-    }, 120);
-  });
-}
-
 showScreen("lookup");
-loadAddressSuggestions();
 
