@@ -288,6 +288,7 @@ button.secondary {
   margin: 0 0 6px;
   font-size: 18px;
   min-height: 48px;
+  text-align: center;
 }
 
 .product-media {
@@ -307,8 +308,9 @@ button.secondary {
 
 .product-price {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 900;
   margin: 0 0 10px;
+  text-align: center;
 }
 
 .qty { display: flex; gap: 10px; align-items: center; }
