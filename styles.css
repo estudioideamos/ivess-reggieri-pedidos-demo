@@ -138,6 +138,57 @@ button.secondary {
 
 .card-schedule {
   text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 88px;
+  padding: 14px 18px;
+}
+
+.schedule-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.schedule-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-icon {
+  width: 23px;
+  height: 23px;
+  filter: brightness(0) invert(1);
+}
+
+.schedule-text {
+  font-family: "Montserrat", "Manrope", sans-serif;
+  font-size: 23px;
+  font-weight: 700;
+  color: #0f3f99;
+}
+
+.schedule-arrow {
+  font-size: 36px;
+  line-height: 1;
+  color: #0f56c7;
+  margin-left: 10px;
+}
+
+.card-schedule.accent-blue .schedule-icon-wrap { background: #0f6be5; }
+.card-schedule.accent-green .schedule-icon-wrap { background: #09a84a; }
+.card-schedule.accent-violet .schedule-icon-wrap { background: #6b40d8; }
+.card-schedule.accent-orange .schedule-icon-wrap { background: #f39a0d; }
+.card-schedule.accent-cyan .schedule-icon-wrap { background: #14a8c6; }
+
+@media (max-width: 680px) {
+  .schedule-text { font-size: 20px; }
+  .schedule-arrow { font-size: 31px; }
 }
 
 #products-list {

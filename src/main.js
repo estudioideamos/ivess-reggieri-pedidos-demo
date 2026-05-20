@@ -123,10 +123,21 @@ async function getProductsForClient(cliente) {
 
 function renderSchedules() {
   scheduleList.innerHTML = "";
-  state.cliente.horarios.forEach((h) => {
+  const accentClasses = ["accent-blue", "accent-green", "accent-violet", "accent-orange", "accent-cyan"];
+  const options = [...state.cliente.horarios, "Ninguno, hablar con un asesor"];
+  options.forEach((h, idx) => {
     const btn = document.createElement("button");
-    btn.className = "card card-schedule";
-    btn.textContent = h;
+    const accent = accentClasses[idx % accentClasses.length];
+    btn.className = `card card-schedule ${accent}`;
+    btn.innerHTML = `
+      <span class="schedule-left">
+        <span class="schedule-icon-wrap">
+          <img src="./assets/agenda.svg" alt="" class="schedule-icon" />
+        </span>
+        <span class="schedule-text">${h}</span>
+      </span>
+      <span class="schedule-arrow">›</span>
+    `;
     btn.onclick = () => {
       state.horario = h;
       renderProducts();
