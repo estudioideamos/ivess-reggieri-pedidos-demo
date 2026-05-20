@@ -1,39 +1,63 @@
 <svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="420" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#EEF7FF"/>
-      <stop offset="1" stop-color="#D6EBFF"/>
+      <stop stop-color="#EFF8FF"/>
+      <stop offset="1" stop-color="#DDEFFF"/>
     </linearGradient>
-    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#1F64C8"/>
-      <stop offset="1" stop-color="#46B3F4"/>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#0D57C7"/>
+      <stop offset="1" stop-color="#2C87E8"/>
+    </linearGradient>
+    <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#5FCBFF"/>
+      <stop offset="1" stop-color="#19A9E8"/>
     </linearGradient>
   </defs>
 
   <rect width="1200" height="420" rx="24" fill="url(#bg)"/>
 
-  <rect x="56" y="76" width="460" height="268" rx="20" fill="#FFFFFF" stroke="#B7D8F8" stroke-width="4"/>
-  <rect x="86" y="106" width="340" height="120" rx="16" fill="#E9F4FF"/>
-  <text x="102" y="153" fill="#0E4EBA" font-family="Montserrat, Arial, sans-serif" font-size="52" font-weight="800">PROMOCIONES</text>
-  <text x="102" y="202" fill="#1A74D3" font-family="Montserrat, Arial, sans-serif" font-size="34" font-weight="700">ENVÍO GRATIS</text>
-  <text x="88" y="274" fill="#0E4EBA" font-family="Montserrat, Arial, sans-serif" font-size="26" font-weight="700">Consultá por zonas y días de reparto</text>
-  <text x="88" y="310" fill="#2A5FA5" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="600">Ivess Reggieri</text>
+  <circle cx="1012" cy="98" r="62" fill="#1D83DD" opacity=".13"/>
+  <circle cx="1110" cy="178" r="40" fill="#1D83DD" opacity=".12"/>
+  <circle cx="944" cy="190" r="22" fill="#1D83DD" opacity=".10"/>
 
-  <ellipse cx="840" cy="316" rx="170" ry="26" fill="#BBD9F4" opacity=".48"/>
+  <rect x="52" y="62" width="604" height="296" rx="26" fill="#FFFFFF" stroke="#B3D8FA" stroke-width="4"/>
+  <rect x="76" y="86" width="560" height="124" rx="18" fill="#EAF5FF"/>
+  <text x="98" y="145" fill="#0E4FB9" font-family="Montserrat, Arial, sans-serif" font-size="52" font-weight="800">PROMOCIONES</text>
+  <text x="98" y="196" fill="#2196EA" font-family="Montserrat, Arial, sans-serif" font-size="42" font-weight="800">ENVIO GRATIS</text>
+  <text x="90" y="266" fill="#0E4FB9" font-family="Montserrat, Arial, sans-serif" font-size="29" font-weight="700">Coordinamos por zonas y dias de reparto</text>
+  <text x="90" y="308" fill="#355D9E" font-family="Manrope, Arial, sans-serif" font-size="24" font-weight="700">Ivess Reggieri</text>
 
-  <circle cx="870" cy="118" r="44" fill="#F4C8A8"/>
-  <path d="M827 101C832 62 912 62 915 106C899 98 881 94 871 96C858 98 845 108 827 101Z" fill="#1C3F75"/>
-  <circle cx="856" cy="118" r="4" fill="#1C3F75"/>
-  <circle cx="884" cy="118" r="4" fill="#1C3F75"/>
-  <path d="M856 134C866 142 876 142 886 134" stroke="#BA6E5E" stroke-width="4" stroke-linecap="round"/>
+  <g transform="translate(724 64)">
+    <ellipse cx="240" cy="292" rx="228" ry="34" fill="#B6D6F3" opacity=".55"/>
 
-  <path d="M786 244C792 184 829 160 870 160C911 160 948 184 954 244L964 314H776L786 244Z" fill="url(#shirt)"/>
-  <rect x="826" y="186" width="88" height="42" rx="12" fill="#FFFFFF" opacity=".92"/>
-  <text x="840" y="214" fill="#0E4EBA" font-family="Montserrat, Arial, sans-serif" font-size="24" font-weight="800">ivess</text>
+    <rect x="34" y="194" width="362" height="78" rx="12" fill="#F7FBFF" stroke="#A7D0F6" stroke-width="4"/>
+    <rect x="368" y="210" width="108" height="62" rx="10" fill="#F7FBFF" stroke="#A7D0F6" stroke-width="4"/>
+    <rect x="384" y="188" width="56" height="32" rx="9" fill="#CFE8FB"/>
 
-  <rect x="740" y="256" width="60" height="22" rx="11" fill="#F4C8A8" transform="rotate(-18 740 256)"/>
-  <rect x="940" y="256" width="60" height="22" rx="11" fill="#F4C8A8" transform="rotate(18 940 256)"/>
+    <rect x="58" y="154" width="264" height="58" rx="8" fill="url(#blue)"/>
+    <rect x="84" y="166" width="22" height="34" rx="4" fill="#8ED5FF"/>
+    <rect x="114" y="166" width="22" height="34" rx="4" fill="#8ED5FF"/>
+    <rect x="144" y="166" width="22" height="34" rx="4" fill="#8ED5FF"/>
+    <rect x="174" y="166" width="22" height="34" rx="4" fill="#8ED5FF"/>
+    <rect x="204" y="166" width="22" height="34" rx="4" fill="#8ED5FF"/>
+    <rect x="234" y="166" width="22" height="34" rx="4" fill="#8ED5FF"/>
+    <rect x="264" y="166" width="22" height="34" rx="4" fill="#8ED5FF"/>
 
-  <circle cx="1038" cy="146" r="68" fill="#1E8FDE" opacity=".16"/>
-  <circle cx="1088" cy="212" r="42" fill="#1E8FDE" opacity=".12"/>
+    <circle cx="112" cy="279" r="27" fill="#2B3A55"/>
+    <circle cx="112" cy="279" r="13" fill="#97C2E9"/>
+    <circle cx="382" cy="279" r="27" fill="#2B3A55"/>
+    <circle cx="382" cy="279" r="13" fill="#97C2E9"/>
+
+    <rect x="386" y="226" width="16" height="18" rx="4" fill="#0E4FB9"/>
+    <rect x="410" y="226" width="16" height="18" rx="4" fill="#0E4FB9"/>
+
+    <rect x="56" y="214" width="70" height="18" rx="9" fill="#0D57C7"/>
+    <text x="66" y="227" fill="#E7F5FF" font-family="Montserrat, Arial, sans-serif" font-size="12" font-weight="800">ivess</text>
+  </g>
+
+  <g transform="translate(950 250)">
+    <circle cx="62" cy="62" r="58" fill="url(#teal)"/>
+    <path d="M45 34C39 34 34 39 34 45V79C34 85 39 90 45 90H52L62 102L72 90H79C85 90 90 85 90 79V45C90 39 85 34 79 34H45Z" fill="#ffffff" fill-opacity=".96"/>
+    <path d="M77 68C74 66 69 65 65 67C63 68 61 68 58 66C56 65 52 61 51 59C50 57 50 55 51 54C52 52 53 50 53 49C54 47 53 46 53 45L48 35C47 33 45 33 44 34C42 35 38 39 37 45C36 52 38 61 48 71C58 81 67 83 74 82C80 81 84 77 86 75C87 74 87 72 86 71L77 68Z" fill="#25D366"/>
+  </g>
 </svg>
