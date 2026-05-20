@@ -685,20 +685,20 @@ button.secondary {
   }
 
   #screen-lookup:not(.hidden) {
-    max-width: 1080px;
+    max-width: 1240px;
     display: grid;
-    grid-template-columns: minmax(360px, 1fr) minmax(420px, 1fr);
+    grid-template-columns: minmax(420px, 1fr) minmax(520px, 1fr);
     grid-template-areas:
       "lookup-icon lookup-input"
       "lookup-title lookup-input"
       "lookup-divider lookup-actions"
       "lookup-subtitle lookup-advisor";
     column-gap: 44px;
-    row-gap: 6px;
-    align-items: start;
+    row-gap: 10px;
+    align-items: center;
     min-height: 0;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 
   .title {
@@ -714,7 +714,7 @@ button.secondary {
   #screen-lookup .address-wrap,
   #screen-lookup .actions,
   #screen-lookup .advisor-link {
-    max-width: 640px;
+    max-width: 100%;
     margin: 0;
   }
 
@@ -735,7 +735,7 @@ button.secondary {
   #screen-lookup .title { grid-area: lookup-title; }
   #screen-lookup .title-divider { grid-area: lookup-divider; }
   #screen-lookup .subtitle { grid-area: lookup-subtitle; }
-  #screen-lookup .address-wrap { grid-area: lookup-input; align-self: start; margin-top: 36px; }
+  #screen-lookup .address-wrap { grid-area: lookup-input; align-self: end; margin-top: 0; }
   #screen-lookup .actions { grid-area: lookup-actions; align-self: start; }
   #screen-lookup .advisor-link { grid-area: lookup-advisor; align-self: start; }
 
