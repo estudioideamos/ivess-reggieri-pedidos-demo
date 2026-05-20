@@ -777,18 +777,22 @@ button.secondary {
   #screen-schedule #schedule-list,
   #screen-schedule .actions,
   #screen-schedule .advisor-link {
-    max-width: 860px;
+    max-width: 100%;
     margin-left: auto;
     margin-right: auto;
   }
 
   #screen-schedule:not(.hidden) {
-    max-width: 1080px;
+    max-width: none;
+    width: 100%;
     display: grid;
-    grid-template-columns: minmax(320px, 0.9fr) minmax(440px, 1.1fr);
-    column-gap: 40px;
+    grid-template-columns: minmax(420px, 46%) minmax(520px, 46%);
+    justify-content: space-between;
+    column-gap: 44px;
     align-items: start;
     padding-top: 30px;
+    padding-left: 44px;
+    padding-right: 44px;
   }
 
   #screen-schedule .title,
@@ -813,6 +817,7 @@ button.secondary {
     font-size: 34px;
     line-height: 1.05;
     margin-bottom: 12px;
+    margin-top: 8px;
   }
 
   #screen-schedule .subtitle {
