@@ -688,6 +688,11 @@ button.secondary {
     max-width: 1080px;
     display: grid;
     grid-template-columns: minmax(360px, 1fr) minmax(420px, 1fr);
+    grid-template-areas:
+      "lookup-icon lookup-input"
+      "lookup-title lookup-input"
+      "lookup-divider lookup-actions"
+      "lookup-subtitle lookup-advisor";
     column-gap: 44px;
     align-items: start;
     min-height: 0;
@@ -724,6 +729,14 @@ button.secondary {
   #screen-lookup .advisor-link {
     grid-column: 2;
   }
+
+  #screen-lookup .title-icon-wrap { grid-area: lookup-icon; }
+  #screen-lookup .title { grid-area: lookup-title; }
+  #screen-lookup .title-divider { grid-area: lookup-divider; }
+  #screen-lookup .subtitle { grid-area: lookup-subtitle; }
+  #screen-lookup .address-wrap { grid-area: lookup-input; align-self: start; margin-top: 8px; }
+  #screen-lookup .actions { grid-area: lookup-actions; align-self: start; }
+  #screen-lookup .advisor-link { grid-area: lookup-advisor; align-self: start; }
 
   #screen-lookup .title-icon-wrap {
     justify-content: flex-start;
