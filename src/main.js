@@ -80,6 +80,16 @@ function normalize(value) {
     .trim();
 }
 
+function canonicalAddress(value) {
+  const base = normalize(value)
+    .replace(/[.,]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const tokens = base.split(" ").filter(Boolean);
+  const stop = new Set(["AV", "AVENIDA", "PASAJE", "PSJE", "CALLE"]);
+  return tokens.filter((t) => !stop.has(t)).join(" ");
+}
+
 function beautifyProductName(name) {
   return String(name || "")
     .replace(/Botellon/gi, "Botellón")
@@ -99,8 +109,9 @@ async function api(path, payload) {
 
 async function findClient(query) {
   const normalized = normalize(query);
+  const canonical = canonicalAddress(query);
   const byMock = MOCK_CLIENTS.find(
-    (c) => normalize(c.direccion).includes(normalized) || normalize(c.telefono) === normalized
+    (c) => canonicalAddress(c.direccion) === canonical || normalize(c.telefono) === normalized
   );
   if (API_BASE_URL) {
     try {
@@ -313,13 +324,21 @@ document.getElementById("btn-find").onclick = async () => {
       alert("No encontramos cliente con esa dirección/teléfono.");
       return;
     }
+    const q = normalize(query);
+    const cq = canonicalAddress(query);
+    const exactAddress = canonicalAddress(found.direccion) === cq;
+    const exactPhone = normalize(found.telefono) === q;
+    if (!exactAddress && !exactPhone) {
+      alert("Ingresá la dirección completa o el teléfono exacto para continuar.");
+      return;
+    }
     state.cliente = found;
     state.products = [];
     productsPromise = getProductsForClient(found).then((catalog) => {
       state.products = catalog;
       return catalog;
     });
-    customerLabel.textContent = `Nro ${found.id_cliente} - ${found.direccion}`;
+    customerLabel.textContent = `Nro. de Cliente ${found.id_cliente} - ${found.direccion}`;
     renderSchedules();
     showScreen("schedule");
   } catch (err) {
