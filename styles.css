@@ -36,7 +36,7 @@ body {
 }
 
 .logo {
-  height: 72px;
+  height: 62px;
   width: auto;
   object-fit: contain;
   filter: drop-shadow(0 4px 10px rgba(0, 27, 92, 0.28));
