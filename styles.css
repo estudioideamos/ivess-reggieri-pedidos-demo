@@ -184,6 +184,28 @@ body {
 
 .actions { display: flex; gap: 10px; margin-top: 14px; }
 
+.advisor-link {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #2cb861, #36cf72);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 15px;
+  padding: 12px;
+  font-family: "Montserrat", "Manrope", sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.advisor-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(34, 150, 84, 0.34);
+  filter: saturate(1.06);
+}
+
 button {
   border: none;
   border-radius: 12px;
