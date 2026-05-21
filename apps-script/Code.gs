@@ -5,6 +5,17 @@
   HORARIOS: 'Horarios',
 };
 
+const ESTADOS_PEDIDO = [
+  'NUEVO',
+  'CONFIRMADO',
+  'EN PREPARACION',
+  'EN REPARTO',
+  'ENTREGADO',
+  'REPROGRAMAR',
+  'NO ENTREGADO',
+  'CANCELADO',
+];
+
 function doPost(e) {
   try {
     const path = (e.parameter.path || '').trim();
@@ -218,6 +229,7 @@ function getCatalog_(listaPrecio) {
 
 function createOrder_(payload) {
   const sh = getSheet_(SHEETS.PEDIDOS);
+  ensurePedidosEstadoDropdown_(sh);
   const idPedido = buildOrderNumber_();
   const itemsRaw = payload.items || {};
   const itemsPretty = formatItemsForSheet_(itemsRaw);
@@ -234,6 +246,22 @@ function createOrder_(payload) {
   ]);
 
   return { ok: true, id_pedido: idPedido };
+}
+
+function ensurePedidosEstadoDropdown_(sheet) {
+  const estadoCol = 9; // Columna I = Estado
+  const totalRows = Math.max(sheet.getMaxRows(), 2);
+  const range = sheet.getRange(2, estadoCol, totalRows - 1, 1);
+  const rule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(ESTADOS_PEDIDO, true)
+    .setAllowInvalid(false)
+    .build();
+  range.setDataValidation(rule);
+}
+
+function setupEstadoPedidosManual_() {
+  const sh = getSheet_(SHEETS.PEDIDOS);
+  ensurePedidosEstadoDropdown_(sh);
 }
 
 function buildOrderNumber_() {
