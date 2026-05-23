@@ -123,7 +123,13 @@ function addressScore_(query, address) {
   const qNums = qTokens.filter((t) => numRegex.test(t));
   const qWords = qTokens.filter((t) => !numRegex.test(t));
   const matchedNums = qNums.filter((n) => aTokens.indexOf(n) !== -1).length;
-  const matchedWords = qWords.filter((w) => aTokens.indexOf(w) !== -1).length;
+  const matchedWords = qWords.filter(function (w) {
+    if (aTokens.indexOf(w) !== -1) return true;
+    // Permite un pequeno error de tipeo por palabra (ej: SOREDE -> SOREDA)
+    return aTokens.some(function (aw) {
+      return levenshtein_(w, aw) <= 1;
+    });
+  }).length;
 
   const numRatio = qNums.length ? (matchedNums / qNums.length) : 0;
   const wordRatio = qWords.length ? (matchedWords / qWords.length) : 0;
@@ -132,7 +138,7 @@ function addressScore_(query, address) {
   const maxLen = Math.max(q.length, a.length, 1);
   const editScore = 1 - (dist / maxLen);
 
-  return (numRatio * 0.45) + (wordRatio * 0.35) + (editScore * 0.20);
+  return (numRatio * 0.50) + (wordRatio * 0.35) + (editScore * 0.15);
 }
 
 function findSuggestions_(query, clientes) {
@@ -142,7 +148,7 @@ function findSuggestions_(query, clientes) {
       direccion: String(c.direccion || '').trim(),
       score: addressScore_(query, c.direccion),
     }))
-    .filter((x) => x.score >= 0.58)
+    .filter((x) => x.score >= 0.52)
     .sort((a, b) => b.score - a.score)
     .slice(0, 3)
     .map((x) => x.direccion);
@@ -370,5 +376,4 @@ function jsonResponse(data, statusCode) {
   out.setMimeType(ContentService.MimeType.JSON);
   return out;
 }
-
 
