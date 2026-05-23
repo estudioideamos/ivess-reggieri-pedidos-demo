@@ -253,6 +253,16 @@ function normalizeHeader_(h) {
     'nro horario 2': 'horario_2',
     'nro horario 3': 'horario_3',
     'nro horario 4': 'horario_4',
+    'estado pago': 'estado_pago',
+    'estado_de_pago': 'estado_pago',
+    'mp payment id': 'mp_payment_id',
+    'mp_payment_id': 'mp_payment_id',
+    'mp status': 'mp_status',
+    'mp_status': 'mp_status',
+    'fecha pago': 'fecha_pago',
+    'fecha_de_pago': 'fecha_pago',
+    'monto pagado': 'monto_pagado',
+    'monto_pagado': 'monto_pagado',
   };
 
   return map[raw] || raw.replace(/\s+/g, '_');
@@ -322,18 +332,35 @@ function createOrder_(payload) {
   ensurePedidosEstadoDropdown_(sh);
   const idPedido = buildOrderNumber_();
   const itemsRaw = payload.items || {};
+  const qtyTotal = countSelectedItems_(itemsRaw);
+  if (!qtyTotal) {
+    return { ok: false, error: 'Debes seleccionar al menos un producto' };
+  }
   const itemsPretty = formatItemsForSheet_(itemsRaw);
-  sh.appendRow([
-    new Date(),
-    idPedido,
-    payload.id_cliente || '',
-    payload.direccion || '',
-    payload.horario || '',
-    itemsPretty,
-    Number(payload.total || 0),
-    payload.comentario || '',
-    'NUEVO',
-  ]);
+  const total = Number(payload.total || 0);
+  if (!(total > 0)) {
+    return { ok: false, error: 'El total del pedido debe ser mayor a cero' };
+  }
+
+  const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const row = headers.map(function (key) {
+    if (key === 'fecha_y_hora' || key === 'fecha') return new Date();
+    if (key === 'nro_de_pedido' || key === 'id_pedido' || key === 'pedido') return idPedido;
+    if (key === 'id_cliente') return payload.id_cliente || '';
+    if (key === 'direccion') return payload.direccion || '';
+    if (key === 'horario') return payload.horario || '';
+    if (key === 'items' || key === 'items_json') return itemsPretty;
+    if (key === 'total') return total;
+    if (key === 'comentario') return payload.comentario || '';
+    if (key === 'estado') return 'NUEVO';
+    if (key === 'estado_pago') return 'PENDIENTE_CONFIG';
+    if (key === 'mp_payment_id') return '';
+    if (key === 'mp_status') return 'NO_CONFIGURADO';
+    if (key === 'fecha_pago') return '';
+    if (key === 'monto_pagado') return '';
+    return '';
+  });
+  sh.appendRow(row);
 
   return { ok: true, id_pedido: idPedido };
 }
@@ -408,6 +435,12 @@ function formatItemsForSheet_(items) {
     .map((x) => `${x.qty} x ${bySku[x.sku] || x.sku}`);
 
   return lines.length ? lines.join(' | ') : 'Sin productos';
+}
+
+function countSelectedItems_(items) {
+  return Object.keys(items || {})
+    .map(function (sku) { return Number(items[sku] || 0); })
+    .reduce(function (acc, qty) { return acc + (qty > 0 ? qty : 0); }, 0);
 }
 
 function getAddressBook_() {

@@ -326,13 +326,23 @@ function orderSummary() {
 
 async function submitOrder() {
   const submitBtn = document.getElementById("btn-submit");
+  const selectedLines = orderSummary();
+  if (!selectedLines.length) {
+    alert("Tenés que seleccionar al menos un producto para enviar el pedido.");
+    return;
+  }
+  const totalNow = calcTotal();
+  if (!(totalNow > 0)) {
+    alert("El total del pedido debe ser mayor a cero.");
+    return;
+  }
   const payload = {
     id_cliente: state.cliente.id_cliente,
     direccion: state.cliente.direccion,
     horario: state.horario,
     items: state.items,
     comentario: commentInput.value.trim(),
-    total: calcTotal(),
+    total: totalNow,
     lista_precio: Number(state.cliente?.lista_precio || 1),
   };
 
@@ -342,6 +352,9 @@ async function submitOrder() {
     submitBtn.textContent = "Enviando...";
     try {
       const created = await api("createOrder", payload);
+      if (!created?.ok) {
+        throw new Error(created?.error || "No se pudo crear el pedido");
+      }
       state.orderId = String(created?.id_pedido || "");
     } finally {
       submitBtn.disabled = false;
@@ -358,7 +371,7 @@ async function submitOrder() {
     </div>
     <div class="confirm-row">
       <span class="confirm-icon-circle"><img src="./assets/logistica.svg" alt="" class="confirm-row-icon" /></span>
-      <p><span class="confirm-label">Pedido:</span><br /><span class="confirm-value">${orderSummary().length ? orderSummary().join(" | ") : "Sin productos"}</span></p>
+      <p><span class="confirm-label">Pedido:</span><br /><span class="confirm-value">${selectedLines.join(" | ")}</span></p>
     </div>
     <div class="confirm-row">
       <span class="confirm-icon-circle"><img src="./assets/mapas-y-banderas-confirm.svg" alt="" class="confirm-row-icon" /></span>
@@ -370,7 +383,7 @@ async function submitOrder() {
     </div>
     <div class="confirm-row">
       <span class="confirm-icon-circle"><img src="./assets/billete-de-banco.svg" alt="" class="confirm-row-icon" /></span>
-      <p><span class="confirm-label">Monto total:</span><br /><span class="confirm-value">${currency.format(calcTotal())}</span></p>
+      <p><span class="confirm-label">Monto total:</span><br /><span class="confirm-value">${currency.format(totalNow)}</span></p>
     </div>
     <div class="confirm-payline"></div>
     <div class="confirm-pay-row">
@@ -414,7 +427,7 @@ async function submitOrder() {
           direccion: state.cliente?.direccion || "",
           horario: state.horario,
           items: state.items,
-          total: calcTotal(),
+          total: totalNow,
         });
         if (resp?.ok && resp?.init_point) {
           window.location.href = resp.init_point;
