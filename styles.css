@@ -231,6 +231,35 @@ body {
   border: 1px solid rgba(188, 227, 255, 0.85);
 }
 
+.schedule-saved-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 6px 0 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(150, 214, 255, 0.65);
+  background: rgba(16, 97, 191, 0.25);
+}
+
+.schedule-saved-label {
+  color: #cdeaff;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: "Montserrat", "Manrope", sans-serif;
+}
+
+.schedule-saved-clear {
+  width: auto;
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(188, 227, 255, 0.85);
+}
+
 .lookup-spinner {
   position: absolute;
   right: 14px;

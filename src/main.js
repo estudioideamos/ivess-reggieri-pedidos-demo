@@ -44,6 +44,9 @@ const lookupSuggestions = document.getElementById("lookup-suggestions");
 const savedAddressBar = document.getElementById("saved-address-bar");
 const btnClearSavedAddress = document.getElementById("btn-clear-saved-address");
 const savedAddressValue = document.getElementById("saved-address-value");
+const scheduleSavedBar = document.getElementById("schedule-saved-bar");
+const scheduleSavedAddress = document.getElementById("schedule-saved-address");
+const btnScheduleChangeUser = document.getElementById("btn-schedule-change-user");
 const SAVED_ADDRESS_KEY = "ivess_last_address";
 
 function showScreen(name) {
@@ -180,6 +183,12 @@ function refreshSavedAddressUI() {
   savedAddressBar.classList.toggle("hidden", !saved);
   if (savedAddressValue) {
     savedAddressValue.textContent = saved || "";
+  }
+  if (scheduleSavedBar) {
+    scheduleSavedBar.classList.toggle("hidden", !saved);
+  }
+  if (scheduleSavedAddress) {
+    scheduleSavedAddress.textContent = saved || "";
   }
 }
 
@@ -447,7 +456,8 @@ async function submitOrder() {
   showScreen("confirm");
 }
 
-const handleFindClient = async () => {
+const handleFindClient = async (opts = {}) => {
+  const { isAuto = false } = opts;
   const btn = document.getElementById("btn-find");
   const query = addressInput.value.trim();
   if (!query) return;
@@ -460,6 +470,11 @@ const handleFindClient = async () => {
     const result = await findClient(query);
     if (!result?.found || !result.client) {
       renderLookupSuggestions(result?.suggestions || []);
+      if (isAuto) {
+        clearSavedAddress();
+        refreshSavedAddressUI();
+        return;
+      }
       if (!(result?.suggestions || []).length) {
         alert("No encontramos cliente con esa dirección/teléfono.");
       }
@@ -511,6 +526,21 @@ if (btnClearSavedAddress) {
     addressInput.focus();
   });
 }
+if (btnScheduleChangeUser) {
+  btnScheduleChangeUser.addEventListener("click", () => {
+    clearSavedAddress();
+    refreshSavedAddressUI();
+    state.cliente = null;
+    state.horario = "";
+    state.items = {};
+    state.products = [];
+    state.orderId = "";
+    commentInput.value = "";
+    addressInput.value = "";
+    showScreen("lookup");
+    addressInput.focus();
+  });
+}
 
 document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
 document.getElementById("btn-back-schedule").onclick = () => showScreen("schedule");
@@ -531,6 +561,9 @@ showScreen("lookup");
 const rememberedAddress = getSavedAddress();
 if (rememberedAddress) {
   addressInput.value = rememberedAddress;
+  setTimeout(() => {
+    handleFindClient({ isAuto: true });
+  }, 120);
 }
 refreshSavedAddressUI();
 
