@@ -16,6 +16,11 @@ const ESTADOS_PEDIDO = [
   'CANCELADO',
 ];
 
+// TODO: completar cuando el cliente pase credenciales de Mercado Pago.
+const MP_ACCESS_TOKEN = '';
+const MP_PUBLIC_KEY = '';
+const MP_WEBHOOK_URL = '';
+
 function doPost(e) {
   try {
     const path = (e.parameter.path || '').trim();
@@ -27,6 +32,14 @@ function doPost(e) {
 
     if (path === 'createOrder') {
       return jsonResponse(createOrder_(body));
+    }
+
+    if (path === 'createPaymentPreference') {
+      return jsonResponse(createPaymentPreference_(body));
+    }
+
+    if (path === 'mpWebhook') {
+      return jsonResponse(mpWebhook_(body));
     }
     
     if (path === 'getCatalog') {
@@ -45,6 +58,10 @@ function doPost(e) {
 
 function doGet() {
   return jsonResponse({ ok: true, service: 'Ivess Reggieri API' });
+}
+
+function isMpConfigured_() {
+  return !!String(MP_ACCESS_TOKEN || '').trim();
 }
 
 function normalize_(v) {
@@ -321,6 +338,38 @@ function createOrder_(payload) {
   return { ok: true, id_pedido: idPedido };
 }
 
+function createPaymentPreference_(payload) {
+  const idPedido = String(payload.id_pedido || '').trim();
+  if (!idPedido) {
+    return { ok: false, error: 'Falta id_pedido' };
+  }
+
+  if (!isMpConfigured_()) {
+    return {
+      ok: false,
+      pending_config: true,
+      message: 'Mercado Pago aun no esta configurado',
+    };
+  }
+
+  // Placeholder: al recibir credenciales reales, completar creacion de preferencia.
+  return {
+    ok: false,
+    pending_config: true,
+    message: 'Configuracion de Mercado Pago pendiente de credenciales',
+    id_pedido: idPedido,
+  };
+}
+
+function mpWebhook_(_payload) {
+  // Endpoint reservado para notificaciones de Mercado Pago.
+  return {
+    ok: true,
+    pending_config: !isMpConfigured_(),
+    webhook_url: MP_WEBHOOK_URL || '',
+  };
+}
+
 function ensurePedidosEstadoDropdown_(sheet) {
   const estadoCol = 9; // Columna I = Estado
   const totalRows = Math.max(sheet.getMaxRows(), 2);
@@ -376,4 +425,3 @@ function jsonResponse(data, statusCode) {
   out.setMimeType(ContentService.MimeType.JSON);
   return out;
 }
-

@@ -638,6 +638,23 @@ button.secondary {
   white-space: nowrap;
 }
 
+.confirm-mp {
+  margin-top: 10px;
+}
+
+.confirm-mp-btn {
+  width: 100%;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.confirm-mp-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #bfe4ff;
+  font-weight: 600;
+}
+
 .dev-credit {
   margin-top: auto;
   text-align: center;

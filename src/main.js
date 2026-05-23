@@ -5,6 +5,7 @@ const state = {
   horario: "",
   items: {},
   products: [],
+  orderId: "",
 };
 const catalogCache = new Map();
 let productsPromise = null;
@@ -340,11 +341,14 @@ async function submitOrder() {
     submitBtn.disabled = true;
     submitBtn.textContent = "Enviando...";
     try {
-      await api("createOrder", payload);
+      const created = await api("createOrder", payload);
+      state.orderId = String(created?.id_pedido || "");
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = prev;
     }
+  } else {
+    state.orderId = `PED-MOCK-${Date.now()}`;
   }
 
   confirmBox.innerHTML = `
@@ -373,6 +377,10 @@ async function submitOrder() {
       <p class="confirm-pay-text"><img src="./assets/billetera.svg" alt="" class="confirm-pay-icon" /> Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
       <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
     </div>
+    <div class="confirm-mp">
+      <button id="btn-pay-mp" type="button" class="confirm-mp-btn">Pagar con Mercado Pago</button>
+      <p id="confirm-mp-note" class="confirm-mp-note">Pago online en preparacion.</p>
+    </div>
     <div class="confirm-note"><span>Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</span></div>
   `;
   const copyBtn = document.getElementById("btn-copy-alias");
@@ -385,6 +393,41 @@ async function submitOrder() {
       } catch (_) {
         copyBtn.textContent = "No se pudo copiar";
         setTimeout(() => { copyBtn.textContent = "Copiar alias"; }, 1300);
+      }
+    };
+  }
+  const payMpBtn = document.getElementById("btn-pay-mp");
+  const payMpNote = document.getElementById("confirm-mp-note");
+  if (payMpBtn) {
+    payMpBtn.onclick = async () => {
+      if (!API_BASE_URL) {
+        if (payMpNote) payMpNote.textContent = "Mercado Pago disponible cuando conectemos backend productivo.";
+        return;
+      }
+      const prev = payMpBtn.textContent;
+      payMpBtn.disabled = true;
+      payMpBtn.textContent = "Preparando pago...";
+      try {
+        const resp = await api("createPaymentPreference", {
+          id_pedido: state.orderId,
+          id_cliente: state.cliente?.id_cliente || "",
+          direccion: state.cliente?.direccion || "",
+          horario: state.horario,
+          items: state.items,
+          total: calcTotal(),
+        });
+        if (resp?.ok && resp?.init_point) {
+          window.location.href = resp.init_point;
+          return;
+        }
+        if (payMpNote) {
+          payMpNote.textContent = resp?.message || "Mercado Pago aun no esta configurado.";
+        }
+      } catch (_err) {
+        if (payMpNote) payMpNote.textContent = "No se pudo iniciar el pago. Intenta nuevamente.";
+      } finally {
+        payMpBtn.disabled = false;
+        payMpBtn.textContent = prev;
       }
     };
   }
@@ -465,6 +508,7 @@ document.getElementById("btn-new-order").onclick = () => {
   state.horario = "";
   state.items = {};
   state.products = [];
+  state.orderId = "";
   commentInput.value = "";
   addressInput.value = "";
   showScreen("lookup");
