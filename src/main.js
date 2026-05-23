@@ -42,6 +42,7 @@ const stepIndicator = document.getElementById("step-indicator");
 const lookupSuggestions = document.getElementById("lookup-suggestions");
 const savedAddressBar = document.getElementById("saved-address-bar");
 const btnClearSavedAddress = document.getElementById("btn-clear-saved-address");
+const savedAddressValue = document.getElementById("saved-address-value");
 const SAVED_ADDRESS_KEY = "ivess_last_address";
 
 function showScreen(name) {
@@ -176,6 +177,9 @@ function refreshSavedAddressUI() {
   if (!savedAddressBar) return;
   const saved = getSavedAddress();
   savedAddressBar.classList.toggle("hidden", !saved);
+  if (savedAddressValue) {
+    savedAddressValue.textContent = saved || "";
+  }
 }
 
 function renderLookupSuggestions(suggestions) {
