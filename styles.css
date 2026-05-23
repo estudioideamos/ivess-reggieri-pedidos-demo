@@ -921,8 +921,21 @@ button.secondary {
     margin-right: 0;
   }
 
+  #screen-schedule .schedule-saved-bar {
+    grid-column: 1 !important;
+    grid-row: auto;
+    justify-self: start;
+    align-self: start;
+    margin-top: 2px;
+    margin-bottom: 12px;
+    max-width: 94%;
+    position: relative;
+    z-index: 2;
+  }
   #screen-schedule #schedule-list {
-    margin-top: -35px;
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
   }
 
   #screen-schedule .title {
