@@ -329,6 +329,7 @@ function getCatalog_(listaPrecio) {
 
 function createOrder_(payload) {
   const sh = getSheet_(SHEETS.PEDIDOS);
+  ensurePedidosPaymentColumns_(sh);
   ensurePedidosEstadoDropdown_(sh);
   const idPedido = buildOrderNumber_();
   const itemsRaw = payload.items || {};
@@ -363,6 +364,28 @@ function createOrder_(payload) {
   sh.appendRow(row);
 
   return { ok: true, id_pedido: idPedido };
+}
+
+function ensurePedidosPaymentColumns_(sheet) {
+  const required = [
+    { label: 'Estado pago', key: 'estado_pago' },
+    { label: 'MP payment_id', key: 'mp_payment_id' },
+    { label: 'MP status', key: 'mp_status' },
+    { label: 'Fecha pago', key: 'fecha_pago' },
+    { label: 'Monto pagado', key: 'monto_pagado' },
+  ];
+
+  let lastCol = Math.max(sheet.getLastColumn(), 1);
+  const headerValues = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  const headerKeys = headerValues.map(normalizeHeader_);
+
+  required.forEach(function (item) {
+    if (headerKeys.indexOf(item.key) === -1) {
+      lastCol += 1;
+      sheet.getRange(1, lastCol).setValue(item.label);
+      headerKeys.push(item.key);
+    }
+  });
 }
 
 function createPaymentPreference_(payload) {
