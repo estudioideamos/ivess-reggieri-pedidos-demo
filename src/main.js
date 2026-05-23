@@ -40,6 +40,9 @@ const commentInput = document.getElementById("comment-input");
 const lookupSpinner = document.getElementById("lookup-spinner");
 const stepIndicator = document.getElementById("step-indicator");
 const lookupSuggestions = document.getElementById("lookup-suggestions");
+const savedAddressBar = document.getElementById("saved-address-bar");
+const btnClearSavedAddress = document.getElementById("btn-clear-saved-address");
+const SAVED_ADDRESS_KEY = "ivess_last_address";
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -145,6 +148,34 @@ function clearLookupSuggestions() {
   if (!lookupSuggestions) return;
   lookupSuggestions.innerHTML = "";
   lookupSuggestions.classList.add("hidden");
+}
+
+function getSavedAddress() {
+  try {
+    return localStorage.getItem(SAVED_ADDRESS_KEY) || "";
+  } catch (_) {
+    return "";
+  }
+}
+
+function saveAddress(value) {
+  try {
+    const clean = String(value || "").trim();
+    if (!clean) return;
+    localStorage.setItem(SAVED_ADDRESS_KEY, clean);
+  } catch (_) {}
+}
+
+function clearSavedAddress() {
+  try {
+    localStorage.removeItem(SAVED_ADDRESS_KEY);
+  } catch (_) {}
+}
+
+function refreshSavedAddressUI() {
+  if (!savedAddressBar) return;
+  const saved = getSavedAddress();
+  savedAddressBar.classList.toggle("hidden", !saved);
 }
 
 function renderLookupSuggestions(suggestions) {
@@ -383,6 +414,8 @@ const handleFindClient = async () => {
       return;
     }
     state.cliente = found;
+    saveAddress(found.direccion || query);
+    refreshSavedAddressUI();
     state.products = [];
     productsPromise = getProductsForClient(found).then((catalog) => {
       state.products = catalog;
@@ -410,6 +443,14 @@ addressInput.addEventListener("keydown", (event) => {
 addressInput.addEventListener("input", () => {
   clearLookupSuggestions();
 });
+if (btnClearSavedAddress) {
+  btnClearSavedAddress.addEventListener("click", () => {
+    clearSavedAddress();
+    addressInput.value = "";
+    refreshSavedAddressUI();
+    addressInput.focus();
+  });
+}
 
 document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
 document.getElementById("btn-back-schedule").onclick = () => showScreen("schedule");
@@ -426,4 +467,9 @@ document.getElementById("btn-new-order").onclick = () => {
 };
 
 showScreen("lookup");
+const rememberedAddress = getSavedAddress();
+if (rememberedAddress) {
+  addressInput.value = rememberedAddress;
+}
+refreshSavedAddressUI();
 
