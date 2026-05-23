@@ -84,6 +84,70 @@ function addressMatches_(inputAddress, storedAddress) {
   return qWords.every(function (w) { return fTokens.indexOf(w) !== -1; });
 }
 
+function levenshtein_(a, b) {
+  const s = canonicalAddress_(a);
+  const t = canonicalAddress_(b);
+  if (!s && !t) return 0;
+  if (!s) return t.length;
+  if (!t) return s.length;
+  const rows = s.length + 1;
+  const cols = t.length + 1;
+  const dp = [];
+  for (let i = 0; i < rows; i++) {
+    dp[i] = [];
+    dp[i][0] = i;
+  }
+  for (let j = 0; j < cols; j++) dp[0][j] = j;
+  for (let i = 1; i < rows; i++) {
+    for (let j = 1; j < cols; j++) {
+      const cost = s[i - 1] === t[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + cost
+      );
+    }
+  }
+  return dp[s.length][t.length];
+}
+
+function addressScore_(query, address) {
+  const q = canonicalAddress_(query);
+  const a = canonicalAddress_(address);
+  if (!q || !a) return 0;
+  if (a.indexOf(q) !== -1) return 0.98;
+
+  const qTokens = q.split(' ').filter(Boolean);
+  const aTokens = a.split(' ').filter(Boolean);
+  const numRegex = /^\d+[A-Z]?$/;
+  const qNums = qTokens.filter((t) => numRegex.test(t));
+  const qWords = qTokens.filter((t) => !numRegex.test(t));
+  const matchedNums = qNums.filter((n) => aTokens.indexOf(n) !== -1).length;
+  const matchedWords = qWords.filter((w) => aTokens.indexOf(w) !== -1).length;
+
+  const numRatio = qNums.length ? (matchedNums / qNums.length) : 0;
+  const wordRatio = qWords.length ? (matchedWords / qWords.length) : 0;
+
+  const dist = levenshtein_(q, a);
+  const maxLen = Math.max(q.length, a.length, 1);
+  const editScore = 1 - (dist / maxLen);
+
+  return (numRatio * 0.45) + (wordRatio * 0.35) + (editScore * 0.20);
+}
+
+function findSuggestions_(query, clientes) {
+  return clientes
+    .filter((c) => isEnabled_(c.activo) && String(c.direccion || '').trim())
+    .map((c) => ({
+      direccion: String(c.direccion || '').trim(),
+      score: addressScore_(query, c.direccion),
+    }))
+    .filter((x) => x.score >= 0.58)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((x) => x.direccion);
+}
+
 function isEnabled_(value) {
   const v = normalize_(value);
   if (v === '' || v === '1' || v === 'SI' || v === 'SÍ' || v === 'TRUE' || v === 'VERDADERO') {
@@ -180,7 +244,10 @@ function findClient_(query) {
     return isEnabled_(c.activo) && (addressMatches_(query, c.direccion) || normalize_(c.telefono) === q);
   });
 
-  if (!client) return { found: false };
+  if (!client) {
+    const suggestions = findSuggestions_(query, clientes);
+    return { found: false, suggestions: suggestions };
+  }
 
   const ids = ['horario_1', 'horario_2', 'horario_3', 'horario_4']
     .map((k) => String(client[k] || '').trim())
@@ -259,7 +326,7 @@ function ensurePedidosEstadoDropdown_(sheet) {
   range.setDataValidation(rule);
 }
 
-function setupEstadoPedidosManual_() {
+function setupEstadoPedidosManual() {
   const sh = getSheet_(SHEETS.PEDIDOS);
   ensurePedidosEstadoDropdown_(sh);
 }
@@ -303,3 +370,5 @@ function jsonResponse(data, statusCode) {
   out.setMimeType(ContentService.MimeType.JSON);
   return out;
 }
+
+

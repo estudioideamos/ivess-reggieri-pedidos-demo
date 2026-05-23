@@ -39,6 +39,7 @@ const confirmBox = document.getElementById("confirm-box");
 const commentInput = document.getElementById("comment-input");
 const lookupSpinner = document.getElementById("lookup-spinner");
 const stepIndicator = document.getElementById("step-indicator");
+const lookupSuggestions = document.getElementById("lookup-suggestions");
 
 function showScreen(name) {
   Object.values(screens).forEach((el) => el.classList.add("hidden"));
@@ -130,12 +131,43 @@ async function findClient(query) {
   if (API_BASE_URL) {
     try {
       const live = await api("findClient", { query });
-      if (live?.found) return live.client;
+      if (live?.found) return { found: true, client: live.client, suggestions: [] };
+      return { found: false, client: null, suggestions: Array.isArray(live?.suggestions) ? live.suggestions : [] };
     } catch (err) {
       console.warn("Fallo findClient en backend, uso datos locales temporales.", err);
     }
   }
-  return byMock || null;
+  if (byMock) return { found: true, client: byMock, suggestions: [] };
+  return { found: false, client: null, suggestions: [] };
+}
+
+function clearLookupSuggestions() {
+  if (!lookupSuggestions) return;
+  lookupSuggestions.innerHTML = "";
+  lookupSuggestions.classList.add("hidden");
+}
+
+function renderLookupSuggestions(suggestions) {
+  if (!lookupSuggestions) return;
+  const unique = [...new Set((suggestions || []).filter(Boolean))].slice(0, 3);
+  if (!unique.length) {
+    clearLookupSuggestions();
+    return;
+  }
+  lookupSuggestions.innerHTML = `
+    <p class="lookup-suggestions-title">Tal vez quisiste decir:</p>
+    <div class="lookup-suggestions-list">
+      ${unique.map((item) => `<button type="button" class="lookup-suggestion-item">${item}</button>`).join("")}
+    </div>
+  `;
+  lookupSuggestions.classList.remove("hidden");
+  lookupSuggestions.querySelectorAll(".lookup-suggestion-item").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      addressInput.value = btn.textContent || "";
+      clearLookupSuggestions();
+      handleFindClient();
+    });
+  });
 }
 
 async function getProductsForClient(cliente) {
@@ -332,12 +364,17 @@ const handleFindClient = async () => {
   btn.disabled = true;
   btn.textContent = "Buscando...";
   setLookupLoading(true);
+  clearLookupSuggestions();
   try {
-    const found = await findClient(query);
-    if (!found) {
-      alert("No encontramos cliente con esa dirección/teléfono.");
+    const result = await findClient(query);
+    if (!result?.found || !result.client) {
+      renderLookupSuggestions(result?.suggestions || []);
+      if (!(result?.suggestions || []).length) {
+        alert("No encontramos cliente con esa dirección/teléfono.");
+      }
       return;
     }
+    const found = result.client;
     const q = normalize(query);
     const exactAddress = addressMatches(query, found.direccion);
     const exactPhone = normalize(found.telefono) === q;
@@ -369,6 +406,9 @@ addressInput.addEventListener("keydown", (event) => {
     event.preventDefault();
     handleFindClient();
   }
+});
+addressInput.addEventListener("input", () => {
+  clearLookupSuggestions();
 });
 
 document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
