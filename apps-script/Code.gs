@@ -555,7 +555,7 @@ function getLocalidades_() {
 }
 
 function createLead_(payload) {
-  const direccion = String(payload.direccion || '').trim();
+  const direccion = String(payload.direccion || '').trim().toUpperCase();
   const localidad = String(payload.localidad || '').trim();
   const codigoArea = String(payload.codigo_area || '').trim();
   const celular = String(payload.celular || '').trim();
@@ -638,10 +638,14 @@ function applyAltasSheetLayout_(sheet) {
   sheet.setColumnWidth(7, 130); // Origen
   sheet.setColumnWidth(8, 180); // Estado
 
-  // Intercalado de colores para lectura (como en otras hojas).
+  // Intercalado de colores para lectura (blanco + celeste suave).
   const bodyRows = Math.max(sheet.getMaxRows() - 1, 1);
   const bodyRange = sheet.getRange(2, 1, bodyRows, lastCol);
-  bodyRange.applyRowBanding(SpreadsheetApp.BandingTheme.LIGHT_GREY);
+  const existingBandings = sheet.getBandings() || [];
+  existingBandings.forEach(function (b) { b.remove(); });
+  const banding = bodyRange.applyRowBanding(SpreadsheetApp.BandingTheme.BLUE);
+  banding.setFirstRowColor('#ffffff');
+  banding.setSecondRowColor('#eaf2ff');
 }
 
 function ensureAltasDropdowns_(sheet) {
