@@ -3,6 +3,7 @@
   PRODUCTOS: 'ProductosPrecios',
   PEDIDOS: 'Pedidos',
   HORARIOS: 'Horarios',
+  ALTAS: 'AltasAutomaticas',
 };
 
 const ESTADOS_PEDIDO = [
@@ -60,6 +61,10 @@ function doPost(e) {
     
     if (path === 'getAddressBook') {
       return jsonResponse(getAddressBook_());
+    }
+
+    if (path === 'createLead') {
+      return jsonResponse(createLead_(body));
     }
 
     return jsonResponse({ error: 'Ruta invalida' }, 400);
@@ -528,8 +533,62 @@ function getAddressBook_() {
   return { ok: true, direcciones: unique };
 }
 
+function createLead_(payload) {
+  const direccion = String(payload.direccion || '').trim();
+  const localidad = String(payload.localidad || '').trim();
+  const codigoArea = String(payload.codigo_area || '').trim();
+  const celular = String(payload.celular || '').trim();
+
+  if (!direccion) return { ok: false, error: 'Falta direccion' };
+  if (!localidad) return { ok: false, error: 'Falta localidad' };
+  if (!codigoArea) return { ok: false, error: 'Falta codigo de area' };
+  if (!celular) return { ok: false, error: 'Falta celular' };
+
+  const sh = getOrCreateAltasSheet_();
+  const telefonoCompleto = codigoArea + celular;
+
+  sh.appendRow([
+    new Date(),
+    direccion,
+    localidad,
+    codigoArea,
+    celular,
+    telefonoCompleto,
+    'WEB_ALTAS',
+    'NUEVO',
+  ]);
+
+  return { ok: true };
+}
+
+function getOrCreateAltasSheet_() {
+  const ss = SpreadsheetApp.getActive();
+  let sh = ss.getSheetByName(SHEETS.ALTAS);
+  if (!sh) {
+    sh = ss.insertSheet(SHEETS.ALTAS);
+  }
+
+  if (sh.getLastRow() === 0) {
+    sh.appendRow([
+      'Fecha y hora',
+      'Direccion',
+      'Localidad',
+      'Codigo area',
+      'Celular',
+      'Telefono completo',
+      'Origen',
+      'Estado',
+    ]);
+  }
+
+  return sh;
+}
 function jsonResponse(data, statusCode) {
   const out = ContentService.createTextOutput(JSON.stringify(data));
   out.setMimeType(ContentService.MimeType.JSON);
   return out;
 }
+
+
+
+

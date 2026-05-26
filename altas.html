@@ -3,81 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ivess Reggieri - Alta automática</title>
+  <title>Ivess Reggieri - Alta automatica</title>
   <link rel="icon" type="image/x-icon" href="./assets/favicon-somoselagua.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Manrope:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
+    .alta-form {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .alta-form label {
+      color: #d8efff;
+      font-weight: 700;
       font-family: "Montserrat", "Manrope", sans-serif;
-      background: linear-gradient(135deg, #e3ebf4 0%, #d2dee9 50%, #c2d2e2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .app {
-      width: 100%;
-      max-width: 520px;
-      background: #0b52c4;
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0, 45, 108, 0.22);
-      color: #fff;
-    }
-    .head {
-      background: #d7e5ef;
-      padding: 24px 20px 18px;
-      border-bottom: 1px solid #c6d7e6;
-    }
-    .head img { height: 52px; width: auto; }
-    .content { padding: 24px 20px 22px; text-align: center; }
-    h1 { margin: 0 0 10px; font-size: 34px; line-height: 1.05; text-transform: uppercase; }
-    p { margin: 0 0 18px; color: #d8ecff; font-size: 17px; }
-    .btn {
-      display: block;
-      width: 100%;
-      text-decoration: none;
-      text-align: center;
-      color: #fff;
-      font-size: 20px;
-      font-weight: 800;
-      padding: 14px 12px;
-      border-radius: 12px;
-      border: 2px solid rgba(255, 255, 255, 0.35);
-      background: linear-gradient(90deg, #1f63c8, #4fb4f3);
-      margin-bottom: 10px;
-    }
-    .btn-green {
-      background: linear-gradient(90deg, #2cb861, #36cf72);
-    }
-    .footer {
-      border-top: 1px solid rgba(189, 226, 255, 0.3);
-      padding: 12px;
-      text-align: center;
-      color: #a9d4ff;
-      font-size: 12px;
+      font-size: 13px;
       text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
-    .footer strong { color: #e0f3ff; }
+
+    .phone-row {
+      display: grid;
+      grid-template-columns: 125px 1fr;
+      gap: 10px;
+    }
+
+    .alta-note {
+      color: #bfe4ff;
+      font-size: 12px;
+      margin: 2px 0 6px;
+      font-weight: 600;
+    }
+
+    .alta-content {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 520px) {
+      .phone-row {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 <body>
-  <main class="app">
-    <header class="head">
-      <img src="https://ivessreggieri.com.ar/wp-content/uploads/2021/08/LOGO-FINAL.png" alt="Ivess Reggieri" />
-    </header>
-    <section class="content">
-      <h1>ALTA AUTOMÁTICA</h1>
-      <p>Esta sección ya quedó preparada para conectar el formulario de nuevos clientes.</p>
-      <a class="btn btn-green" href="https://wa.me/5491133053315?text=Hola%20Ivess%20Reggieri%2C%20quiero%20darme%20de%20alta%20como%20cliente..." target="_blank" rel="noopener noreferrer">Hablar con un asesor</a>
-      <a class="btn" href="./index.html">Volver al inicio</a>
-    </section>
-    <footer class="footer">DESARROLLO DE <strong>ESTUDIO IDEAMOS</strong> © 2026</footer>
-  </main>
+  <div class="layout">
+    <main class="app">
+      <header class="header">
+        <img class="logo" src="https://ivessreggieri.com.ar/wp-content/uploads/2021/08/LOGO-FINAL.png" alt="Ivess Reggieri" />
+      </header>
+
+      <section class="content alta-content">
+        <h1 class="title">ALTA AUTOMATICA</h1>
+        <div class="title-divider"></div>
+        <p class="subtitle">Completanos tus datos y te contactamos para activar tu cuenta.</p>
+
+        <form class="alta-form" id="alta-form">
+          <label for="alta-direccion">Direccion</label>
+          <input id="alta-direccion" class="input" type="text" autocomplete="street-address" placeholder="Ej: Av. Corrientes 1234" />
+
+          <label for="alta-localidad">Localidad</label>
+          <input id="alta-localidad" class="input" type="text" autocomplete="address-level2" placeholder="Ej: Ramos Mejia" />
+
+          <label>Telefono celular</label>
+          <div class="phone-row">
+            <input id="alta-cod-area" class="input" type="tel" inputmode="numeric" autocomplete="tel-area-code" placeholder="Codigo area" />
+            <input id="alta-celular" class="input" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="Numero celular" />
+          </div>
+          <p class="alta-note">Ingresalo sin 0 ni 15. Ej: 11 + 45551234.</p>
+
+          <div class="actions">
+            <button id="alta-submit" type="submit" style="width:100%">Enviar solicitud</button>
+          </div>
+          <p id="alta-feedback" class="alta-note" style="margin-top:0"></p>
+        </form>
+
+        <a class="advisor-link" href="https://wa.me/5491133053315?text=Hola%20Ivess%20Reggieri%2C%20quiero%20darme%20de%20alta%20como%20cliente..." target="_blank" rel="noopener noreferrer"><img src="./assets/whatsapp.svg" alt="" class="advisor-link-icon" /> Hablar con un asesor</a>
+        <div class="actions">
+          <a href="./index.html" class="advisor-link" style="margin-top:0;background:transparent;border:2px solid #9ad1ff">Volver al inicio</a>
+        </div>
+      </section>
+
+      <footer class="dev-credit">DESARROLLO DE <strong>ESTUDIO IDEAMOS</strong> (c) 2026</footer>
+    </main>
+  </div>
+  <script type="module" src="./src/altas.js?v=20260526-1"></script>
 </body>
 </html>
