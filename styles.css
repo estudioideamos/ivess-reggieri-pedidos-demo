@@ -1046,7 +1046,8 @@ button.secondary {
   .title-icon-svg { width: 40px; height: 40px; }
   .step-indicator { font-size: 12px; right: 12px; top: 10px; padding: 6px 9px; }
   #screen-lookup .advisor-link-lookup {
-    margin-top: 152px !important;
+    margin-top: 0 !important;
+    transform: translateY(100px) !important;
     display: block;
   }
   #products-list { grid-template-columns: 1fr 1fr; }
