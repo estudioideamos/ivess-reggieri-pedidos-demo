@@ -31,7 +31,6 @@ const screens = {
 };
 
 const addressInput = document.getElementById("address-input");
-const customerLabel = document.getElementById("customer-label");
 const scheduleList = document.getElementById("schedule-list");
 const scheduleLoading = document.getElementById("schedule-loading");
 const productsList = document.getElementById("products-list");
@@ -496,7 +495,6 @@ const handleFindClient = async (opts = {}) => {
       state.products = catalog;
       return catalog;
     });
-    customerLabel.textContent = `Nro. de Cliente ${found.id_cliente} - ${found.direccion}`;
     renderSchedules();
     showScreen("schedule");
   } catch (err) {
