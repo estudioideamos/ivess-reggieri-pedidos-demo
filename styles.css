@@ -1052,8 +1052,8 @@ button.secondary {
   }
   #products-list { grid-template-columns: 1fr 1fr; }
   .product h3 { font-size: 16px; min-height: 34px; }
-  .product-media { height: 116px; }
-  .product-image { max-height: 112px; }
+  .product-media { height: 132px; }
+  .product-image { max-height: 128px; }
   .qty button { width: 36px; height: 36px; font-size: 24px; }
   .qty span { font-size: 20px; }
   .confirm-pay-row { grid-template-columns: 1fr; }
