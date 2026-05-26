@@ -644,8 +644,9 @@ function applyAltasSheetLayout_(sheet) {
   const existingBandings = sheet.getBandings() || [];
   existingBandings.forEach(function (b) { b.remove(); });
   const banding = bodyRange.applyRowBanding(SpreadsheetApp.BandingTheme.BLUE);
+  // Igualado al look de la hoja Pedidos: blanco + azul grisaceo mas marcado.
   banding.setFirstRowColor('#ffffff');
-  banding.setSecondRowColor('#eaf2ff');
+  banding.setSecondRowColor('#d6e1ef');
 }
 
 function ensureAltasDropdowns_(sheet) {
