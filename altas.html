@@ -27,8 +27,12 @@
 
     .phone-row {
       display: grid;
-      grid-template-columns: 170px 1fr;
+      grid-template-columns: minmax(140px, 42%) minmax(0, 1fr);
       gap: 10px;
+    }
+
+    .phone-row .input {
+      min-width: 0;
     }
 
     .alta-note {
@@ -45,7 +49,8 @@
 
     @media (max-width: 520px) {
       .phone-row {
-        grid-template-columns: 42% 58%;
+        grid-template-columns: minmax(132px, 44%) minmax(0, 1fr);
+        gap: 8px;
       }
     }
   </style>
