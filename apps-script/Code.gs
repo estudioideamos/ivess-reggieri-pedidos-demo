@@ -637,6 +637,11 @@ function applyAltasSheetLayout_(sheet) {
   sheet.setColumnWidth(6, 160); // Telefono completo
   sheet.setColumnWidth(7, 130); // Origen
   sheet.setColumnWidth(8, 180); // Estado
+
+  // Intercalado de colores para lectura (como en otras hojas).
+  const bodyRows = Math.max(sheet.getMaxRows() - 1, 1);
+  const bodyRange = sheet.getRange(2, 1, bodyRows, lastCol);
+  bodyRange.applyRowBanding(SpreadsheetApp.BandingTheme.LIGHT_GREY);
 }
 
 function ensureAltasDropdowns_(sheet) {
