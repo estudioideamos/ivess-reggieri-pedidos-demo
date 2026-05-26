@@ -65,7 +65,7 @@ function updateStepIndicator(screenName) {
     lookup: "PASO 1 de 3",
     schedule: "PASO 2 de 3",
     products: "PASO 3 de 3",
-    confirm: "PASO 3 de 3",
+    confirm: "FINALIZADO",
   };
   stepIndicator.textContent = map[screenName] || "PASO 1 de 3";
 }
