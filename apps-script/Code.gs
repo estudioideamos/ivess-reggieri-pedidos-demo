@@ -109,6 +109,8 @@ function normalize_(v) {
 
 function canonicalAddress_(v) {
   const base = normalize_(v)
+    .replace(/([A-Z])(\d)/g, '$1 $2')
+    .replace(/(\d)([A-Z])/g, '$1 $2')
     .replace(/[.,]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
