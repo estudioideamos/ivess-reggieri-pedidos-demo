@@ -308,6 +308,11 @@ body {
   filter: brightness(0) invert(1);
 }
 
+.advisor-link-lookup {
+  margin-top: 34px;
+  opacity: 0.96;
+}
+
 button {
   border: none;
   border-radius: 12px;
@@ -847,6 +852,10 @@ button.secondary {
 
   #screen-lookup .advisor-link {
     margin-top: 8px;
+  }
+
+  #screen-lookup .advisor-link-lookup {
+    margin-top: 26px;
   }
 
   #screen-lookup .title-icon-wrap {
