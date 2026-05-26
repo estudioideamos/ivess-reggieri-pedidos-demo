@@ -114,9 +114,11 @@ function addressMatches(inputAddress, storedAddress) {
 }
 
 function beautifyProductName(name) {
-  return String(name || "")
+  const pretty = String(name || "")
     .replace(/Botellon/gi, "Botellón")
     .replace(/Sifon/gi, "Sifón");
+  // Compactamos los botellones para priorizar imagen en la grilla mobile.
+  return pretty.replace(/\s+litros/gi, "");
 }
 
 async function api(path, payload) {
