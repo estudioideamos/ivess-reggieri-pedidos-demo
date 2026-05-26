@@ -76,6 +76,10 @@ function doPost(e) {
       return jsonResponse(getAddressBook_());
     }
 
+    if (path === 'getLocalidades') {
+      return jsonResponse(getLocalidades_());
+    }
+
     if (path === 'createLead') {
       return jsonResponse(createLead_(body));
     }
@@ -544,6 +548,10 @@ function getAddressBook_() {
 
   const unique = clientes.filter((v, i, arr) => arr.indexOf(v) === i);
   return { ok: true, direcciones: unique };
+}
+
+function getLocalidades_() {
+  return { ok: true, localidades: getLocalidadesFromClientes_() };
 }
 
 function createLead_(payload) {

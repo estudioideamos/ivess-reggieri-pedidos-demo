@@ -5,6 +5,7 @@ const submitBtn = document.getElementById("alta-submit");
 const feedback = document.getElementById("alta-feedback");
 const direccionInput = document.getElementById("alta-direccion");
 const localidadInput = document.getElementById("alta-localidad");
+const localidadesList = document.getElementById("alta-localidades-list");
 const codAreaInput = document.getElementById("alta-cod-area");
 const celularInput = document.getElementById("alta-celular");
 
@@ -26,6 +27,20 @@ async function api(path, payload) {
   });
   if (!res.ok) throw new Error("Error API");
   return res.json();
+}
+
+async function preloadLocalidades() {
+  if (!API_BASE_URL || !localidadesList) return;
+  try {
+    const response = await api("getLocalidades", {});
+    const localidades = Array.isArray(response?.localidades) ? response.localidades : [];
+    localidadesList.innerHTML = localidades
+      .filter((v) => String(v || "").trim())
+      .map((loc) => `<option value="${String(loc).replace(/"/g, "&quot;")}"></option>`)
+      .join("");
+  } catch (_err) {
+    // Si falla, el usuario puede seguir escribiendo manualmente.
+  }
 }
 
 if (codAreaInput) {
@@ -77,3 +92,5 @@ if (form) {
     }
   });
 }
+
+preloadLocalidades();
