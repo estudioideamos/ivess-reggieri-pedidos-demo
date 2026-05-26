@@ -540,8 +540,10 @@ if (btnScheduleChangeUser) {
   });
 }
 
-document.getElementById("btn-back-lookup").onclick = () => showScreen("lookup");
-document.getElementById("btn-back-schedule").onclick = () => showScreen("schedule");
+const btnBackLookup = document.getElementById("btn-back-lookup");
+if (btnBackLookup) btnBackLookup.onclick = () => showScreen("lookup");
+const btnBackSchedule = document.getElementById("btn-back-schedule");
+if (btnBackSchedule) btnBackSchedule.onclick = () => showScreen("schedule");
 document.getElementById("btn-submit").onclick = submitOrder;
 
 document.getElementById("btn-new-order").onclick = () => {
