@@ -942,7 +942,7 @@ button.secondary {
     z-index: 2;
   }
   #screen-schedule #schedule-list {
-    margin-top: 8px;
+    margin-top: -22px;
     position: relative;
     z-index: 1;
   }
