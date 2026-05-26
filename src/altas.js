@@ -5,6 +5,7 @@ const submitBtn = document.getElementById("alta-submit");
 const feedback = document.getElementById("alta-feedback");
 const direccionInput = document.getElementById("alta-direccion");
 const localidadInput = document.getElementById("alta-localidad");
+const localidadesList = document.getElementById("alta-localidades-list");
 const codAreaInput = document.getElementById("alta-cod-area");
 const celularInput = document.getElementById("alta-celular");
 
@@ -29,15 +30,14 @@ async function api(path, payload) {
 }
 
 async function preloadLocalidades() {
-  if (!API_BASE_URL || !localidadInput) return;
+  if (!API_BASE_URL || !localidadesList) return;
   try {
     const response = await api("getLocalidades", {});
     const localidades = Array.isArray(response?.localidades) ? response.localidades : [];
-    const options = localidades
+    localidadesList.innerHTML = localidades
       .filter((v) => String(v || "").trim())
-      .map((loc) => `<option value="${String(loc).replace(/"/g, "&quot;")}">${String(loc)}</option>`)
+      .map((loc) => `<option value="${String(loc).replace(/"/g, "&quot;")}"></option>`)
       .join("");
-    localidadInput.innerHTML = `<option value="">Selecciona una localidad</option>${options}`;
   } catch (_err) {
     // Si falla, el usuario puede seguir escribiendo manualmente.
   }
