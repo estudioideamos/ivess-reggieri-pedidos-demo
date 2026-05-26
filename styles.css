@@ -1045,7 +1045,7 @@ button.secondary {
   .title-icon { width: 78px; height: 78px; }
   .title-icon-svg { width: 40px; height: 40px; }
   .step-indicator { font-size: 12px; right: 12px; top: 10px; padding: 6px 9px; }
-  #screen-lookup .advisor-link-lookup { margin-top: 52px; }
+  #screen-lookup .advisor-link-lookup { margin-top: 152px; }
   #products-list { grid-template-columns: 1fr 1fr; }
   .product h3 { font-size: 16px; min-height: 34px; }
   .product-media { height: 116px; }
