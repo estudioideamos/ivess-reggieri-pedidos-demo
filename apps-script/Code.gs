@@ -633,34 +633,71 @@ function applyAltasSheetLayout_(sheet) {
 
 function ensureAltasDropdowns_(sheet) {
   const totalRows = Math.max(sheet.getMaxRows(), 2);
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const localidadCol = headers.indexOf('localidad') + 1;
+  const estadoCol = headers.indexOf('estado') + 1;
 
-  // Columna C: Localidad, tomada de la hoja Clientes.
+  // Localidad: tomada de Clientes (valores + validacion si existe).
   const localidades = getLocalidadesFromClientes_();
-  if (localidades.length) {
+  if (localidadCol > 0 && localidades.length) {
     const localidadRule = SpreadsheetApp.newDataValidation()
       .requireValueInList(localidades, true)
       .setAllowInvalid(false)
       .build();
-    sheet.getRange(2, 3, totalRows - 1, 1).setDataValidation(localidadRule);
+    sheet.getRange(2, localidadCol, totalRows - 1, 1).setDataValidation(localidadRule);
   }
 
-  // Columna H: Estado operativo para seguimiento telefonico.
+  // Estado operativo para seguimiento telefonico.
   const estadoRule = SpreadsheetApp.newDataValidation()
     .requireValueInList(ESTADOS_ALTA, true)
     .setAllowInvalid(false)
     .build();
-  sheet.getRange(2, 8, totalRows - 1, 1).setDataValidation(estadoRule);
+  if (estadoCol > 0) {
+    sheet.getRange(2, estadoCol, totalRows - 1, 1).setDataValidation(estadoRule);
+  }
 }
 
 function getLocalidadesFromClientes_() {
-  const clientes = mapByHeaders_(getSheet_(SHEETS.CLIENTES));
   const unique = {};
+  const clientesSheet = getSheet_(SHEETS.CLIENTES);
+  const clientes = mapByHeaders_(clientesSheet);
+
+  // 1) Localidades ya cargadas en filas de Clientes.
   clientes.forEach(function (c) {
     const loc = String(c.localidad || '').trim();
     if (!loc) return;
     const key = normalize_(loc);
     if (!unique[key]) unique[key] = loc;
   });
+
+  // 2) Si la hoja Clientes ya tiene dropdown en Localidad, reutilizar esa lista.
+  const headers = clientesSheet.getRange(1, 1, 1, clientesSheet.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const localidadCol = headers.indexOf('localidad') + 1;
+  if (localidadCol > 0 && clientesSheet.getMaxRows() >= 2) {
+    const rule = clientesSheet.getRange(2, localidadCol).getDataValidation();
+    if (rule) {
+      const criteria = rule.getCriteriaType();
+      const values = rule.getCriteriaValues() || [];
+      if (criteria === SpreadsheetApp.DataValidationCriteria.VALUE_IN_LIST && values[0]) {
+        values[0].forEach(function (item) {
+          const loc = String(item || '').trim();
+          if (!loc) return;
+          const key = normalize_(loc);
+          if (!unique[key]) unique[key] = loc;
+        });
+      }
+      if (criteria === SpreadsheetApp.DataValidationCriteria.VALUE_IN_RANGE && values[0]) {
+        const rangeValues = values[0].getValues().flat();
+        rangeValues.forEach(function (item) {
+          const loc = String(item || '').trim();
+          if (!loc) return;
+          const key = normalize_(loc);
+          if (!unique[key]) unique[key] = loc;
+        });
+      }
+    }
+  }
+
   return Object.keys(unique)
     .map(function (k) { return unique[k]; })
     .sort(function (a, b) { return a.localeCompare(b, 'es'); });
