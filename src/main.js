@@ -62,12 +62,12 @@ function showScreen(name) {
 function updateStepIndicator(screenName) {
   if (!stepIndicator) return;
   const map = {
-    lookup: "PASO 1 de 4",
-    schedule: "PASO 2 de 4",
-    products: "PASO 3 de 4",
-    confirm: "PASO 4 de 4",
+    lookup: "PASO 1 de 3",
+    schedule: "PASO 2 de 3",
+    products: "PASO 3 de 3",
+    confirm: "PASO 3 de 3",
   };
-  stepIndicator.textContent = map[screenName] || "PASO 1 de 4";
+  stepIndicator.textContent = map[screenName] || "PASO 1 de 3";
 }
 
 function setLookupLoading(show) {
