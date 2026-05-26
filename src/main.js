@@ -88,6 +88,14 @@ function normalize(value) {
     .trim();
 }
 
+function normalizeLookupQuery(value) {
+  return String(value || "")
+    .replace(/([A-Za-zÁÉÍÓÚÜÑáéíóúüñ])(\d)/g, "$1 $2")
+    .replace(/(\d)([A-Za-zÁÉÍÓÚÜÑáéíóúüñ])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 function canonicalAddress(value) {
   const base = normalize(value)
     .replace(/([A-Z])(\d)/g, "$1 $2")
@@ -135,13 +143,14 @@ async function api(path, payload) {
 }
 
 async function findClient(query) {
-  const normalized = normalize(query);
+  const safeQuery = normalizeLookupQuery(query);
+  const normalized = normalize(safeQuery);
   const byMock = MOCK_CLIENTS.find(
-    (c) => addressMatches(query, c.direccion) || normalize(c.telefono) === normalized
+    (c) => addressMatches(safeQuery, c.direccion) || normalize(c.telefono) === normalized
   );
   if (API_BASE_URL) {
     try {
-      const live = await api("findClient", { query });
+      const live = await api("findClient", { query: safeQuery });
       if (live?.found) return { found: true, client: live.client, suggestions: [] };
       return { found: false, client: null, suggestions: Array.isArray(live?.suggestions) ? live.suggestions : [] };
     } catch (err) {
