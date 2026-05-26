@@ -296,7 +296,6 @@ function renderProducts() {
     card.style.animationDelay = `${0.05 * productsList.children.length}s`;
     card.innerHTML = `
       <div class="product-media">${imageUrl ? `<img src="${imageUrl}" alt="${displayName}" class="product-image" />` : ""}</div>
-      <h3>${displayName}</h3>
       <p class="product-price">${currency.format(p.precio)}</p>
       <div class="qty">
         <button data-delta="-1">-</button>
