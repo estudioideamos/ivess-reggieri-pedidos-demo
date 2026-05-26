@@ -29,6 +29,19 @@ const OPCIONES_SI_NO = [
   'SI',
 ];
 
+const ESTADOS_ALTA = [
+  'NUEVO',
+  'PENDIENTE CONTACTO',
+  'PRIMER INTENTO',
+  'SEGUNDO INTENTO',
+  'CONTACTADO',
+  'INTERESADO',
+  'NO INTERESADO',
+  'NO RESPONDE',
+  'DATOS INCOMPLETOS',
+  'ALTA CONCRETADA',
+];
+
 // TODO: completar cuando el cliente pase credenciales de Mercado Pago.
 const MP_ACCESS_TOKEN = '';
 const MP_PUBLIC_KEY = '';
@@ -545,6 +558,8 @@ function createLead_(payload) {
   if (!celular) return { ok: false, error: 'Falta celular' };
 
   const sh = getOrCreateAltasSheet_();
+  applyAltasSheetLayout_(sh);
+  ensureAltasDropdowns_(sh);
   const telefonoCompleto = codigoArea + celular;
 
   sh.appendRow([
@@ -582,6 +597,73 @@ function getOrCreateAltasSheet_() {
   }
 
   return sh;
+}
+
+function setupAltasAutomaticasManual() {
+  const sh = getOrCreateAltasSheet_();
+  applyAltasSheetLayout_(sh);
+  ensureAltasDropdowns_(sh);
+}
+
+function applyAltasSheetLayout_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 8);
+
+  sheet.setFrozenRows(1);
+  if (!sheet.getFilter()) {
+    sheet.getRange(1, 1, 1, lastCol).createFilter();
+  }
+
+  const header = sheet.getRange(1, 1, 1, lastCol);
+  header
+    .setFontWeight('bold')
+    .setFontColor('#ffffff')
+    .setBackground('#0b57d0')
+    .setHorizontalAlignment('center');
+
+  sheet.getRange(2, 1, Math.max(sheet.getMaxRows() - 1, 1), 1).setNumberFormat('dd/MM/yyyy HH:mm');
+  sheet.setColumnWidth(1, 150); // Fecha y hora
+  sheet.setColumnWidth(2, 320); // Direccion
+  sheet.setColumnWidth(3, 170); // Localidad
+  sheet.setColumnWidth(4, 120); // Codigo area
+  sheet.setColumnWidth(5, 140); // Celular
+  sheet.setColumnWidth(6, 160); // Telefono completo
+  sheet.setColumnWidth(7, 130); // Origen
+  sheet.setColumnWidth(8, 180); // Estado
+}
+
+function ensureAltasDropdowns_(sheet) {
+  const totalRows = Math.max(sheet.getMaxRows(), 2);
+
+  // Columna C: Localidad, tomada de la hoja Clientes.
+  const localidades = getLocalidadesFromClientes_();
+  if (localidades.length) {
+    const localidadRule = SpreadsheetApp.newDataValidation()
+      .requireValueInList(localidades, true)
+      .setAllowInvalid(false)
+      .build();
+    sheet.getRange(2, 3, totalRows - 1, 1).setDataValidation(localidadRule);
+  }
+
+  // Columna H: Estado operativo para seguimiento telefonico.
+  const estadoRule = SpreadsheetApp.newDataValidation()
+    .requireValueInList(ESTADOS_ALTA, true)
+    .setAllowInvalid(false)
+    .build();
+  sheet.getRange(2, 8, totalRows - 1, 1).setDataValidation(estadoRule);
+}
+
+function getLocalidadesFromClientes_() {
+  const clientes = mapByHeaders_(getSheet_(SHEETS.CLIENTES));
+  const unique = {};
+  clientes.forEach(function (c) {
+    const loc = String(c.localidad || '').trim();
+    if (!loc) return;
+    const key = normalize_(loc);
+    if (!unique[key]) unique[key] = loc;
+  });
+  return Object.keys(unique)
+    .map(function (k) { return unique[k]; })
+    .sort(function (a, b) { return a.localeCompare(b, 'es'); });
 }
 function jsonResponse(data, statusCode) {
   const out = ContentService.createTextOutput(JSON.stringify(data));
