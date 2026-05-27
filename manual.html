@@ -3,330 +3,396 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manual Operativo - Ivess Reggieri</title>
+  <title>Manual Operativo Premium - Ivess Reggieri</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --blue-900: #0a4fb8;
-      --blue-700: #1766d3;
-      --blue-100: #eaf3ff;
-      --text: #173d75;
-      --muted: #4c6a95;
-      --ok: #0e8f4f;
-      --warn: #a86000;
-      --line: #d6e6fb;
-      --card: #ffffff;
-      --bg: #e8eef6;
+      --bg-0: #e6edf7;
+      --bg-1: #d6e3f4;
+      --blue-900: #083a91;
+      --blue-800: #0a4fb8;
+      --blue-700: #1868d7;
+      --blue-100: #edf4ff;
+      --cyan-300: #69d3ff;
+      --text: #163f7a;
+      --muted: #5977a3;
+      --line: #d4e4f9;
+      --ok: #0b9051;
+      --warn: #9d5d00;
+      --white: #ffffff;
     }
 
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
-      background: linear-gradient(135deg, #eaf0f8 0%, #dbe6f4 100%);
       font-family: "Manrope", sans-serif;
       color: var(--text);
-      line-height: 1.45;
-      padding: 22px;
+      background:
+        radial-gradient(1200px 600px at 0% -10%, rgba(90, 167, 255, 0.18), rgba(90, 167, 255, 0)),
+        radial-gradient(900px 500px at 100% 10%, rgba(80, 196, 255, 0.18), rgba(80, 196, 255, 0)),
+        linear-gradient(145deg, var(--bg-0), var(--bg-1));
+      padding: 24px;
     }
 
     .manual {
-      max-width: 1080px;
+      max-width: 1140px;
       margin: 0 auto;
-      background: var(--card);
-      border-radius: 18px;
-      box-shadow: 0 16px 44px rgba(12, 59, 129, 0.15);
+      border-radius: 24px;
       overflow: hidden;
-      border: 1px solid #d9e7fa;
+      background: var(--white);
+      border: 1px solid #d9e8fb;
+      box-shadow: 0 24px 70px rgba(6, 47, 115, 0.16);
     }
 
     .hero {
-      padding: 34px 32px 24px;
-      background: linear-gradient(120deg, var(--blue-900), var(--blue-700));
+      padding: 38px 34px 30px;
       color: #fff;
+      background:
+        radial-gradient(420px 220px at 86% 16%, rgba(141, 221, 255, 0.32), rgba(141, 221, 255, 0)),
+        linear-gradient(120deg, var(--blue-900), var(--blue-800) 52%, var(--blue-700));
+      position: relative;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 5px;
+      background: linear-gradient(90deg, rgba(105, 211, 255, 0.2), rgba(105, 211, 255, 0.9), rgba(105, 211, 255, 0.2));
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(209, 241, 255, 0.45);
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
     }
 
     .hero h1 {
-      margin: 0;
-      font-family: "Montserrat", sans-serif;
-      font-size: 35px;
-      line-height: 1.05;
+      margin: 14px 0 0;
+      font: 800 40px/1.02 "Montserrat", sans-serif;
       text-transform: uppercase;
     }
 
     .hero p {
       margin: 10px 0 0;
-      font-size: 16px;
+      max-width: 780px;
+      font-size: 17px;
       opacity: 0.97;
-      max-width: 800px;
     }
 
     .meta {
-      margin-top: 12px;
-      font-size: 13px;
-      opacity: 0.9;
+      margin-top: 14px;
       display: flex;
-      gap: 14px;
       flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(201, 235, 255, 0.5);
+      border-radius: 999px;
+      padding: 7px 11px;
+      font-size: 12px;
+      font-weight: 700;
     }
 
     .content {
-      padding: 26px 32px 34px;
+      padding: 28px 34px 36px;
     }
 
-    h2 {
-      margin: 24px 0 10px;
-      font: 800 22px/1.2 "Montserrat", sans-serif;
-      color: var(--blue-900);
+    .toc {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #f4f9ff, #edf5ff);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 22px;
     }
 
-    h3 {
-      margin: 18px 0 8px;
-      font: 700 17px/1.25 "Montserrat", sans-serif;
-      color: var(--blue-900);
+    .toc h2 {
+      margin: 0 0 8px;
+      font: 800 18px/1.2 "Montserrat", sans-serif;
+      color: var(--blue-800);
+      text-transform: uppercase;
     }
 
-    p {
-      margin: 8px 0;
-      color: var(--text);
-    }
-
-    ul, ol {
-      margin: 8px 0 12px 20px;
+    .toc ol {
+      margin: 0 0 0 18px;
       padding: 0;
     }
 
-    li {
-      margin: 7px 0;
-    }
-
-    .toc, .box, .note {
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      background: var(--blue-100);
-      padding: 14px 16px;
-      margin: 12px 0;
-    }
-
-    .toc strong,
-    .box strong,
-    .note strong {
+    h3.section-title {
+      margin: 28px 0 10px;
+      font: 800 24px/1.2 "Montserrat", sans-serif;
       color: var(--blue-900);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .note {
+    h3.section-title::before {
+      content: "";
+      width: 7px;
+      height: 26px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #22c3ff, #0f72de);
+    }
+
+    h4 {
+      margin: 16px 0 8px;
+      font: 700 17px/1.25 "Montserrat", sans-serif;
+      color: var(--blue-800);
+    }
+
+    p { margin: 8px 0; }
+
+    ul, ol {
+      margin: 6px 0 12px 20px;
+      padding: 0;
+    }
+
+    li { margin: 7px 0; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 10px 0 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--white);
+      box-shadow: 0 8px 20px rgba(12, 62, 135, 0.08);
+      padding: 14px;
+    }
+
+    .card strong {
+      color: var(--blue-900);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .alert {
+      border-radius: 12px;
+      padding: 12px 14px;
+      border: 1px solid;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    .alert.warn {
       background: #fff8eb;
-      border-color: #f0d6a8;
-      color: #6f4600;
+      border-color: #f2d6a4;
+      color: #764900;
     }
 
-    .ok {
-      color: var(--ok);
-      font-weight: 700;
+    .alert.ok {
+      background: #ecfbf3;
+      border-color: #b9ebcf;
+      color: #0b7c43;
     }
 
-    .warn {
-      color: var(--warn);
-      font-weight: 700;
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 12px 0 16px;
     }
 
-    code {
-      background: #edf4ff;
-      border: 1px solid #d5e6ff;
-      padding: 2px 7px;
-      border-radius: 7px;
-      font-size: 13px;
-      color: #17458f;
+    .flow .step {
+      background: linear-gradient(180deg, #f8fbff, #eef5ff);
+      border: 1px solid #d8e9ff;
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 92px;
+    }
+
+    .flow .step b {
+      font-size: 12px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      color: var(--blue-700);
+    }
+
+    .flow .step p {
+      margin: 6px 0 0;
+      font-size: 14px;
+      line-height: 1.35;
     }
 
     table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 14px;
       overflow: hidden;
       margin: 10px 0 14px;
+      font-size: 14px;
     }
 
     th, td {
-      text-align: left;
       border-bottom: 1px solid var(--line);
       padding: 10px 12px;
-      font-size: 14px;
+      text-align: left;
       vertical-align: top;
     }
 
     th {
-      background: #0b57d0;
+      background: linear-gradient(180deg, #0d58cf, #0a4fb8);
       color: #fff;
       font-weight: 700;
     }
 
-    tr:nth-child(even) td {
-      background: #f6faff;
+    tr:nth-child(even) td { background: #f5f9ff; }
+    tr:last-child td { border-bottom: none; }
+
+    code {
+      background: #edf4ff;
+      border: 1px solid #d6e6ff;
+      color: #17468d;
+      border-radius: 8px;
+      padding: 2px 7px;
+      font-size: 13px;
     }
 
     .footer {
-      border-top: 1px solid var(--line);
-      margin-top: 26px;
+      margin-top: 24px;
       padding-top: 14px;
+      border-top: 1px solid var(--line);
       color: var(--muted);
       font-size: 13px;
     }
 
+    @media (max-width: 900px) {
+      .grid-2, .flow { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 760px) {
       body { padding: 10px; }
-      .hero { padding: 24px 18px 18px; }
-      .hero h1 { font-size: 27px; }
+      .hero { padding: 24px 18px 20px; }
+      .hero h1 { font-size: 30px; }
+      .hero p { font-size: 15px; }
       .content { padding: 18px; }
+      h3.section-title { font-size: 21px; }
     }
   </style>
 </head>
 <body>
   <main class="manual">
     <header class="hero">
-      <h1>Manual Operativo</h1>
-      <p>Sistema Web de Pedidos y Altas de Clientes - Ivess Reggieri</p>
+      <span class="kicker">Manual Oficial</span>
+      <h1>Sistema Operativo Ivess Reggieri</h1>
+      <p>Guia completa para operar el sistema de pedidos y altas de clientes con seguridad, claridad y criterios estandarizados.</p>
       <div class="meta">
-        <span>Version: Mayo 2026</span>
-        <span>Uso interno</span>
-        <span>Desarrollo: Estudio Ideamos</span>
+        <span class="pill">Version: 27 de mayo de 2026</span>
+        <span class="pill">Publico: Equipo operativo y comercial</span>
+        <span class="pill">Desarrollo: Estudio Ideamos</span>
       </div>
     </header>
 
     <section class="content">
-      <div class="toc">
-        <strong>Indice rapido</strong>
+      <section class="toc">
+        <h2>Indice</h2>
         <ol>
-          <li>Que hace el sistema</li>
-          <li>Pantallas y flujo de pedidos</li>
-          <li>Como cargar y mantener Google Sheets</li>
+          <li>Resumen del sistema</li>
+          <li>Flujo de pedidos (web)</li>
+          <li>Estructura de Google Sheets</li>
           <li>Flujo de altas automaticas</li>
-          <li>Tareas de mantenimiento periodico</li>
-          <li>Que hacer si algo falla</li>
-          <li>Publicacion y actualizaciones</li>
+          <li>Tareas operativas habituales</li>
+          <li>Resolucion de problemas</li>
+          <li>Publicacion y mantenimiento</li>
         </ol>
+      </section>
+
+      <h3 class="section-title">1. Resumen Del Sistema</h3>
+      <p>El sistema recibe pedidos online, consulta datos en Google Sheets y registra resultados automaticamente. Tambien recibe solicitudes de alta de nuevos clientes para seguimiento comercial.</p>
+      <div class="grid-2">
+        <article class="card">
+          <strong>Que hace automaticamente</strong>
+          <ul>
+            <li>Busca cliente por direccion o telefono.</li>
+            <li>Muestra solo horarios habilitados del cliente.</li>
+            <li>Registra pedidos en la hoja <code>Pedidos</code>.</li>
+            <li>Registra altas en <code>AltasAutomaticas</code>.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <strong>Que gestiona el equipo</strong>
+          <ul>
+            <li>Actualizacion de clientes, horarios y productos.</li>
+            <li>Seguimiento de estados en altas.</li>
+            <li>Control de precios y productos activos.</li>
+            <li>Correccion manual ante excepciones.</li>
+          </ul>
+        </article>
       </div>
 
-      <h2>1. Que Hace el Sistema</h2>
-      <p>El sistema permite tomar pedidos online y registrar altas de nuevos clientes de forma ordenada en Google Sheets.</p>
-      <ul>
-        <li>El cliente busca por direccion o telefono.</li>
-        <li>El sistema encuentra el cliente y muestra solo sus horarios habilitados.</li>
-        <li>El cliente arma el pedido y se guarda automaticamente en la hoja <code>Pedidos</code>.</li>
-        <li>Las altas de nuevos clientes se guardan en <code>AltasAutomaticas</code>.</li>
-      </ul>
-
-      <h2>2. Pantallas y Flujo de Pedidos</h2>
-      <h3>2.1 Indicador de paso (pastilla superior)</h3>
-      <ul>
-        <li><code>INICIO</code>: pantalla de busqueda.</li>
-        <li><code>1 DE 2</code>: seleccion de horario.</li>
-        <li><code>2 DE 2</code>: armado del pedido.</li>
-        <li><code>FINALIZADO</code>: confirmacion de pedido enviado.</li>
-      </ul>
-
-      <h3>2.2 Pantalla INICIO</h3>
-      <ul>
-        <li>Campo: <code>Direccion completa o telefono</code>.</li>
-        <li>Boton principal: <code>Buscar mi direccion</code>.</li>
-        <li>Boton secundario: <code>Hablar con un asesor</code> (WhatsApp).</li>
-      </ul>
-      <p>La busqueda tolera variaciones comunes, por ejemplo:</p>
-      <ul>
-        <li>Sin espacio entre calle y numero: <code>BARADERO6140</code>.</li>
-        <li>Error tipico: <code>BRADERO6140</code> (se interpreta como BARADERO).</li>
-      </ul>
-
-      <h3>2.3 Pantalla 1 DE 2 (horarios)</h3>
-      <ul>
-        <li>Muestra los horarios habilitados para ese cliente.</li>
-        <li>Si ninguno aplica, usar: <code>Ninguno, hablar con un asesor.</code></li>
-        <li>Se puede cambiar usuario con el boton <code>No soy yo / Cambiar direccion</code>.</li>
-      </ul>
-
-      <h3>2.4 Pantalla 2 DE 2 (productos)</h3>
-      <ul>
-        <li>Cards con imagen, precio y cantidad.</li>
-        <li>El nombre del producto esta oculto en la card para priorizar imagen.</li>
-        <li>Se puede agregar comentario de entrega.</li>
-      </ul>
-
-      <h3>2.5 Pantalla FINALIZADO</h3>
-      <ul>
-        <li>Muestra resumen de pedido.</li>
-        <li>Permite iniciar un nuevo pedido.</li>
-      </ul>
-
-      <h2>3. Google Sheets: Estructura y Reglas</h2>
-      <div class="note">
-        <strong>Importante:</strong> No cambiar nombres de pestañas ni encabezados de fila 1. Si se cambian, el sistema deja de mapear datos correctamente.
+      <h3 class="section-title">2. Flujo De Pedidos (Web)</h3>
+      <div class="flow">
+        <div class="step"><b>Inicio</b><p>El cliente escribe direccion o telefono y presiona <code>Buscar mi direccion</code>.</p></div>
+        <div class="step"><b>1 de 2</b><p>Selecciona uno de los horarios disponibles para su direccion.</p></div>
+        <div class="step"><b>2 de 2</b><p>Elige productos, cantidades y deja comentario opcional.</p></div>
+        <div class="step"><b>Finalizado</b><p>Confirma y el pedido queda guardado en la hoja <code>Pedidos</code>.</p></div>
       </div>
 
+      <div class="alert ok">
+        <strong>Busqueda tolerante:</strong> el sistema interpreta entradas como <code>BARADERO6140</code> y errores tipicos como <code>BRADERO6140</code>.
+      </div>
+
+      <h3 class="section-title">3. Estructura De Google Sheets</h3>
+      <div class="alert warn">
+        <strong>Regla critica:</strong> no cambiar nombres de pestañas ni encabezados de fila 1. Si cambian, la integracion puede dejar de funcionar.
+      </div>
       <table>
         <thead>
-          <tr>
-            <th>Hoja</th>
-            <th>Uso</th>
-            <th>Quien la edita</th>
-          </tr>
+          <tr><th>Hoja</th><th>Funcion</th><th>Responsable</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td><code>Clientes</code></td>
-            <td>Base de clientes, direccion, telefono, lista de precio y horarios asignados</td>
-            <td>Operacion</td>
-          </tr>
-          <tr>
-            <td><code>Horarios</code></td>
-            <td>Catalogo de horarios disponibles</td>
-            <td>Operacion</td>
-          </tr>
-          <tr>
-            <td><code>ProductosPrecios</code></td>
-            <td>Productos, imagenes y precios por lista</td>
-            <td>Operacion</td>
-          </tr>
-          <tr>
-            <td><code>Pedidos</code></td>
-            <td>Pedidos generados desde la web</td>
-            <td>Automatico + control operativo</td>
-          </tr>
-          <tr>
-            <td><code>AltasAutomaticas</code></td>
-            <td>Solicitudes de alta de nuevos clientes</td>
-            <td>Automatico + seguimiento comercial</td>
-          </tr>
+          <tr><td><code>Clientes</code></td><td>Base maestra de clientes y parametros por cliente.</td><td>Operacion</td></tr>
+          <tr><td><code>Horarios</code></td><td>Catalogo de franjas horarias disponibles.</td><td>Operacion</td></tr>
+          <tr><td><code>ProductosPrecios</code></td><td>Catalogo de productos, imagenes y precios por lista.</td><td>Operacion</td></tr>
+          <tr><td><code>Pedidos</code></td><td>Registro automatico de pedidos web.</td><td>Sistema + control operativo</td></tr>
+          <tr><td><code>AltasAutomaticas</code></td><td>Leads entrantes para gestion comercial telefonica.</td><td>Sistema + equipo comercial</td></tr>
         </tbody>
       </table>
 
-      <h3>3.1 Reglas de carga recomendadas</h3>
+      <h4>Criterios de carga recomendados</h4>
       <ul>
-        <li>Direcciones en <span class="ok">MAYUSCULAS</span>.</li>
-        <li>Telefonos sin simbolos extra (solo numeros).</li>
-        <li>Campos Activo usar valores tipo SI/NO o TRUE/FALSE segun lista.</li>
-        <li>Para horarios por cliente usar columnas <code>Horario 1</code> a <code>Horario 4</code>.</li>
+        <li>Direcciones en <strong>MAYUSCULAS</strong>.</li>
+        <li>Telefonos solo con numeros.</li>
+        <li>Valores de activo segun lista (SI/NO).</li>
+        <li>Horarios por cliente en columnas <code>Horario 1</code> a <code>Horario 4</code>.</li>
       </ul>
 
-      <h2>4. Flujo de Altas Automaticas</h2>
-      <h3>4.1 Que datos recibe</h3>
+      <h3 class="section-title">4. Altas Automaticas</h3>
+      <h4>Datos que se guardan</h4>
       <ul>
-        <li>Direccion</li>
+        <li>Fecha y hora</li>
+        <li>Direccion (en mayusculas)</li>
         <li>Localidad</li>
         <li>Codigo de area</li>
         <li>Celular</li>
+        <li>Telefono completo</li>
+        <li>Origen</li>
+        <li>Estado</li>
       </ul>
 
-      <h3>4.2 Como se guarda</h3>
-      <ul>
-        <li>Se inserta una fila nueva en <code>AltasAutomaticas</code>.</li>
-        <li><code>Direccion</code> se guarda en mayusculas automaticamente.</li>
-        <li>Se aplica formato visual (header azul, filtro, intercalado de filas).</li>
-        <li><code>Localidad</code> y <code>Estado</code> quedan con validacion de lista.</li>
-      </ul>
-
-      <h3>4.3 Estados sugeridos para seguimiento</h3>
+      <h4>Estados recomendados para seguimiento</h4>
       <ul>
         <li>NUEVO</li>
         <li>PENDIENTE CONTACTO</li>
@@ -340,79 +406,70 @@
         <li>ALTA CONCRETADA</li>
       </ul>
 
-      <h2>5. Tareas Operativas (Paso a Paso)</h2>
-      <h3>5.1 Agregar un nuevo cliente habilitado para pedidos</h3>
+      <h3 class="section-title">5. Tareas Operativas Habituales</h3>
+      <h4>5.1 Cargar un cliente nuevo</h4>
       <ol>
-        <li>Abrir hoja <code>Clientes</code>.</li>
-        <li>Crear fila nueva con: id, direccion, localidad, telefono, activo, lista de precio.</li>
-        <li>Completar <code>Horario 1..4</code> con IDs validos de la hoja <code>Horarios</code>.</li>
-        <li>Verificar que <code>Activo</code> este en SI.</li>
+        <li>Ir a <code>Clientes</code>.</li>
+        <li>Completar ID, direccion, localidad, telefono, activo y lista de precio.</li>
+        <li>Asignar horarios en <code>Horario 1..4</code>.</li>
       </ol>
 
-      <h3>5.2 Agregar o editar productos</h3>
+      <h4>5.2 Actualizar precios de productos</h4>
       <ol>
-        <li>Abrir hoja <code>ProductosPrecios</code>.</li>
-        <li>Editar precio lista 1 y/o lista 2.</li>
-        <li>Verificar URL de imagen.</li>
-        <li>Confirmar estado activo por lista.</li>
+        <li>Ir a <code>ProductosPrecios</code>.</li>
+        <li>Actualizar precio lista 1 y/o lista 2.</li>
+        <li>Confirmar que el producto quede activo en la lista correcta.</li>
       </ol>
 
-      <h3>5.3 Eliminar un pedido cargado por error</h3>
+      <h4>5.3 Borrar un pedido cargado por error</h4>
       <ol>
-        <li>Ir a hoja <code>Pedidos</code>.</li>
+        <li>Ir a <code>Pedidos</code>.</li>
         <li>Seleccionar fila completa.</li>
-        <li>Clic derecho &gt; Eliminar fila.</li>
+        <li>Click derecho y eliminar fila.</li>
       </ol>
 
-      <h2>6. Que Hacer Si Algo Falla</h2>
-      <h3>6.1 No encuentra direccion que deberia existir</h3>
-      <ul>
-        <li>Revisar que el cliente este ACTIVO en <code>Clientes</code>.</li>
-        <li>Verificar que la direccion este bien escrita.</li>
-        <li>Probar buscar por telefono.</li>
-      </ul>
+      <h3 class="section-title">6. Resolucion De Problemas</h3>
+      <div class="grid-2">
+        <article class="card">
+          <strong>No encuentra la direccion</strong>
+          <ul>
+            <li>Verificar cliente activo en <code>Clientes</code>.</li>
+            <li>Probar por telefono.</li>
+            <li>Revisar que tenga horarios asignados.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <strong>No guarda pedidos o altas</strong>
+          <ul>
+            <li>Validar URL de API en <code>src/config.js</code>.</li>
+            <li>Revisar deploy de Apps Script (Web App).</li>
+            <li>Controlar permisos del despliegue.</li>
+          </ul>
+        </article>
+      </div>
 
-      <h3>6.2 No llegan pedidos a la hoja</h3>
-      <ul>
-        <li>Validar URL de API en <code>src/config.js</code>.</li>
-        <li>Confirmar que el Apps Script este desplegado como Web App.</li>
-        <li>Revisar permisos del despliegue (acceso publico segun configuracion actual).</li>
-      </ul>
+      <div class="alert warn">
+        <strong>Importante:</strong> cuando hay cambios de backend (Apps Script), siempre hay que hacer un nuevo despliegue para que entren en produccion.
+      </div>
 
-      <h3>6.3 Cambie codigo y no lo veo en la web</h3>
-      <ul>
-        <li>GitHub Pages puede tardar 1 a 3 minutos.</li>
-        <li>Probar en modo incognito.</li>
-        <li>Usar URL con cache-buster: <code>?ts=fecha-hora</code>.</li>
-      </ul>
-
-      <h2>7. Publicacion y Actualizaciones</h2>
-      <h3>7.1 Frontend (GitHub Pages)</h3>
+      <h3 class="section-title">7. Publicacion Y Mantenimiento</h3>
+      <h4>Frontend (sitio web)</h4>
       <ol>
-        <li>Guardar cambios.</li>
-        <li>Hacer commit y push a rama <code>main</code>.</li>
-        <li>Esperar deploy automatico de GitHub Pages.</li>
+        <li>Guardar cambios en archivos web.</li>
+        <li>Commit y push a <code>main</code>.</li>
+        <li>Esperar 1 a 3 minutos por GitHub Pages.</li>
       </ol>
 
-      <h3>7.2 Backend (Google Apps Script)</h3>
+      <h4>Backend (Google Apps Script)</h4>
       <ol>
-        <li>Pegar cambios en <code>apps-script/Code.gs</code>.</li>
-        <li>Deploy &gt; Manage Deployments &gt; New Version.</li>
-        <li>Confirmar.</li>
+        <li>Actualizar <code>Code.gs</code>.</li>
+        <li>Deploy &gt; Manage deployments &gt; New version.</li>
+        <li>Publicar y validar prueba real.</li>
       </ol>
-      <p class="warn">Si no se redeploya Apps Script, los cambios de backend no impactan aunque el sitio web este actualizado.</p>
-
-      <h2>8. Checklist Rapido Diario</h2>
-      <ul>
-        <li>Verificar si entraron pedidos nuevos en <code>Pedidos</code>.</li>
-        <li>Revisar nuevas filas en <code>AltasAutomaticas</code>.</li>
-        <li>Actualizar estado de altas segun gestion telefonica.</li>
-        <li>Controlar que precios y horarios vigentes esten correctos.</li>
-      </ul>
 
       <div class="footer">
         <strong>DESARROLLO DE ESTUDIO IDEAMOS (c) 2026</strong><br />
-        Documento operativo para uso interno de Ivess Reggieri.
+        Documento interno para operacion diaria de Ivess Reggieri.
       </div>
     </section>
   </main>
