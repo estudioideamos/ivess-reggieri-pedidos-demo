@@ -56,6 +56,13 @@
       position: relative;
     }
 
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      align-items: start;
+      gap: 20px;
+    }
+
     .hero::after {
       content: "";
       position: absolute;
@@ -84,22 +91,20 @@
       margin: 10px 0 0;
       font: 800 40px/1.02 "Montserrat", sans-serif;
       text-transform: uppercase;
-      max-width: 760px;
+      max-width: none;
     }
 
     .brand {
-      position: absolute;
-      top: 26px;
-      right: 28px;
-      margin: 0;
-      padding: 8px 10px;
+      margin-top: 10px;
+      padding: 10px 12px;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(202, 234, 255, 0.35);
+      justify-self: start;
     }
 
     .brand img {
-      height: 46px;
+      height: 92px;
       width: auto;
       object-fit: contain;
       display: block;
@@ -305,12 +310,11 @@
     @media (max-width: 760px) {
       body { padding: 10px; }
       .hero { padding: 24px 18px 20px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 12px; }
       .hero h1 { font-size: 30px; }
       .hero p { font-size: 15px; }
       .brand {
-        position: static;
-        display: inline-block;
-        margin-top: 12px;
+        margin-top: 0;
         margin-bottom: 2px;
       }
       .brand img { height: 40px; }
@@ -322,16 +326,20 @@
 <body>
   <main class="manual">
     <header class="hero">
-      <span class="kicker">Manual Oficial</span>
-      <h1>Sistema Operativo Ivess Reggieri</h1>
-      <div class="brand">
-        <img src="https://ivessreggieri.com.ar/wp-content/uploads/2021/08/LOGO-FINAL.png" alt="Ivess Reggieri" />
-      </div>
-      <p>Guia completa para operar el sistema de pedidos y altas de clientes con seguridad, claridad y criterios estandarizados.</p>
-      <div class="meta">
-        <span class="pill">Version: 27 de mayo de 2026</span>
-        <span class="pill">Publico: Equipo operativo y comercial</span>
-        <span class="pill">Desarrollo: Estudio Ideamos</span>
+      <div class="hero-grid">
+        <div class="brand">
+          <img src="https://ivessreggieri.com.ar/wp-content/uploads/2021/08/LOGO-FINAL.png" alt="Ivess Reggieri" />
+        </div>
+        <div>
+          <span class="kicker">Manual Oficial</span>
+          <h1>Sistema Operativo Ivess Reggieri</h1>
+          <p>Guia completa para operar el sistema de pedidos y altas de clientes con seguridad, claridad y criterios estandarizados.</p>
+          <div class="meta">
+            <span class="pill">Version: 27 de mayo de 2026</span>
+            <span class="pill">Publico: Equipo operativo y comercial</span>
+            <span class="pill">Desarrollo: Estudio Ideamos</span>
+          </div>
+        </div>
       </div>
     </header>
 
