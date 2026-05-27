@@ -1017,6 +1017,19 @@ button.secondary {
     padding-right: 44px;
   }
 
+  #screen-confirm .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  #screen-confirm .actions .advisor-link {
+    margin-top: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
   .confirm-transfer-card {
     grid-template-columns: 1fr auto;
     align-items: end;
@@ -1095,6 +1108,8 @@ button.secondary {
   #screen-confirm .actions {
     margin-top: 8px;
     gap: 8px;
+    display: flex;
+    flex-direction: column;
   }
 
   #screen-confirm .actions button,
