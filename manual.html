@@ -3,85 +3,417 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manual de uso - Ivess Reggieri</title>
+  <title>Manual Operativo - Ivess Reggieri</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { margin: 0; background: #e7eef7; font-family: Manrope, sans-serif; color: #113873; }
-    .wrap { max-width: 980px; margin: 24px auto; background: #fff; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.08); overflow: hidden; }
-    .head { background: linear-gradient(120deg,#0a4fb8,#1aa5e2); color: #fff; padding: 28px; }
-    h1 { margin: 0; font: 800 34px/1.1 Montserrat, sans-serif; }
-    .sub { margin-top: 8px; opacity: .95; }
-    .c { padding: 24px 28px 30px; }
-    h2 { font: 700 20px Montserrat, sans-serif; margin: 20px 0 10px; color: #0a4fb8; }
-    ol, ul { margin: 0 0 0 20px; padding: 0; }
-    li { margin: 8px 0; }
-    .box { background: #f1f7ff; border: 1px solid #d4e6ff; border-radius: 12px; padding: 14px; margin: 12px 0; }
-    code { background: #edf3fb; padding: 2px 6px; border-radius: 6px; }
+    :root {
+      --blue-900: #0a4fb8;
+      --blue-700: #1766d3;
+      --blue-100: #eaf3ff;
+      --text: #173d75;
+      --muted: #4c6a95;
+      --ok: #0e8f4f;
+      --warn: #a86000;
+      --line: #d6e6fb;
+      --card: #ffffff;
+      --bg: #e8eef6;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #eaf0f8 0%, #dbe6f4 100%);
+      font-family: "Manrope", sans-serif;
+      color: var(--text);
+      line-height: 1.45;
+      padding: 22px;
+    }
+
+    .manual {
+      max-width: 1080px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 16px 44px rgba(12, 59, 129, 0.15);
+      overflow: hidden;
+      border: 1px solid #d9e7fa;
+    }
+
+    .hero {
+      padding: 34px 32px 24px;
+      background: linear-gradient(120deg, var(--blue-900), var(--blue-700));
+      color: #fff;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-family: "Montserrat", sans-serif;
+      font-size: 35px;
+      line-height: 1.05;
+      text-transform: uppercase;
+    }
+
+    .hero p {
+      margin: 10px 0 0;
+      font-size: 16px;
+      opacity: 0.97;
+      max-width: 800px;
+    }
+
+    .meta {
+      margin-top: 12px;
+      font-size: 13px;
+      opacity: 0.9;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .content {
+      padding: 26px 32px 34px;
+    }
+
+    h2 {
+      margin: 24px 0 10px;
+      font: 800 22px/1.2 "Montserrat", sans-serif;
+      color: var(--blue-900);
+    }
+
+    h3 {
+      margin: 18px 0 8px;
+      font: 700 17px/1.25 "Montserrat", sans-serif;
+      color: var(--blue-900);
+    }
+
+    p {
+      margin: 8px 0;
+      color: var(--text);
+    }
+
+    ul, ol {
+      margin: 8px 0 12px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin: 7px 0;
+    }
+
+    .toc, .box, .note {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--blue-100);
+      padding: 14px 16px;
+      margin: 12px 0;
+    }
+
+    .toc strong,
+    .box strong,
+    .note strong {
+      color: var(--blue-900);
+    }
+
+    .note {
+      background: #fff8eb;
+      border-color: #f0d6a8;
+      color: #6f4600;
+    }
+
+    .ok {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .warn {
+      color: var(--warn);
+      font-weight: 700;
+    }
+
+    code {
+      background: #edf4ff;
+      border: 1px solid #d5e6ff;
+      padding: 2px 7px;
+      border-radius: 7px;
+      font-size: 13px;
+      color: #17458f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 10px 0 14px;
+    }
+
+    th, td {
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 12px;
+      font-size: 14px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #0b57d0;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background: #f6faff;
+    }
+
+    .footer {
+      border-top: 1px solid var(--line);
+      margin-top: 26px;
+      padding-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 10px; }
+      .hero { padding: 24px 18px 18px; }
+      .hero h1 { font-size: 27px; }
+      .content { padding: 18px; }
+    }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <header class="head">
-      <h1>MANUAL DE USO</h1>
-      <div class="sub">Sistema de pedidos online - Ivess Reggieri</div>
+  <main class="manual">
+    <header class="hero">
+      <h1>Manual Operativo</h1>
+      <p>Sistema Web de Pedidos y Altas de Clientes - Ivess Reggieri</p>
+      <div class="meta">
+        <span>Version: Mayo 2026</span>
+        <span>Uso interno</span>
+        <span>Desarrollo: Estudio Ideamos</span>
+      </div>
     </header>
-    <section class="c">
-      <h2>1. Estructura de pantallas</h2>
+
+    <section class="content">
+      <div class="toc">
+        <strong>Indice rapido</strong>
+        <ol>
+          <li>Que hace el sistema</li>
+          <li>Pantallas y flujo de pedidos</li>
+          <li>Como cargar y mantener Google Sheets</li>
+          <li>Flujo de altas automaticas</li>
+          <li>Tareas de mantenimiento periodico</li>
+          <li>Que hacer si algo falla</li>
+          <li>Publicacion y actualizaciones</li>
+        </ol>
+      </div>
+
+      <h2>1. Que Hace el Sistema</h2>
+      <p>El sistema permite tomar pedidos online y registrar altas de nuevos clientes de forma ordenada en Google Sheets.</p>
+      <ul>
+        <li>El cliente busca por direccion o telefono.</li>
+        <li>El sistema encuentra el cliente y muestra solo sus horarios habilitados.</li>
+        <li>El cliente arma el pedido y se guarda automaticamente en la hoja <code>Pedidos</code>.</li>
+        <li>Las altas de nuevos clientes se guardan en <code>AltasAutomaticas</code>.</li>
+      </ul>
+
+      <h2>2. Pantallas y Flujo de Pedidos</h2>
+      <h3>2.1 Indicador de paso (pastilla superior)</h3>
+      <ul>
+        <li><code>INICIO</code>: pantalla de busqueda.</li>
+        <li><code>1 DE 2</code>: seleccion de horario.</li>
+        <li><code>2 DE 2</code>: armado del pedido.</li>
+        <li><code>FINALIZADO</code>: confirmacion de pedido enviado.</li>
+      </ul>
+
+      <h3>2.2 Pantalla INICIO</h3>
+      <ul>
+        <li>Campo: <code>Direccion completa o telefono</code>.</li>
+        <li>Boton principal: <code>Buscar mi direccion</code>.</li>
+        <li>Boton secundario: <code>Hablar con un asesor</code> (WhatsApp).</li>
+      </ul>
+      <p>La busqueda tolera variaciones comunes, por ejemplo:</p>
+      <ul>
+        <li>Sin espacio entre calle y numero: <code>BARADERO6140</code>.</li>
+        <li>Error tipico: <code>BRADERO6140</code> (se interpreta como BARADERO).</li>
+      </ul>
+
+      <h3>2.3 Pantalla 1 DE 2 (horarios)</h3>
+      <ul>
+        <li>Muestra los horarios habilitados para ese cliente.</li>
+        <li>Si ninguno aplica, usar: <code>Ninguno, hablar con un asesor.</code></li>
+        <li>Se puede cambiar usuario con el boton <code>No soy yo / Cambiar direccion</code>.</li>
+      </ul>
+
+      <h3>2.4 Pantalla 2 DE 2 (productos)</h3>
+      <ul>
+        <li>Cards con imagen, precio y cantidad.</li>
+        <li>El nombre del producto esta oculto en la card para priorizar imagen.</li>
+        <li>Se puede agregar comentario de entrega.</li>
+      </ul>
+
+      <h3>2.5 Pantalla FINALIZADO</h3>
+      <ul>
+        <li>Muestra resumen de pedido.</li>
+        <li>Permite iniciar un nuevo pedido.</li>
+      </ul>
+
+      <h2>3. Google Sheets: Estructura y Reglas</h2>
+      <div class="note">
+        <strong>Importante:</strong> No cambiar nombres de pestañas ni encabezados de fila 1. Si se cambian, el sistema deja de mapear datos correctamente.
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Hoja</th>
+            <th>Uso</th>
+            <th>Quien la edita</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Clientes</code></td>
+            <td>Base de clientes, direccion, telefono, lista de precio y horarios asignados</td>
+            <td>Operacion</td>
+          </tr>
+          <tr>
+            <td><code>Horarios</code></td>
+            <td>Catalogo de horarios disponibles</td>
+            <td>Operacion</td>
+          </tr>
+          <tr>
+            <td><code>ProductosPrecios</code></td>
+            <td>Productos, imagenes y precios por lista</td>
+            <td>Operacion</td>
+          </tr>
+          <tr>
+            <td><code>Pedidos</code></td>
+            <td>Pedidos generados desde la web</td>
+            <td>Automatico + control operativo</td>
+          </tr>
+          <tr>
+            <td><code>AltasAutomaticas</code></td>
+            <td>Solicitudes de alta de nuevos clientes</td>
+            <td>Automatico + seguimiento comercial</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>3.1 Reglas de carga recomendadas</h3>
+      <ul>
+        <li>Direcciones en <span class="ok">MAYUSCULAS</span>.</li>
+        <li>Telefonos sin simbolos extra (solo numeros).</li>
+        <li>Campos Activo usar valores tipo SI/NO o TRUE/FALSE segun lista.</li>
+        <li>Para horarios por cliente usar columnas <code>Horario 1</code> a <code>Horario 4</code>.</li>
+      </ul>
+
+      <h2>4. Flujo de Altas Automaticas</h2>
+      <h3>4.1 Que datos recibe</h3>
+      <ul>
+        <li>Direccion</li>
+        <li>Localidad</li>
+        <li>Codigo de area</li>
+        <li>Celular</li>
+      </ul>
+
+      <h3>4.2 Como se guarda</h3>
+      <ul>
+        <li>Se inserta una fila nueva en <code>AltasAutomaticas</code>.</li>
+        <li><code>Direccion</code> se guarda en mayusculas automaticamente.</li>
+        <li>Se aplica formato visual (header azul, filtro, intercalado de filas).</li>
+        <li><code>Localidad</code> y <code>Estado</code> quedan con validacion de lista.</li>
+      </ul>
+
+      <h3>4.3 Estados sugeridos para seguimiento</h3>
+      <ul>
+        <li>NUEVO</li>
+        <li>PENDIENTE CONTACTO</li>
+        <li>PRIMER INTENTO</li>
+        <li>SEGUNDO INTENTO</li>
+        <li>CONTACTADO</li>
+        <li>INTERESADO</li>
+        <li>NO INTERESADO</li>
+        <li>NO RESPONDE</li>
+        <li>DATOS INCOMPLETOS</li>
+        <li>ALTA CONCRETADA</li>
+      </ul>
+
+      <h2>5. Tareas Operativas (Paso a Paso)</h2>
+      <h3>5.1 Agregar un nuevo cliente habilitado para pedidos</h3>
       <ol>
-        <li>Paso 1 de 3: búsqueda por dirección o teléfono.</li>
-        <li>Paso 2 de 3: selección de horario habilitado del cliente.</li>
-        <li>Paso 3 de 3: carga de productos y comentario.</li>
-        <li>Pedido enviado: confirmación del pedido.</li>
+        <li>Abrir hoja <code>Clientes</code>.</li>
+        <li>Crear fila nueva con: id, direccion, localidad, telefono, activo, lista de precio.</li>
+        <li>Completar <code>Horario 1..4</code> con IDs validos de la hoja <code>Horarios</code>.</li>
+        <li>Verificar que <code>Activo</code> este en SI.</li>
       </ol>
 
-      <h2>2. Hojas que usa el sistema</h2>
-      <div class="box">No cambiar los nombres de pestañas ni los títulos de la fila 1.</div>
+      <h3>5.2 Agregar o editar productos</h3>
+      <ol>
+        <li>Abrir hoja <code>ProductosPrecios</code>.</li>
+        <li>Editar precio lista 1 y/o lista 2.</li>
+        <li>Verificar URL de imagen.</li>
+        <li>Confirmar estado activo por lista.</li>
+      </ol>
+
+      <h3>5.3 Eliminar un pedido cargado por error</h3>
+      <ol>
+        <li>Ir a hoja <code>Pedidos</code>.</li>
+        <li>Seleccionar fila completa.</li>
+        <li>Clic derecho &gt; Eliminar fila.</li>
+      </ol>
+
+      <h2>6. Que Hacer Si Algo Falla</h2>
+      <h3>6.1 No encuentra direccion que deberia existir</h3>
       <ul>
-        <li><code>Clientes</code>: Nro de cliente, Dirección, Localidad, Teléfono, Activo, Lista de precios, Horario 1 a Horario 4.</li>
-        <li><code>Horarios</code>: Nro de horario, Etiqueta, Activo.</li>
-        <li><code>ProductosPrecios</code>: Código producto, Producto, Precio lista 1, Precio lista 2, Activo lista 1, Activo lista 2, Imagen URL.</li>
-        <li><code>Pedidos</code>: se completa automáticamente desde la web.</li>
+        <li>Revisar que el cliente este ACTIVO en <code>Clientes</code>.</li>
+        <li>Verificar que la direccion este bien escrita.</li>
+        <li>Probar buscar por telefono.</li>
       </ul>
 
-      <h2>3. Criterios de carga</h2>
+      <h3>6.2 No llegan pedidos a la hoja</h3>
       <ul>
-        <li>Campos tipo sí/no: usar valores de lista desplegable (<code>si</code> o <code>no</code>).</li>
-        <li>Direcciones: guardar en texto claro, con numeración.</li>
-        <li>Horarios por cliente: completar columnas Horario 1, 2, 3 y 4 con números de horario existentes.</li>
-        <li>Lista de precios por cliente: usar 1 o 2.</li>
+        <li>Validar URL de API en <code>src/config.js</code>.</li>
+        <li>Confirmar que el Apps Script este desplegado como Web App.</li>
+        <li>Revisar permisos del despliegue (acceso publico segun configuracion actual).</li>
       </ul>
 
-      <h2>4. Productos por lista</h2>
+      <h3>6.3 Cambie codigo y no lo veo en la web</h3>
       <ul>
-        <li>Si un producto debe aparecer en una lista y no en la otra, usar <code>Activo lista 1</code> y <code>Activo lista 2</code>.</li>
-        <li>Ejemplo: visible solo en lista 1: <code>Activo lista 1 = si</code> y <code>Activo lista 2 = no</code>.</li>
+        <li>GitHub Pages puede tardar 1 a 3 minutos.</li>
+        <li>Probar en modo incognito.</li>
+        <li>Usar URL con cache-buster: <code>?ts=fecha-hora</code>.</li>
       </ul>
 
-      <h2>5. WhatsApp de asesor</h2>
+      <h2>7. Publicacion y Actualizaciones</h2>
+      <h3>7.1 Frontend (GitHub Pages)</h3>
+      <ol>
+        <li>Guardar cambios.</li>
+        <li>Hacer commit y push a rama <code>main</code>.</li>
+        <li>Esperar deploy automatico de GitHub Pages.</li>
+      </ol>
+
+      <h3>7.2 Backend (Google Apps Script)</h3>
+      <ol>
+        <li>Pegar cambios en <code>apps-script/Code.gs</code>.</li>
+        <li>Deploy &gt; Manage Deployments &gt; New Version.</li>
+        <li>Confirmar.</li>
+      </ol>
+      <p class="warn">Si no se redeploya Apps Script, los cambios de backend no impactan aunque el sitio web este actualizado.</p>
+
+      <h2>8. Checklist Rapido Diario</h2>
       <ul>
-        <li>Está disponible en todas las pantallas.</li>
-        <li>Número configurado: <code>+54 9 11 3305-3315</code>.</li>
-        <li>Mensaje predefinido: “Hola Ivess Reggieri, me gustaría hacer una consulta...”.</li>
+        <li>Verificar si entraron pedidos nuevos en <code>Pedidos</code>.</li>
+        <li>Revisar nuevas filas en <code>AltasAutomaticas</code>.</li>
+        <li>Actualizar estado de altas segun gestion telefonica.</li>
+        <li>Controlar que precios y horarios vigentes esten correctos.</li>
       </ul>
 
-      <h2>6. Cómo eliminar pedidos</h2>
-      <ul>
-        <li>Ir a la hoja <code>Pedidos</code>.</li>
-        <li>Seleccionar la fila completa del pedido.</li>
-        <li>Clic derecho → Eliminar fila.</li>
-      </ul>
-
-      <h2>7. URL del sistema</h2>
-      <ul>
-        <li>Landing inicial: <code>/index.html</code>.</li>
-        <li>App de pedidos: <code>/pedidos.html</code>.</li>
-        <li>Página base de altas: <code>/altas.html</code>.</li>
-      </ul>
-
-      <h2>8. Soporte</h2>
-      <div class="box">DESARROLLO DE <strong>ESTUDIO IDEAMOS</strong> © 2026</div>
+      <div class="footer">
+        <strong>DESARROLLO DE ESTUDIO IDEAMOS (c) 2026</strong><br />
+        Documento operativo para uso interno de Ivess Reggieri.
+      </div>
     </section>
   </main>
 </body>
