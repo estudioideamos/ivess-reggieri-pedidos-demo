@@ -58,7 +58,7 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 220px 1fr;
+      grid-template-columns: 260px minmax(0, 1fr);
       align-items: start;
       gap: 20px;
     }
@@ -89,7 +89,7 @@
 
     .hero h1 {
       margin: 10px 0 0;
-      font: 800 40px/1.02 "Montserrat", sans-serif;
+      font: 800 38px/1.02 "Montserrat", sans-serif;
       text-transform: uppercase;
       max-width: none;
     }
@@ -104,8 +104,9 @@
     }
 
     .brand img {
-      height: 92px;
-      width: auto;
+      height: auto;
+      width: 100%;
+      max-width: 220px;
       object-fit: contain;
       display: block;
       filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.16));
