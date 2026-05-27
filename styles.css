@@ -645,6 +645,42 @@ button.secondary {
   align-items: center;
 }
 
+.confirm-transfer-card {
+  border: 1px solid rgba(145, 217, 255, 0.72);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(28, 119, 224, 0.36), rgba(87, 192, 255, 0.22));
+  box-shadow: 0 10px 26px rgba(3, 36, 99, 0.3), inset 0 0 0 1px rgba(187, 234, 255, 0.24);
+  padding: 12px;
+}
+
+.confirm-transfer-kicker {
+  margin: 0;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #aee5ff;
+  font-weight: 800;
+}
+
+.confirm-transfer-title {
+  margin: 4px 0 2px;
+  font-size: 20px;
+  line-height: 1.05;
+  color: #f3fbff;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.confirm-transfer-alias {
+  margin: 0 0 8px;
+  font-size: 28px;
+  line-height: 1;
+  color: #ffffff;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
+}
+
 .confirm-pay-text {
   margin: 0;
   font-size: 14px;
@@ -661,15 +697,17 @@ button.secondary {
 }
 
 .confirm-copy-btn {
-  padding: 8px 12px;
+  width: 100%;
+  padding: 10px 14px;
   border-radius: 10px;
-  border: 1px solid rgba(172, 223, 255, 0.8);
-  background: rgba(10, 82, 191, 0.5);
-  color: #e8f6ff;
-  font-size: 13px;
+  border: 1px solid rgba(190, 232, 255, 0.95);
+  background: linear-gradient(90deg, #38a4ee, #69c7ff);
+  color: #ffffff;
+  font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
   white-space: nowrap;
+  box-shadow: 0 10px 22px rgba(7, 52, 133, 0.33);
 }
 
 .confirm-mp {
@@ -1058,6 +1096,8 @@ button.secondary {
   .qty span { font-size: 20px; }
   .confirm-pay-row { grid-template-columns: 1fr; }
   .confirm-copy-btn { width: 100%; }
+  .confirm-transfer-title { font-size: 18px; }
+  .confirm-transfer-alias { font-size: 24px; }
   .confirm-status { font-size: 24px; }
   .confirm-top-icon-wrap { width: 62px; height: 62px; }
   .confirm-top-icon { width: 28px; height: 28px; }

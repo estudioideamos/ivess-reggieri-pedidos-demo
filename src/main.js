@@ -413,8 +413,11 @@ async function submitOrder() {
       <p><span class="confirm-label">Comentario:</span><br /><span class="confirm-value">${commentInput.value.trim()}</span></p>
     </div>` : ""}
     <div class="confirm-payline"></div>
-    <div class="confirm-pay-row">
-      <p class="confirm-pay-text"><img src="./assets/billetera.svg" alt="" class="confirm-pay-icon" /> Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
+    <div class="confirm-transfer-card">
+      <p class="confirm-transfer-kicker">Pago por transferencia</p>
+      <h4 class="confirm-transfer-title">Alias para transferir</h4>
+      <p class="confirm-transfer-alias">Reggieri.SA</p>
+      <p class="confirm-pay-text"><img src="./assets/billetera.svg" alt="" class="confirm-pay-icon" /> También podés abonar en efectivo al recibir.</p>
       <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
     </div>
     <div class="confirm-note"><span>Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</span></div>
