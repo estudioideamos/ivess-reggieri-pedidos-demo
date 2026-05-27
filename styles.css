@@ -986,7 +986,7 @@ button.secondary {
   #screen-confirm .confirm,
   #screen-confirm .actions,
   #screen-confirm .advisor-link {
-    max-width: 560px;
+    max-width: 860px;
     margin-left: auto;
     margin-right: auto;
   }
