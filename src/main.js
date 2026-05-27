@@ -415,10 +415,12 @@ async function submitOrder() {
     <div class="confirm-payline"></div>
     <div class="confirm-transfer-card">
       <p class="confirm-transfer-kicker">Pago por transferencia</p>
-      <h4 class="confirm-transfer-title">Alias para transferir</h4>
-      <p class="confirm-transfer-alias">Reggieri.SA</p>
-      <p class="confirm-pay-text"><img src="./assets/billetera.svg" alt="" class="confirm-pay-icon" /> También podés abonar en efectivo al recibir.</p>
-      <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
+      <h4 class="confirm-transfer-title">Alias</h4>
+      <div class="confirm-transfer-main">
+        <p class="confirm-transfer-alias">Reggieri.SA</p>
+        <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
+      </div>
+      <p class="confirm-pay-text">También podés abonar en efectivo al recibir.</p>
     </div>
     <div class="confirm-note"><span>Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</span></div>
   `;
