@@ -17,18 +17,6 @@ const ESTADOS_PEDIDO = [
   'CANCELADO',
 ];
 
-const MEDIOS_PAGO = [
-  'NO INFORMADO',
-  'TRANSFERENCIA',
-  'EFECTIVO',
-  'MERCADO PAGO',
-];
-
-const OPCIONES_SI_NO = [
-  'NO',
-  'SI',
-];
-
 const ESTADOS_ALTA = [
   'NUEVO',
   'PENDIENTE CONTACTO',
@@ -41,11 +29,6 @@ const ESTADOS_ALTA = [
   'DATOS INCOMPLETOS',
   'ALTA CONCRETADA',
 ];
-
-// TODO: completar cuando el cliente pase credenciales de Mercado Pago.
-const MP_ACCESS_TOKEN = '';
-const MP_PUBLIC_KEY = '';
-const MP_WEBHOOK_URL = '';
 const MANUAL_URL = 'https://estudioideamos.github.io/ivess-reggieri-pedidos-demo/manual.html';
 const SHEET_META_KEY = 'IVESS_EXPECTED_SHEET_NAME';
 
@@ -173,14 +156,6 @@ function doPost(e) {
       return jsonResponse(createOrder_(body));
     }
 
-    if (path === 'createPaymentPreference') {
-      return jsonResponse(createPaymentPreference_(body));
-    }
-
-    if (path === 'mpWebhook') {
-      return jsonResponse(mpWebhook_(body));
-    }
-    
     if (path === 'getCatalog') {
       return jsonResponse(getCatalog_(body.lista_precio));
     }
@@ -205,10 +180,6 @@ function doPost(e) {
 
 function doGet() {
   return jsonResponse({ ok: true, service: 'Ivess Reggieri API' });
-}
-
-function isMpConfigured_() {
-  return !!String(MP_ACCESS_TOKEN || '').trim();
 }
 
 function normalize_(v) {
@@ -407,22 +378,6 @@ function normalizeHeader_(h) {
     'items (json)': 'items_json',
     'items(json)': 'items_json',
     'items json': 'items_json',
-    'estado pago': 'estado_pago',
-    'estado_de_pago': 'estado_pago',
-    'mp payment id': 'mp_payment_id',
-    'mp_payment_id': 'mp_payment_id',
-    'mp status': 'mp_status',
-    'mp_status': 'mp_status',
-    'fecha pago': 'fecha_pago',
-    'fecha_de_pago': 'fecha_pago',
-    'monto pagado': 'monto_pagado',
-    'monto_pagado': 'monto_pagado',
-    'medio de pago': 'medio_pago',
-    'medio_pago': 'medio_pago',
-    'pago confirmado': 'pago_confirmado',
-    'pago_confirmado': 'pago_confirmado',
-    'referencia de pago': 'referencia_pago',
-    'referencia_pago': 'referencia_pago',
   };
 
   return map[raw] || raw.replace(/\s+/g, '_');
@@ -489,9 +444,7 @@ function getCatalog_(listaPrecio) {
 
 function createOrder_(payload) {
   const sh = getSheet_(SHEETS.PEDIDOS);
-  ensurePedidosPaymentColumns_(sh);
   ensurePedidosEstadoDropdown_(sh);
-  ensurePedidosPaymentDropdowns_(sh);
   const idPedido = buildOrderNumber_();
   const itemsRaw = payload.items || {};
   const qtyTotal = countSelectedItems_(itemsRaw);
@@ -515,99 +468,11 @@ function createOrder_(payload) {
     if (key === 'total') return total;
     if (key === 'comentario') return payload.comentario || '';
     if (key === 'estado') return 'NUEVO';
-    if (key === 'estado_pago') return 'PENDIENTE_CONFIG';
-    if (key === 'mp_payment_id') return '';
-    if (key === 'mp_status') return 'NO_CONFIGURADO';
-    if (key === 'fecha_pago') return '';
-    if (key === 'monto_pagado') return '';
-    if (key === 'medio_pago') return 'NO INFORMADO';
-    if (key === 'pago_confirmado') return 'NO';
-    if (key === 'referencia_pago') return '';
     return '';
   });
   sh.appendRow(row);
 
   return { ok: true, id_pedido: idPedido };
-}
-
-function ensurePedidosPaymentColumns_(sheet) {
-  const required = [
-    { label: 'Estado pago', key: 'estado_pago' },
-    { label: 'MP payment_id', key: 'mp_payment_id' },
-    { label: 'MP status', key: 'mp_status' },
-    { label: 'Fecha pago', key: 'fecha_pago' },
-    { label: 'Monto pagado', key: 'monto_pagado' },
-    { label: 'Medio de pago', key: 'medio_pago' },
-    { label: 'Pago confirmado', key: 'pago_confirmado' },
-    { label: 'Referencia de pago', key: 'referencia_pago' },
-  ];
-
-  let lastCol = Math.max(sheet.getLastColumn(), 1);
-  const headerValues = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
-  const headerKeys = headerValues.map(normalizeHeader_);
-
-  required.forEach(function (item) {
-    if (headerKeys.indexOf(item.key) === -1) {
-      lastCol += 1;
-      sheet.getRange(1, lastCol).setValue(item.label);
-      headerKeys.push(item.key);
-    }
-  });
-}
-
-function ensurePedidosPaymentDropdowns_(sheet) {
-  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(normalizeHeader_);
-  const medioPagoCol = headers.indexOf('medio_pago') + 1;
-  const pagoConfirmadoCol = headers.indexOf('pago_confirmado') + 1;
-  const totalRows = Math.max(sheet.getMaxRows(), 2);
-  if (medioPagoCol > 0) {
-    const rangeMedio = sheet.getRange(2, medioPagoCol, totalRows - 1, 1);
-    const ruleMedio = SpreadsheetApp.newDataValidation()
-      .requireValueInList(MEDIOS_PAGO, true)
-      .setAllowInvalid(false)
-      .build();
-    rangeMedio.setDataValidation(ruleMedio);
-  }
-  if (pagoConfirmadoCol > 0) {
-    const rangeConfirmado = sheet.getRange(2, pagoConfirmadoCol, totalRows - 1, 1);
-    const ruleConfirmado = SpreadsheetApp.newDataValidation()
-      .requireValueInList(OPCIONES_SI_NO, true)
-      .setAllowInvalid(false)
-      .build();
-    rangeConfirmado.setDataValidation(ruleConfirmado);
-  }
-}
-
-function createPaymentPreference_(payload) {
-  const idPedido = String(payload.id_pedido || '').trim();
-  if (!idPedido) {
-    return { ok: false, error: 'Falta id_pedido' };
-  }
-
-  if (!isMpConfigured_()) {
-    return {
-      ok: false,
-      pending_config: true,
-      message: 'Mercado Pago aun no esta configurado',
-    };
-  }
-
-  // Placeholder: al recibir credenciales reales, completar creacion de preferencia.
-  return {
-    ok: false,
-    pending_config: true,
-    message: 'Configuracion de Mercado Pago pendiente de credenciales',
-    id_pedido: idPedido,
-  };
-}
-
-function mpWebhook_(_payload) {
-  // Endpoint reservado para notificaciones de Mercado Pago.
-  return {
-    ok: true,
-    pending_config: !isMpConfigured_(),
-    webhook_url: MP_WEBHOOK_URL || '',
-  };
 }
 
 function ensurePedidosEstadoDropdown_(sheet) {
@@ -624,6 +489,30 @@ function ensurePedidosEstadoDropdown_(sheet) {
 function setupEstadoPedidosManual() {
   const sh = getSheet_(SHEETS.PEDIDOS);
   ensurePedidosEstadoDropdown_(sh);
+}
+
+function removePedidosPaymentColumnsManual() {
+  const sh = getSheet_(SHEETS.PEDIDOS);
+  const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const toDelete = [
+    'estado_pago',
+    'mp_payment_id',
+    'mp_status',
+    'fecha_pago',
+    'monto_pagado',
+    'medio_pago',
+    'pago_confirmado',
+    'referencia_pago',
+  ];
+
+  const cols = [];
+  headers.forEach(function (h, idx) {
+    if (toDelete.indexOf(h) !== -1) cols.push(idx + 1);
+  });
+
+  cols.sort(function (a, b) { return b - a; }).forEach(function (col) {
+    sh.deleteColumn(col);
+  });
 }
 
 function buildOrderNumber_() {
