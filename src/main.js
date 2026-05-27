@@ -416,7 +416,7 @@ async function submitOrder() {
     <div class="confirm-transfer-card">
       <div class="confirm-transfer-copy">
         <h4 class="confirm-transfer-heading">Pagá tu pedido</h4>
-        <p class="confirm-pay-text">Podés abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>
+        <p class="confirm-pay-text">Podés abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <span class="confirm-alias-pill">REGGIERI.SA</span></p>
       </div>
       <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
     </div>
@@ -426,7 +426,7 @@ async function submitOrder() {
   if (copyBtn) {
     copyBtn.onclick = async () => {
       try {
-        await navigator.clipboard.writeText("Reggieri.SA");
+        await navigator.clipboard.writeText("REGGIERI.SA");
         copyBtn.textContent = "Alias copiado";
         setTimeout(() => { copyBtn.textContent = "Copiar alias"; }, 1300);
       } catch (_) {

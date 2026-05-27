@@ -668,9 +668,11 @@ button.secondary {
   font-size: 18px;
   line-height: 1;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
   color: #ffffff;
+  font-family: "Montserrat", "Manrope", sans-serif;
   font-weight: 900;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .confirm-pay-text {
@@ -679,6 +681,21 @@ button.secondary {
   line-height: 1.35;
   color: #d8f3ff;
   font-weight: 600;
+}
+
+.confirm-alias-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7fd6ff, #57bfff);
+  color: #063b90;
+  font-family: "Montserrat", "Manrope", sans-serif;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  box-shadow: 0 3px 10px rgba(6, 59, 144, 0.2);
 }
 
 .confirm-copy-btn {
