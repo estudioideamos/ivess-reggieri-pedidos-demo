@@ -389,7 +389,7 @@ async function submitOrder() {
   confirmBox.innerHTML = `
     <div class="confirm-top">
       <span class="confirm-top-icon-wrap"><img src="./assets/marca-de-verificacion.svg" alt="" class="confirm-top-icon" /></span>
-      <div class="confirm-status">Muchas gracias.<br />Pedido realizado con exito.</div>
+      <div class="confirm-status">Gracias por su pedido</div>
     </div>
     <div class="confirm-row">
       <span class="confirm-icon-circle"><img src="./assets/logistica.svg" alt="" class="confirm-row-icon" /></span>
