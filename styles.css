@@ -569,11 +569,13 @@ button.secondary {
 
 .confirm-status {
   width: 100%;
+  font-family: "Montserrat", "Manrope", sans-serif;
   font-weight: 900;
   text-transform: uppercase;
   text-align: center;
   font-size: 24px;
   line-height: 1;
+  letter-spacing: 0.02em;
   color: #0b3f98;
   background: #ffffff;
   border-radius: 10px;
@@ -681,6 +683,11 @@ button.secondary {
   line-height: 1.35;
   color: #d8f3ff;
   font-weight: 600;
+}
+
+.confirm-pay-line2 {
+  display: block;
+  margin-top: 6px;
 }
 
 .confirm-alias-pill {
