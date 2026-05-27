@@ -654,11 +654,21 @@ button.secondary {
   border-radius: 10px;
   background: rgba(9, 75, 181, 0.28);
   box-shadow: inset 0 0 0 1px rgba(205, 239, 255, 0.12);
-  padding: 9px;
+  padding: 11px;
+}
+
+.confirm-transfer-heading {
+  margin: 0 0 8px;
+  font-size: 18px;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  font-weight: 900;
 }
 
 .confirm-pay-text {
-  margin: 0 0 8px;
+  margin: 0 0 14px;
   font-size: 12px;
   line-height: 1.35;
   color: #d8f3ff;
@@ -1130,6 +1140,10 @@ button.secondary {
   .confirm-transfer-kicker { font-size: 10px; letter-spacing: 0.08em; }
   .confirm-pay-row { grid-template-columns: 1fr; }
   .confirm-copy-btn { width: 100%; }
+  .confirm-transfer-heading {
+    font-size: 15px;
+    margin-bottom: 7px;
+  }
   .confirm-pay-text { font-size: 12px; line-height: 1.25; }
   .confirm-copy-btn {
     min-width: 0;
