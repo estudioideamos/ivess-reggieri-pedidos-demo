@@ -57,6 +57,7 @@ function onOpen() {
     .addItem('Abrir manual', 'openManual_')
     .addSeparator()
     .addItem('Activar proteccion de estructura', 'setupCriticalStructureProtection_')
+    .addItem('Limpiar columnas de pago (legacy)', 'removePedidosPaymentColumnsManual')
     .addToUi();
 }
 
@@ -493,26 +494,34 @@ function setupEstadoPedidosManual() {
 
 function removePedidosPaymentColumnsManual() {
   const sh = getSheet_(SHEETS.PEDIDOS);
-  const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(normalizeHeader_);
-  const toDelete = [
-    'estado_pago',
-    'mp_payment_id',
-    'mp_status',
-    'fecha_pago',
-    'monto_pagado',
-    'medio_pago',
-    'pago_confirmado',
-    'referencia_pago',
-  ];
-
+  const headersRaw = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
   const cols = [];
-  headers.forEach(function (h, idx) {
-    if (toDelete.indexOf(h) !== -1) cols.push(idx + 1);
+
+  headersRaw.forEach(function (raw, idx) {
+    const h = normalizeHeader_(raw);
+    const rawNorm = normalize_(raw).toLowerCase();
+    const legacyMatch =
+      h === 'estado_pago' ||
+      h === 'mp_payment_id' ||
+      h === 'mp_status' ||
+      h === 'fecha_pago' ||
+      h === 'monto_pagado' ||
+      h === 'medio_pago' ||
+      h === 'pago_confirmado' ||
+      h === 'referencia_pago';
+
+    const broadMatch =
+      rawNorm.indexOf('mercado pago') !== -1 ||
+      rawNorm.indexOf('medio de pago') !== -1 ||
+      rawNorm.indexOf('referencia de pago') !== -1 ||
+      rawNorm.indexOf('mp') !== -1 ||
+      (rawNorm.indexOf('pago') !== -1 && rawNorm.indexOf('estado') !== -1);
+
+    if (legacyMatch || broadMatch) cols.push(idx + 1);
   });
 
-  cols.sort(function (a, b) { return b - a; }).forEach(function (col) {
-    sh.deleteColumn(col);
-  });
+  cols.sort(function (a, b) { return b - a; }).forEach(function (col) { sh.deleteColumn(col); });
+  SpreadsheetApp.getActive().toast('Columnas de pago legacy eliminadas: ' + cols.length, 'Ivess', 6);
 }
 
 function buildOrderNumber_() {
