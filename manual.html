@@ -81,22 +81,29 @@
     }
 
     .hero h1 {
-      margin: 14px 0 0;
+      margin: 10px 0 0;
       font: 800 40px/1.02 "Montserrat", sans-serif;
       text-transform: uppercase;
+      max-width: 760px;
     }
 
     .brand {
-      margin-top: 14px;
-      margin-bottom: 4px;
+      position: absolute;
+      top: 26px;
+      right: 28px;
+      margin: 0;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(202, 234, 255, 0.35);
     }
 
     .brand img {
-      height: 62px;
+      height: 46px;
       width: auto;
       object-fit: contain;
       display: block;
-      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.16));
     }
 
     .hero p {
@@ -300,6 +307,13 @@
       .hero { padding: 24px 18px 20px; }
       .hero h1 { font-size: 30px; }
       .hero p { font-size: 15px; }
+      .brand {
+        position: static;
+        display: inline-block;
+        margin-top: 12px;
+        margin-bottom: 2px;
+      }
+      .brand img { height: 40px; }
       .content { padding: 18px; }
       h3.section-title { font-size: 21px; }
     }
@@ -309,10 +323,10 @@
   <main class="manual">
     <header class="hero">
       <span class="kicker">Manual Oficial</span>
+      <h1>Sistema Operativo Ivess Reggieri</h1>
       <div class="brand">
         <img src="https://ivessreggieri.com.ar/wp-content/uploads/2021/08/LOGO-FINAL.png" alt="Ivess Reggieri" />
       </div>
-      <h1>Sistema Operativo Ivess Reggieri</h1>
       <p>Guia completa para operar el sistema de pedidos y altas de clientes con seguridad, claridad y criterios estandarizados.</p>
       <div class="meta">
         <span class="pill">Version: 27 de mayo de 2026</span>
