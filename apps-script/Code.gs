@@ -47,11 +47,33 @@ const MP_ACCESS_TOKEN = '';
 const MP_PUBLIC_KEY = '';
 const MP_WEBHOOK_URL = '';
 const MANUAL_URL = 'https://estudioideamos.github.io/ivess-reggieri-pedidos-demo/manual.html';
+const SHEET_META_KEY = 'IVESS_EXPECTED_SHEET_NAME';
+
+const REQUIRED_HEADERS = {
+  Clientes: [
+    'id_cliente', 'nombre', 'direccion', 'localidad', 'telefono', 'activo',
+    'lista_precio', 'horario_1', 'horario_2', 'horario_3', 'horario_4',
+  ],
+  Horarios: [
+    'id_horario', 'etiqueta', 'activo',
+  ],
+  ProductosPrecios: [
+    'sku', 'producto', 'imagen_url', 'precio_lista_1', 'precio_lista_2', 'activo_lista_1', 'activo_lista_2', 'activo',
+  ],
+  Pedidos: [
+    'fecha_y_hora', 'nro_de_pedido', 'id_cliente', 'direccion', 'horario', 'items_json', 'total', 'comentario', 'estado',
+  ],
+  AltasAutomaticas: [
+    'fecha_y_hora', 'direccion', 'localidad', 'codigo_area', 'celular', 'telefono_completo', 'origen', 'estado',
+  ],
+};
 
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('Ayuda Ivess')
     .addItem('Abrir manual', 'openManual_')
+    .addSeparator()
+    .addItem('Activar proteccion de estructura', 'setupCriticalStructureProtection_')
     .addToUi();
 }
 
@@ -65,6 +87,77 @@ function openManual_() {
     .setWidth(10)
     .setHeight(10);
   SpreadsheetApp.getUi().showModalDialog(html, 'Abriendo manual...');
+}
+
+function setupCriticalStructureProtection_() {
+  const ss = SpreadsheetApp.getActive();
+  const me = Session.getEffectiveUser().getEmail();
+
+  Object.keys(SHEETS).forEach(function (k) {
+    const sheetName = SHEETS[k];
+    const sh = ss.getSheetByName(sheetName);
+    if (!sh) return;
+
+    // 1) Marca interna para restaurar nombre de hoja si lo cambian.
+    sh.addDeveloperMetadata(SHEET_META_KEY, sheetName);
+
+    // 2) Protege fila 1 (encabezados).
+    const headerRange = sh.getRange(1, 1, 1, Math.max(sh.getLastColumn(), 1));
+    const protections = headerRange.getProtections(SpreadsheetApp.ProtectionType.RANGE);
+    const p = protections.length ? protections[0] : headerRange.protect();
+    p.setDescription('IVESS - Encabezados protegidos');
+    p.setWarningOnly(false);
+    if (p.canDomainEdit()) p.setDomainEdit(false);
+    const editors = p.getEditors().map(function (u) { return u.getEmail(); });
+    editors.forEach(function (ed) {
+      if (ed !== me) p.removeEditor(ed);
+    });
+  });
+
+  ensureCriticalTriggers_();
+  SpreadsheetApp.getActive().toast('Proteccion activada. Encabezados bloqueados y nombres de hojas vigilados.', 'Ivess', 6);
+}
+
+function ensureCriticalTriggers_() {
+  const ssId = SpreadsheetApp.getActive().getId();
+  const exists = ScriptApp.getProjectTriggers().some(function (t) {
+    return t.getHandlerFunction() === 'guardCriticalStructure_' &&
+      t.getEventType() === ScriptApp.EventType.ON_CHANGE &&
+      t.getTriggerSourceId() === ssId;
+  });
+  if (!exists) {
+    ScriptApp.newTrigger('guardCriticalStructure_')
+      .forSpreadsheet(SpreadsheetApp.getActive())
+      .onChange()
+      .create();
+  }
+}
+
+function guardCriticalStructure_(_e) {
+  restoreRenamedCriticalSheets_();
+}
+
+function restoreRenamedCriticalSheets_() {
+  const ss = SpreadsheetApp.getActive();
+  const sheets = ss.getSheets();
+  const existingByName = {};
+  sheets.forEach(function (s) { existingByName[s.getName()] = true; });
+
+  sheets.forEach(function (sh) {
+    const meta = sh.getDeveloperMetadata().filter(function (m) {
+      return m.getKey() === SHEET_META_KEY;
+    });
+    if (!meta.length) return;
+    const expectedName = String(meta[0].getValue() || '').trim();
+    if (!expectedName) return;
+    if (sh.getName() === expectedName) return;
+
+    // Si ya existe una hoja con ese nombre, evitamos colision.
+    if (existingByName[expectedName]) return;
+
+    sh.setName(expectedName);
+    existingByName[expectedName] = true;
+  });
 }
 
 function doPost(e) {
