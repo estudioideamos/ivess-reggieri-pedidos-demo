@@ -360,6 +360,7 @@ async function submitOrder() {
   const payload = {
     id_cliente: state.cliente.id_cliente,
     direccion: state.cliente.direccion,
+    localidad: state.cliente.localidad || "",
     horario: state.horario,
     items: state.items,
     comentario: commentInput.value.trim(),
@@ -406,6 +407,11 @@ async function submitOrder() {
       <span class="confirm-icon-circle"><img src="./assets/billete-de-banco.svg" alt="" class="confirm-row-icon" /></span>
       <p><span class="confirm-label">Monto total:</span><br /><span class="confirm-value">${currency.format(totalNow)}</span></p>
     </div>
+    ${commentInput.value.trim() ? `
+    <div class="confirm-row">
+      <span class="confirm-icon-circle"><img src="./assets/asesor.svg" alt="" class="confirm-row-icon" /></span>
+      <p><span class="confirm-label">Comentario:</span><br /><span class="confirm-value">${commentInput.value.trim()}</span></p>
+    </div>` : ""}
     <div class="confirm-payline"></div>
     <div class="confirm-pay-row">
       <p class="confirm-pay-text"><img src="./assets/billetera.svg" alt="" class="confirm-pay-icon" /> Podes abonar ahora o en el momento de entrega.<br />En efectivo o por transferencia al alias: <strong>Reggieri.SA</strong></p>

@@ -44,7 +44,7 @@ const REQUIRED_HEADERS = {
     'sku', 'producto', 'imagen_url', 'precio_lista_1', 'precio_lista_2', 'activo_lista_1', 'activo_lista_2', 'activo',
   ],
   Pedidos: [
-    'fecha_y_hora', 'nro_de_pedido', 'id_cliente', 'direccion', 'horario', 'items_json', 'total', 'comentario', 'estado',
+    'fecha_y_hora', 'nro_de_pedido', 'id_cliente', 'direccion', 'localidad', 'horario', 'items_json', 'total', 'comentario', 'estado',
   ],
   AltasAutomaticas: [
     'fecha_y_hora', 'direccion', 'localidad', 'codigo_area', 'celular', 'telefono_completo', 'origen', 'estado',
@@ -445,6 +445,7 @@ function getCatalog_(listaPrecio) {
 
 function createOrder_(payload) {
   const sh = getSheet_(SHEETS.PEDIDOS);
+  ensurePedidosLocalidadColumn_(sh);
   ensurePedidosEstadoDropdown_(sh);
   const idPedido = buildOrderNumber_();
   const itemsRaw = payload.items || {};
@@ -464,6 +465,7 @@ function createOrder_(payload) {
     if (key === 'nro_de_pedido' || key === 'id_pedido' || key === 'pedido') return idPedido;
     if (key === 'id_cliente') return payload.id_cliente || '';
     if (key === 'direccion') return payload.direccion || '';
+    if (key === 'localidad') return payload.localidad || '';
     if (key === 'horario') return payload.horario || '';
     if (key === 'items' || key === 'items_json') return itemsPretty;
     if (key === 'total') return total;
@@ -477,7 +479,9 @@ function createOrder_(payload) {
 }
 
 function ensurePedidosEstadoDropdown_(sheet) {
-  const estadoCol = 9; // Columna I = Estado
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const estadoCol = headers.indexOf('estado') + 1;
+  if (estadoCol <= 0) return;
   const totalRows = Math.max(sheet.getMaxRows(), 2);
   const range = sheet.getRange(2, estadoCol, totalRows - 1, 1);
   const rule = SpreadsheetApp.newDataValidation()
@@ -489,7 +493,17 @@ function ensurePedidosEstadoDropdown_(sheet) {
 
 function setupEstadoPedidosManual() {
   const sh = getSheet_(SHEETS.PEDIDOS);
+  ensurePedidosLocalidadColumn_(sh);
   ensurePedidosEstadoDropdown_(sh);
+}
+
+function ensurePedidosLocalidadColumn_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 1);
+  const headersRaw = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  const headers = headersRaw.map(normalizeHeader_);
+  if (headers.indexOf('localidad') !== -1) return;
+  sheet.insertColumnAfter(2); // despues de Direccion
+  sheet.getRange(1, 3).setValue('Localidad');
 }
 
 function removePedidosPaymentColumnsManual() {
