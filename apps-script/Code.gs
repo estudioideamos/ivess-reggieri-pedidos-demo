@@ -46,6 +46,26 @@ const ESTADOS_ALTA = [
 const MP_ACCESS_TOKEN = '';
 const MP_PUBLIC_KEY = '';
 const MP_WEBHOOK_URL = '';
+const MANUAL_URL = 'https://estudioideamos.github.io/ivess-reggieri-pedidos-demo/manual.html';
+
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('Ayuda Ivess')
+    .addItem('Abrir manual', 'openManual_')
+    .addToUi();
+}
+
+function openManual_() {
+  const html = HtmlService.createHtmlOutput(
+    '<script>' +
+    'window.open("' + MANUAL_URL + '","_blank");' +
+    'google.script.host.close();' +
+    '</script>'
+  )
+    .setWidth(10)
+    .setHeight(10);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Abriendo manual...');
+}
 
 function doPost(e) {
   try {
