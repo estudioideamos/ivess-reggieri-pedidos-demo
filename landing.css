@@ -110,6 +110,15 @@ body {
   font-weight: 800;
 }
 
+.landing-footer strong a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing-footer strong a:hover {
+  text-decoration: underline;
+}
+
 .landing-promo {
   background: #ffffff;
   padding: 10px 12px 8px;

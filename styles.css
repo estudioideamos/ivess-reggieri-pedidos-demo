@@ -755,6 +755,15 @@ button.secondary {
   color: #d9efff;
 }
 
+.dev-credit strong a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.dev-credit strong a:hover {
+  text-decoration: underline;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
