@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -334,10 +334,10 @@
         <div>
           <span class="kicker">Manual Oficial</span>
           <h1>Sistema Operativo Ivess Reggieri</h1>
-          <p>Guia completa para operar el sistema de pedidos y altas de clientes con seguridad, claridad y criterios estandarizados.</p>
+          <p>Guía completa para operar el sistema de pedidos y altas de clientes con seguridad, claridad y criterios estandarizados.</p>
           <div class="meta">
-            <span class="pill">Version: 27 de mayo de 2026 (actualizada)</span>
-            <span class="pill">Publico: Equipo operativo y comercial</span>
+            <span class="pill">Versión: 27 de mayo de 2026 (actualizada)</span>
+            <span class="pill">Público: Equipo operativo y comercial</span>
             <span class="pill">Desarrollo: Estudio Ideamos</span>
           </div>
         </div>
@@ -346,115 +346,117 @@
 
     <section class="content">
       <section class="toc">
-        <h2>Indice</h2>
+        <h2>Índice</h2>
         <ol>
           <li>Resumen del sistema</li>
           <li>Flujo de pedidos (web)</li>
           <li>Estructura de Google Sheets</li>
-          <li>Flujo de altas automaticas</li>
+          <li>Flujo de altas automáticas</li>
           <li>Tareas operativas habituales</li>
-          <li>Resolucion de problemas</li>
-          <li>Publicacion y mantenimiento</li>
+          <li>Resolución de problemas</li>
+          <li>Publicación y mantenimiento</li>
         </ol>
       </section>
 
       <h3 class="section-title">1. Resumen Del Sistema</h3>
-      <p>El sistema recibe pedidos online, consulta datos en Google Sheets y registra resultados automaticamente. Tambien recibe solicitudes de alta de nuevos clientes para seguimiento comercial.</p>
+      <p>El sistema recibe pedidos online, consulta datos en Google Sheets y registra resultados automáticamente. También recibe solicitudes de alta de nuevos clientes para seguimiento comercial.</p>
       <div class="grid-2">
         <article class="card">
-          <strong>Que hace automaticamente</strong>
+          <strong>Qué hace automáticamente</strong>
           <ul>
-            <li>Busca cliente por direccion o telefono.</li>
-            <li>Si hay direccion guardada en ese dispositivo, ingresa directo a Horarios.</li>
+            <li>Busca cliente por dirección o teléfono.</li>
+            <li>Si hay una dirección guardada en ese dispositivo, ingresa directo a Horarios.</li>
             <li>Muestra solo horarios habilitados del cliente.</li>
-            <li>Si falla la busqueda, sugiere direcciones similares ("Tal vez quisiste decir...").</li>
+            <li>Si falla la búsqueda exacta, sugiere direcciones similares ("Tal vez quisiste decir...").</li>
             <li>No permite confirmar pedidos sin al menos 1 producto.</li>
             <li>Registra pedidos en la hoja <code>Pedidos</code>.</li>
             <li>Registra altas en <code>AltasAutomaticas</code>.</li>
           </ul>
         </article>
         <article class="card">
-          <strong>Que gestiona el equipo</strong>
+          <strong>Qué gestiona el equipo</strong>
           <ul>
-            <li>Actualizacion de clientes, horarios y productos.</li>
-            <li>Seguimiento de estados en altas.</li>
+            <li>Actualización de clientes, horarios y productos.</li>
+            <li>Seguimiento de estados en altas y pedidos.</li>
             <li>Control de precios y productos activos.</li>
-            <li>Correccion manual ante excepciones.</li>
+            <li>Confirmación manual de pagos cuando corresponda.</li>
+            <li>Corrección manual ante excepciones.</li>
           </ul>
         </article>
       </div>
 
       <h3 class="section-title">2. Flujo De Pedidos (Web)</h3>
       <div class="flow">
-        <div class="step"><b>Paso 1 de 4</b><p>El cliente escribe direccion o telefono y presiona <code>Buscar cliente</code>.</p></div>
-        <div class="step"><b>Paso 2 de 4</b><p>Selecciona uno de los horarios disponibles para su direccion.</p></div>
+        <div class="step"><b>Paso 1 de 4</b><p>El cliente escribe dirección o teléfono y presiona <code>Enter</code> o <code>Buscar cliente</code>.</p></div>
+        <div class="step"><b>Paso 2 de 4</b><p>Selecciona uno de los horarios disponibles para su dirección.</p></div>
         <div class="step"><b>Paso 3 de 4</b><p>Elige productos y cantidades. Sin productos no permite continuar.</p></div>
         <div class="step"><b>Paso 4 de 4</b><p>Confirma y el pedido queda guardado en la hoja <code>Pedidos</code>.</p></div>
       </div>
 
       <div class="alert ok">
-        <strong>Busqueda tolerante:</strong> el sistema interpreta entradas como <code>BARADERO6140</code> y errores tipicos como <code>SOREDE 5339</code>. Si no hay match exacto, propone sugerencias.
+        <strong>Búsqueda tolerante:</strong> el sistema interpreta entradas como <code>BARADERO6140</code>, <code>LUCENA 5635</code> o errores típicos como <code>SOREDE 5339</code>. Si no hay match exacto, propone sugerencias.
       </div>
 
-      <h4>Direccion recordada en el dispositivo</h4>
+      <h4>Dirección recordada en el dispositivo</h4>
       <ul>
-        <li>Si el cliente ya uso ese navegador, la app puede ingresar directo a Horarios.</li>
-        <li>En Horarios aparece <code>No soy yo / Cambiar direccion</code> para limpiar el dato guardado.</li>
-        <li>El guardado es local del navegador (si borra cache/cookies, se pierde).</li>
+        <li>Si el cliente ya usó ese navegador, la app puede ingresar automáticamente directo a Horarios.</li>
+        <li>En Horarios se muestra la dirección recordada debajo del dato del cliente.</li>
+        <li>También aparece la opción <code>No soy yo / Cambiar dirección</code> para limpiar el dato guardado y volver al Paso 1.</li>
+        <li>El guardado es local del navegador (si borra caché/cookies, se pierde).</li>
       </ul>
 
       <h3 class="section-title">3. Estructura De Google Sheets</h3>
       <div class="alert warn">
-        <strong>Regla critica:</strong> no cambiar nombres de pestañas ni encabezados de fila 1. Si cambian, la integracion puede dejar de funcionar.
+        <strong>Regla crítica:</strong> no cambiar nombres de pestañas ni encabezados de fila 1. Si cambian, la integración puede dejar de funcionar.
       </div>
       <table>
         <thead>
-          <tr><th>Hoja</th><th>Funcion</th><th>Responsable</th></tr>
+          <tr><th>Hoja</th><th>Función</th><th>Responsable</th></tr>
         </thead>
         <tbody>
-          <tr><td><code>Clientes</code></td><td>Base maestra de clientes y parametros por cliente.</td><td>Operacion</td></tr>
-          <tr><td><code>Horarios</code></td><td>Catalogo de franjas horarias disponibles.</td><td>Operacion</td></tr>
-          <tr><td><code>ProductosPrecios</code></td><td>Catalogo de productos, imagenes y precios por lista.</td><td>Operacion</td></tr>
-          <tr><td><code>Pedidos</code></td><td>Registro automatico de pedidos web y estado de pago.</td><td>Sistema + control operativo</td></tr>
-          <tr><td><code>AltasAutomaticas</code></td><td>Leads entrantes para gestion comercial telefonica.</td><td>Sistema + equipo comercial</td></tr>
+          <tr><td><code>Clientes</code></td><td>Base maestra de clientes y parámetros por cliente.</td><td>Operación</td></tr>
+          <tr><td><code>Horarios</code></td><td>Catálogo de franjas horarias disponibles.</td><td>Operación</td></tr>
+          <tr><td><code>ProductosPrecios</code></td><td>Catálogo de productos, imágenes y precios por lista.</td><td>Operación</td></tr>
+          <tr><td><code>Pedidos</code></td><td>Registro automático de pedidos web y estado de pago.</td><td>Sistema + control operativo</td></tr>
+          <tr><td><code>AltasAutomaticas</code></td><td>Leads entrantes para gestión comercial telefónica.</td><td>Sistema + equipo comercial</td></tr>
         </tbody>
       </table>
+
+      <h4>Columnas exactas de la hoja Clientes</h4>
+      <ul>
+        <li><code>Nro de cliente</code></li>
+        <li><code>Direccion</code></li>
+        <li><code>Localidad</code></li>
+        <li><code>Celular</code></li>
+        <li><code>Telefono</code> (fijo)</li>
+        <li><code>Activo</code></li>
+        <li><code>Lista de precios</code></li>
+        <li><code>Horario 1</code></li>
+        <li><code>Horario 2</code></li>
+        <li><code>Horario 3</code></li>
+        <li><code>Horario 4</code></li>
+      </ul>
 
       <h4>Criterios de carga recomendados</h4>
       <ul>
         <li>Direcciones en <strong>MAYUSCULAS</strong>.</li>
-        <li>Telefonos solo con numeros.</li>
-        <li>Valores de activo segun lista (SI/NO).</li>
+        <li>Un cliente por fila. No duplicar filas del mismo cliente.</li>
+        <li>Celular y teléfono solo con números.</li>
+        <li>Valores de activo según lista: <code>si</code> / <code>no</code>.</li>
         <li>Horarios por cliente en columnas <code>Horario 1</code> a <code>Horario 4</code>.</li>
-        <li>En <code>Pedidos</code>, usar dropdown en <code>Estado</code>, <code>Medio de pago</code> y <code>Pago confirmado</code>.</li>
+        <li>En cargas masivas desde base externa, hoy se está usando la regla <code>PBA = Lista 2</code> y <code>CABA = Lista 1</code>.</li>
+        <li>En <code>Pedidos</code>, usar dropdown en <code>Estado</code>.</li>
       </ul>
 
-      <h4>Campos de pago en la hoja Pedidos</h4>
-      <table>
-        <thead>
-          <tr><th>Campo</th><th>Uso</th><th>Valor inicial</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><code>Estado pago</code></td><td>Estado operativo del pago.</td><td><code>PENDIENTE_CONFIG</code></td></tr>
-          <tr><td><code>MP payment_id</code></td><td>ID de pago de Mercado Pago.</td><td>Vacio</td></tr>
-          <tr><td><code>MP status</code></td><td>Estado tecnico devuelto por MP.</td><td><code>NO_CONFIGURADO</code></td></tr>
-          <tr><td><code>Fecha pago</code></td><td>Fecha de acreditacion.</td><td>Vacio</td></tr>
-          <tr><td><code>Monto pagado</code></td><td>Monto efectivamente cobrado.</td><td>Vacio</td></tr>
-          <tr><td><code>Medio de pago</code></td><td>Transferencia / Efectivo / Mercado Pago.</td><td><code>NO INFORMADO</code></td></tr>
-          <tr><td><code>Pago confirmado</code></td><td>Confirmacion manual operativa.</td><td><code>NO</code></td></tr>
-          <tr><td><code>Referencia de pago</code></td><td>Comprobante, nota o referencia interna.</td><td>Vacio</td></tr>
-        </tbody>
-      </table>
-
-      <h3 class="section-title">4. Altas Automaticas</h3>
+      <h3 class="section-title">4. Altas Automáticas</h3>
       <h4>Datos que se guardan</h4>
       <ul>
         <li>Fecha y hora</li>
-        <li>Direccion (en mayusculas)</li>
+        <li>Dirección (en mayúsculas)</li>
         <li>Localidad</li>
-        <li>Codigo de area</li>
+        <li>Código de área</li>
         <li>Celular</li>
-        <li>Telefono completo</li>
+        <li>Teléfono completo</li>
         <li>Origen</li>
         <li>Estado</li>
       </ul>
@@ -477,8 +479,9 @@
       <h4>5.1 Cargar un cliente nuevo</h4>
       <ol>
         <li>Ir a <code>Clientes</code>.</li>
-        <li>Completar ID, direccion, localidad, telefono, activo y lista de precio.</li>
-        <li>Asignar horarios en <code>Horario 1..4</code>.</li>
+        <li>Completar <code>Nro de cliente</code>, <code>Direccion</code>, <code>Localidad</code>, <code>Celular</code>, <code>Telefono</code>, <code>Activo</code> y <code>Lista de precios</code>.</li>
+        <li>Asignar horarios en <code>Horario 1</code> a <code>Horario 4</code>.</li>
+        <li>Verificar que no exista ya una fila con el mismo cliente o la misma dirección.</li>
       </ol>
 
       <h4>5.2 Actualizar precios de productos</h4>
@@ -495,23 +498,35 @@
         <li>Click derecho y eliminar fila.</li>
       </ol>
 
-      <h4>5.4 Marcar pago por transferencia</h4>
-      <ol>
-        <li>Ir a la fila del pedido en <code>Pedidos</code>.</li>
-        <li>En <code>Medio de pago</code> elegir <code>TRANSFERENCIA</code>.</li>
-        <li>En <code>Pago confirmado</code> elegir <code>SI</code> cuando se valida comprobante.</li>
-        <li>Completar <code>Referencia de pago</code> (numero de comprobante o nota).</li>
-        <li>Actualizar <code>Estado pago</code> a <code>PAGADO</code> si corresponde.</li>
-      </ol>
+      <h4>5.4 Estados recomendados para Pedidos</h4>
+      <ul>
+        <li>NUEVO</li>
+        <li>CONFIRMADO</li>
+        <li>EN PREPARACION</li>
+        <li>EN REPARTO</li>
+        <li>ENTREGADO</li>
+        <li>REPROGRAMAR</li>
+        <li>NO ENTREGADO</li>
+        <li>CANCELADO</li>
+      </ul>
 
-      <h3 class="section-title">6. Resolucion De Problemas</h3>
+      <h3 class="section-title">6. Resolución De Problemas</h3>
       <div class="grid-2">
         <article class="card">
-          <strong>No encuentra la direccion</strong>
+          <strong>No encuentra la dirección</strong>
           <ul>
             <li>Verificar cliente activo en <code>Clientes</code>.</li>
-            <li>Probar por telefono.</li>
+            <li>Probar por teléfono.</li>
             <li>Revisar que tenga horarios asignados.</li>
+            <li>Si aparece una sugerencia, tocar la opción propuesta.</li>
+          </ul>
+        </article>
+        <article class="card">
+          <strong>Quedó guardada otra dirección</strong>
+          <ul>
+            <li>Entrar a Horarios.</li>
+            <li>Usar <code>No soy yo / Cambiar dirección</code>.</li>
+            <li>Volver a escribir la dirección correcta.</li>
           </ul>
         </article>
         <article class="card">
@@ -523,20 +538,20 @@
           </ul>
         </article>
         <article class="card">
-          <strong>Boton Mercado Pago no cobra</strong>
+          <strong>El pedido se cargó mal o incompleto</strong>
           <ul>
-            <li>Si muestra "aun no configurado", falta cargar credenciales en Apps Script.</li>
-            <li>Verificar <code>MP_ACCESS_TOKEN</code> y nuevo deploy del backend.</li>
-            <li>Hasta activar Mercado Pago, usar transferencia/efectivo y marcar en <code>Pedidos</code>.</li>
+            <li>Verificar que el cliente haya elegido al menos un producto.</li>
+            <li>Revisar la fila guardada en <code>Pedidos</code>.</li>
+            <li>Si fue una prueba o un error, eliminar la fila completa y volver a cargarlo.</li>
           </ul>
         </article>
       </div>
 
       <div class="alert warn">
-        <strong>Importante:</strong> cuando hay cambios de backend (Apps Script), siempre hay que hacer un nuevo despliegue para que entren en produccion.
+        <strong>Importante:</strong> cuando hay cambios de backend (Apps Script), siempre hay que hacer un nuevo despliegue para que entren en producción.
       </div>
 
-      <h3 class="section-title">7. Publicacion Y Mantenimiento</h3>
+      <h3 class="section-title">7. Publicación Y Mantenimiento</h3>
       <h4>Frontend (sitio web)</h4>
       <ol>
         <li>Guardar cambios en archivos web.</li>
@@ -552,10 +567,11 @@
       </ol>
 
       <div class="footer">
-        <strong>DESARROLLO DE ESTUDIO IDEAMOS (c) 2026</strong><br />
-        Documento interno para operacion diaria de Ivess Reggieri.
+        <strong>DESARROLLO DE <a href="https://ideamos.com.ar" target="_blank" rel="noopener noreferrer">ESTUDIO IDEAMOS</a> © 2026</strong><br />
+        Documento interno para operación diaria de Ivess Reggieri.
       </div>
     </section>
   </main>
 </body>
 </html>
+
