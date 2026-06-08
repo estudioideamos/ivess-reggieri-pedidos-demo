@@ -190,24 +190,65 @@ function clearSavedAddress() {
   } catch (_) {}
 }
 
+function joinAddressParts(parts) {
+  return parts
+    .map((part) => String(part || "").trim())
+    .filter(Boolean)
+    .join(", ");
+}
+
+function formatClientAddress(client) {
+  if (!client) return "";
+  return joinAddressParts([client.direccion, client.localidad, client.provincia]);
+}
+
+function formatSuggestionAddress(item) {
+  if (!item) return "";
+  if (typeof item === "string") return item;
+  return joinAddressParts([item.direccion, item.localidad, item.provincia]);
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function refreshSavedAddressUI() {
   if (!savedAddressBar) return;
   const saved = getSavedAddress();
+  const currentFullAddress = formatClientAddress(state.cliente);
+  const displayValue = currentFullAddress || saved;
   savedAddressBar.classList.toggle("hidden", !saved);
   if (savedAddressValue) {
-    savedAddressValue.textContent = saved || "";
+    savedAddressValue.textContent = displayValue || "";
   }
   if (scheduleSavedBar) {
     scheduleSavedBar.classList.toggle("hidden", !saved);
   }
   if (scheduleSavedAddress) {
-    scheduleSavedAddress.textContent = saved || "";
+    scheduleSavedAddress.textContent = displayValue || "";
   }
 }
 
 function renderLookupSuggestions(suggestions) {
   if (!lookupSuggestions) return;
-  const unique = [...new Set((suggestions || []).filter(Boolean))].slice(0, 3);
+  const unique = [];
+  const seen = new Set();
+  (suggestions || []).forEach((item) => {
+    const display = formatSuggestionAddress(item);
+    if (!display) return;
+    const key = normalize(display);
+    if (seen.has(key) || unique.length >= 3) return;
+    seen.add(key);
+    unique.push({
+      display,
+      direccion: typeof item === "string" ? item : String(item.direccion || "").trim(),
+    });
+  });
   if (!unique.length) {
     clearLookupSuggestions();
     return;
@@ -215,13 +256,13 @@ function renderLookupSuggestions(suggestions) {
   lookupSuggestions.innerHTML = `
     <p class="lookup-suggestions-title">Tal vez quisiste decir:</p>
     <div class="lookup-suggestions-list">
-      ${unique.map((item) => `<button type="button" class="lookup-suggestion-item">${item}</button>`).join("")}
+      ${unique.map((item) => `<button type="button" class="lookup-suggestion-item" data-address="${escapeHtml(item.direccion)}">${escapeHtml(item.display)}</button>`).join("")}
     </div>
   `;
   lookupSuggestions.classList.remove("hidden");
   lookupSuggestions.querySelectorAll(".lookup-suggestion-item").forEach((btn) => {
     btn.addEventListener("click", () => {
-      addressInput.value = btn.textContent || "";
+      addressInput.value = btn.dataset.address || btn.textContent || "";
       clearLookupSuggestions();
       handleFindClient();
     });

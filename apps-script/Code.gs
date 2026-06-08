@@ -34,7 +34,7 @@ const SHEET_META_KEY = 'IVESS_EXPECTED_SHEET_NAME';
 
 const REQUIRED_HEADERS = {
   Clientes: [
-    'id_cliente', 'nombre', 'direccion', 'localidad', 'telefono', 'activo',
+    'id_cliente', 'direccion', 'localidad', 'provincia', 'celular', 'telefono', 'activo',
     'lista_precio', 'horario_1', 'horario_2', 'horario_3', 'horario_4',
   ],
   Horarios: [
@@ -285,12 +285,18 @@ function findSuggestions_(query, clientes) {
     .filter((c) => isEnabled_(c.activo) && String(c.direccion || '').trim())
     .map((c) => ({
       direccion: String(c.direccion || '').trim(),
+      localidad: String(c.localidad || '').trim(),
+      provincia: String(c.provincia || '').trim(),
       score: addressScore_(query, c.direccion),
     }))
     .filter((x) => x.score >= 0.52)
     .sort((a, b) => b.score - a.score)
     .slice(0, 3)
-    .map((x) => x.direccion);
+    .map((x) => ({
+      direccion: x.direccion,
+      localidad: x.localidad,
+      provincia: x.provincia,
+    }));
 }
 
 function isEnabled_(value) {
@@ -336,10 +342,16 @@ function normalizeHeader_(h) {
     'nro de cliente': 'id_cliente',
     'numero de cliente': 'id_cliente',
     'cliente id': 'id_cliente',
+    'nro cliente': 'id_cliente',
     'nombre': 'nombre',
     'direccion': 'direccion',
     'localidad': 'localidad',
+    'provincia': 'provincia',
     'telefono': 'telefono',
+    'telefono fijo': 'telefono',
+    'fijo': 'telefono',
+    'celular': 'celular',
+    'telefono celular': 'celular',
     'activo': 'activo',
     'lista_precio': 'lista_precio',
     'lista de precio': 'lista_precio',
@@ -390,7 +402,13 @@ function findClient_(query) {
   const horarios = mapByHeaders_(getSheet_(SHEETS.HORARIOS));
 
   const client = clientes.find((c) => {
-    return isEnabled_(c.activo) && (addressMatches_(query, c.direccion) || normalize_(c.telefono) === q);
+    const celular = String(c.celular || '').trim();
+    const telefono = String(c.telefono || '').trim();
+    return isEnabled_(c.activo) && (
+      addressMatches_(query, c.direccion) ||
+      normalize_(celular) === q ||
+      normalize_(telefono) === q
+    );
   });
 
   if (!client) {
@@ -412,7 +430,10 @@ function findClient_(query) {
       id_cliente: String(client.id_cliente),
       direccion: String(client.direccion || ''),
       localidad: String(client.localidad || ''),
-      telefono: String(client.telefono || ''),
+      provincia: String(client.provincia || ''),
+      telefono: String(client.celular || client.telefono || ''),
+      celular: String(client.celular || ''),
+      telefono_fijo: String(client.telefono || ''),
       lista_precio: Number(client.lista_precio || 1),
       horarios: etiquetas,
     },
@@ -753,6 +774,7 @@ function jsonResponse(data, statusCode) {
   out.setMimeType(ContentService.MimeType.JSON);
   return out;
 }
+
 
 
 
