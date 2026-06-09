@@ -401,6 +401,7 @@ async function submitOrder() {
   const payload = {
     id_cliente: state.cliente.id_cliente,
     direccion: state.cliente.direccion,
+    provincia: state.cliente.provincia || "",
     localidad: state.cliente.localidad || "",
     horario: state.horario,
     items: state.items,
@@ -438,7 +439,7 @@ async function submitOrder() {
     </div>
     <div class="confirm-row">
       <span class="confirm-icon-circle"><img src="./assets/mapas-y-banderas-confirm.svg" alt="" class="confirm-row-icon" /></span>
-      <p><span class="confirm-label">Dirección de entrega:</span><br /><span class="confirm-value">${state.cliente.direccion}</span></p>
+      <p><span class="confirm-label">Dirección de entrega:</span><br /><span class="confirm-value">${formatClientAddress(state.cliente)}</span></p>
     </div>
     <div class="confirm-row">
       <span class="confirm-icon-circle"><img src="./assets/reloj-circular.svg" alt="" class="confirm-row-icon" /></span>
