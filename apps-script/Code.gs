@@ -55,6 +55,7 @@ function onOpen() {
   try {
     const pedidosSheet = getSheet_(SHEETS.PEDIDOS);
     sortPedidosNewestFirst_(pedidosSheet);
+    ensurePedidosDataTextStyle_(pedidosSheet);
   } catch (_err) {
     // Si la hoja aun no existe o no esta lista, no bloqueamos el menu.
   }
@@ -515,7 +516,9 @@ function createOrder_(payload) {
     sh.getRange(2, 1, 1, lastCol).setFontColor('#000000').setFontWeight('normal');
   }
   sh.getRange(2, 1, 1, row.length).setValues([row]);
+  sh.getRange(2, 1, 1, lastCol).setFontColor('#000000').setFontWeight('normal');
   sortPedidosNewestFirst_(sh);
+  ensurePedidosDataTextStyle_(sh);
 
   return { ok: true, id_pedido: idPedido };
 }
@@ -532,7 +535,18 @@ function sortPedidosNewestFirst_(sheet) {
 function sortPedidosManual() {
   const sh = getSheet_(SHEETS.PEDIDOS);
   sortPedidosNewestFirst_(sh);
+  ensurePedidosDataTextStyle_(sh);
   SpreadsheetApp.getActive().toast('Pedidos ordenados del mas reciente al mas antiguo.', 'Ivess', 4);
+}
+
+function ensurePedidosDataTextStyle_(sheet) {
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  if (lastRow <= 1 || lastCol <= 0) return;
+  sheet
+    .getRange(2, 1, lastRow - 1, lastCol)
+    .setFontColor('#000000')
+    .setFontWeight('normal');
 }
 
 function ensurePedidosEstadoDropdown_(sheet) {
