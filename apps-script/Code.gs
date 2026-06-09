@@ -44,7 +44,7 @@ const REQUIRED_HEADERS = {
     'sku', 'producto', 'imagen_url', 'precio_lista_1', 'precio_lista_2', 'activo_lista_1', 'activo_lista_2', 'activo',
   ],
   Pedidos: [
-    'fecha_y_hora', 'nro_de_pedido', 'id_cliente', 'direccion', 'localidad', 'horario', 'items_json', 'total', 'comentario', 'estado',
+    'fecha_y_hora', 'nro_de_pedido', 'id_cliente', 'direccion', 'provincia', 'localidad', 'horario', 'items_json', 'total', 'comentario', 'estado',
   ],
   AltasAutomaticas: [
     'fecha_y_hora', 'direccion', 'localidad', 'codigo_area', 'celular', 'telefono_completo', 'origen', 'estado',
@@ -52,13 +52,21 @@ const REQUIRED_HEADERS = {
 };
 
 function onOpen() {
+  try {
+    const pedidosSheet = getSheet_(SHEETS.PEDIDOS);
+    sortPedidosNewestFirst_(pedidosSheet);
+  } catch (_err) {
+    // Si la hoja aun no existe o no esta lista, no bloqueamos el menu.
+  }
+
   SpreadsheetApp.getUi()
     .createMenu('Ayuda Ivess')
-    .addItem('Abrir manual', 'openManual_')
-    .addSeparator()
-    .addItem('Activar proteccion de estructura', 'setupCriticalStructureProtection_')
-    .addItem('Limpiar columnas de pago (legacy)', 'removePedidosPaymentColumnsManual')
-    .addToUi();
+      .addItem('Abrir manual', 'openManual_')
+      .addSeparator()
+      .addItem('Ordenar pedidos existentes', 'sortPedidosManual')
+      .addItem('Activar proteccion de estructura', 'setupCriticalStructureProtection_')
+      .addItem('Limpiar columnas de pago (legacy)', 'removePedidosPaymentColumnsManual')
+      .addToUi();
 }
 
 function openManual_() {
@@ -466,6 +474,7 @@ function getCatalog_(listaPrecio) {
 
 function createOrder_(payload) {
   const sh = getSheet_(SHEETS.PEDIDOS);
+  ensurePedidosProvinciaColumn_(sh);
   ensurePedidosLocalidadColumn_(sh);
   ensurePedidosEstadoDropdown_(sh);
   const idPedido = buildOrderNumber_();
@@ -486,6 +495,7 @@ function createOrder_(payload) {
     if (key === 'nro_de_pedido' || key === 'id_pedido' || key === 'pedido') return idPedido;
     if (key === 'id_cliente') return payload.id_cliente || '';
     if (key === 'direccion') return payload.direccion || '';
+    if (key === 'provincia') return payload.provincia || '';
     if (key === 'localidad') return payload.localidad || '';
     if (key === 'horario') return payload.horario || '';
     if (key === 'items' || key === 'items_json') return itemsPretty;
@@ -494,9 +504,35 @@ function createOrder_(payload) {
     if (key === 'estado') return 'NUEVO';
     return '';
   });
-  sh.appendRow(row);
+  const lastCol = sh.getLastColumn();
+  const hadDataRows = sh.getLastRow() >= 2;
+  sh.insertRowAfter(1);
+  if (hadDataRows) {
+    sh
+      .getRange(3, 1, 1, lastCol)
+      .copyTo(sh.getRange(2, 1, 1, lastCol), SpreadsheetApp.CopyPasteType.PASTE_FORMAT, false);
+  } else {
+    sh.getRange(2, 1, 1, lastCol).setFontColor('#000000').setFontWeight('normal');
+  }
+  sh.getRange(2, 1, 1, row.length).setValues([row]);
+  sortPedidosNewestFirst_(sh);
 
   return { ok: true, id_pedido: idPedido };
+}
+
+function sortPedidosNewestFirst_(sheet) {
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  if (lastRow <= 2 || lastCol <= 0) return;
+  sheet
+    .getRange(2, 1, lastRow - 1, lastCol)
+    .sort([{ column: 1, ascending: false }]);
+}
+
+function sortPedidosManual() {
+  const sh = getSheet_(SHEETS.PEDIDOS);
+  sortPedidosNewestFirst_(sh);
+  SpreadsheetApp.getActive().toast('Pedidos ordenados del mas reciente al mas antiguo.', 'Ivess', 4);
 }
 
 function ensurePedidosEstadoDropdown_(sheet) {
@@ -514,8 +550,20 @@ function ensurePedidosEstadoDropdown_(sheet) {
 
 function setupEstadoPedidosManual() {
   const sh = getSheet_(SHEETS.PEDIDOS);
+  ensurePedidosProvinciaColumn_(sh);
   ensurePedidosLocalidadColumn_(sh);
   ensurePedidosEstadoDropdown_(sh);
+}
+
+function ensurePedidosProvinciaColumn_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 1);
+  const headersRaw = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  const headers = headersRaw.map(normalizeHeader_);
+  if (headers.indexOf('provincia') !== -1) return;
+  const direccionCol = headers.indexOf('direccion') + 1;
+  if (direccionCol <= 0) return;
+  sheet.insertColumnAfter(direccionCol);
+  sheet.getRange(1, direccionCol + 1).setValue('Provincia');
 }
 
 function ensurePedidosLocalidadColumn_(sheet) {
@@ -523,8 +571,12 @@ function ensurePedidosLocalidadColumn_(sheet) {
   const headersRaw = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
   const headers = headersRaw.map(normalizeHeader_);
   if (headers.indexOf('localidad') !== -1) return;
-  sheet.insertColumnAfter(2); // despues de Direccion
-  sheet.getRange(1, 3).setValue('Localidad');
+  const provinciaCol = headers.indexOf('provincia') + 1;
+  const direccionCol = headers.indexOf('direccion') + 1;
+  const insertAfter = provinciaCol > 0 ? provinciaCol : direccionCol;
+  if (insertAfter <= 0) return;
+  sheet.insertColumnAfter(insertAfter);
+  sheet.getRange(1, insertAfter + 1).setValue('Localidad');
 }
 
 function removePedidosPaymentColumnsManual() {

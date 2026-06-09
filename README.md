@@ -1,38 +1,47 @@
-﻿# Ivess Reggieri - Demo Pedidos
+# Ivess Reggieri - Canal digital
 
-Demo mobile-first para toma de pedidos de agua/soda con deteccion de cliente por direccion y horarios asignados.
+Proyecto web desarrollado por Estudio Ideamos para Ivess Reggieri.
+
+Incluye:
+- landing principal `index.html`
+- flujo de pedidos `pedidos.html`
+- flujo de altas `altas.html`
+- backend en Google Apps Script `apps-script/Code.gs`
+- manual operativo `manual.html`
 
 ## Stack
-- Frontend: HTML + CSS + JS (sin framework)
-- Backend productivo: Google Apps Script + Google Sheets
-- Hosting demo: GitHub Pages (frontend)
+- Frontend: HTML, CSS y JavaScript vanilla
+- Backend: Google Apps Script
+- Base operativa: Google Sheets
+- Publicacion actual: GitHub Pages o hosting estatico
 
-## Flujo
-1. Cliente ingresa direccion o telefono.
-2. Sistema identifica cliente.
-3. Muestra solo horarios habilitados para ese cliente.
-4. Cliente arma pedido.
-5. Se confirma pedido y se envia al backend.
+## Flujo de pedidos
+1. El cliente ingresa direccion o telefono.
+2. El sistema identifica cliente, localidad y provincia.
+3. Se muestran los horarios habilitados.
+4. El cliente arma el pedido.
+5. El pedido se guarda en Google Sheets.
 
-## Estructura de hojas Google Sheets
-- `Clientes`: id_cliente, nombre, direccion, localidad, telefono, activo
-- `Horarios`: id_horario, etiqueta, activo
-- `ClienteHorarios`: id_cliente, id_horario
-- `ProductosPrecios`: sku, producto, precio, activo
-- `Pedidos`: timestamp, id_pedido, id_cliente, direccion, horario, items_json, total, comentario, estado
+## Hojas activas
+- `Clientes`
+- `Horarios`
+- `ProductosPrecios`
+- `Pedidos`
+- `AltasAutomaticas`
 
-## Configuracion local
-Abrir `index.html` en navegador o servir con cualquier servidor estatico.
+## Frontend principal
+- `index.html`
+- `pedidos.html`
+- `altas.html`
+- `landing.css`
+- `styles.css`
+- `src/main.js`
+- `src/altas.js`
+- `src/config.js`
 
-## Configuracion backend
-1. Crear proyecto de Google Apps Script.
-2. Copiar contenido de `apps-script/Code.gs`.
-3. Publicar como Web App.
-4. Copiar URL y pegar en `src/config.js` como `API_BASE_URL`.
+## Backend
+- El archivo principal es `apps-script/Code.gs`.
+- La URL del Web App se configura en `src/config.js`.
 
-## Deploy demo a GitHub Pages
-1. Crear repo en GitHub.
-2. `git remote add origin <url>`
-3. `git add . && git commit -m "Demo Ivess Reggieri"`
-4. `git push -u origin main`
-5. En GitHub: Settings > Pages > Deploy from branch `main` `/root`.
+## Nota
+Se dejo el repositorio limpio con solo archivos productivos o utiles para mantenimiento. Los archivos temporales de importacion y pruebas quedaron excluidos por `.gitignore`.

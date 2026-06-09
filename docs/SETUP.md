@@ -1,40 +1,75 @@
-﻿# Setup Operativo
+# Setup Operativo
 
 ## 1) Cuenta Google del cliente
-Recomendado: una cuenta exclusiva de Ivess Reggieri para ser dueno de:
+Recomendado: una cuenta exclusiva de Ivess Reggieri para ser duena de:
 - Google Sheet
 - Apps Script
-- Integraciones futuras
+- futuras integraciones
 
-No genera conflicto con otras cuentas/proyectos tuyos.
+## 2) Hojas activas
+1. `Clientes`
+2. `Horarios`
+3. `ProductosPrecios`
+4. `Pedidos`
+5. `AltasAutomaticas`
 
-## 2) Crear Google Sheet con estas pestanas
-1. Clientes
-2. Horarios
-3. ClienteHorarios
-4. ProductosPrecios
-5. Pedidos
-
-## 3) Encabezados exactos
+## 3) Estructura general
 ### Clientes
-id_cliente | nombre | direccion | localidad | telefono | activo | lista_precio
+- nro de cliente
+- direccion
+- provincia
+- localidad
+- celular
+- telefono
+- activo
+- lista de precios
+- horario 1
+- horario 2
+- horario 3
+- horario 4
+- comentarios
 
 ### Horarios
-id_horario | etiqueta | activo
-
-### ClienteHorarios
-id_cliente | id_horario
+- nro de horario
+- franja horaria
+- activo
 
 ### ProductosPrecios
-sku | producto | precio_lista_1 | precio_lista_2 | activo_lista_1 | activo_lista_2
+- codigo producto
+- producto
+- precio lista 1
+- precio lista 2
+- activo lista 1
+- activo lista 2
 
 ### Pedidos
-timestamp | id_pedido | id_cliente | direccion | horario | items_json | total | comentario | estado
+- fecha y hora
+- nro de pedido
+- nro de cliente
+- direccion
+- provincia
+- localidad
+- horario
+- items (json)
+- total
+- comentario
+- estado
+
+### AltasAutomaticas
+- fecha y hora
+- direccion
+- localidad
+- codigo area
+- celular
+- telefono completo
+- origen
+- estado
 
 ## 4) Publicar Apps Script
-- Deploy > New deployment > Web app
-- Execute as: Me
-- Who has access: Anyone
+- `Implementar` > `Nueva implementacion`
+- Tipo: `Aplicacion web`
+- Ejecutar como: `yo`
+- Acceso: `cualquier persona`
 
 ## 5) Conectar frontend
-En `src/config.js` completar `API_BASE_URL` con la URL del Web App.
+Completar `API_BASE_URL` en `src/config.js` con la URL del Web App publicado.
