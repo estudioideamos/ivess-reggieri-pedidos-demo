@@ -336,7 +336,7 @@
           <h1>Sistema Operativo Ivess Reggieri</h1>
           <p>Guía completa para operar el sistema de pedidos y altas de clientes con seguridad, claridad y criterios estandarizados.</p>
           <div class="meta">
-            <span class="pill">Versión: 27 de mayo de 2026 (actualizada)</span>
+            <span class="pill">Versión: 9 de junio de 2026 (actualizada)</span>
             <span class="pill">Público: Equipo operativo y comercial</span>
             <span class="pill">Desarrollo: Estudio Ideamos</span>
           </div>
@@ -371,6 +371,7 @@
             <li>No permite confirmar pedidos sin al menos 1 producto.</li>
             <li>Registra pedidos en la hoja <code>Pedidos</code>.</li>
             <li>Registra altas en <code>AltasAutomaticas</code>.</li>
+            <li>Ordena los pedidos desde el más nuevo al más antiguo.</li>
           </ul>
         </article>
         <article class="card">
@@ -379,7 +380,6 @@
             <li>Actualización de clientes, horarios y productos.</li>
             <li>Seguimiento de estados en altas y pedidos.</li>
             <li>Control de precios y productos activos.</li>
-            <li>Confirmación manual de pagos cuando corresponda.</li>
             <li>Corrección manual ante excepciones.</li>
           </ul>
         </article>
@@ -417,7 +417,7 @@
           <tr><td><code>Clientes</code></td><td>Base maestra de clientes y parámetros por cliente.</td><td>Operación</td></tr>
           <tr><td><code>Horarios</code></td><td>Catálogo de franjas horarias disponibles.</td><td>Operación</td></tr>
           <tr><td><code>ProductosPrecios</code></td><td>Catálogo de productos, imágenes y precios por lista.</td><td>Operación</td></tr>
-          <tr><td><code>Pedidos</code></td><td>Registro automático de pedidos web y estado de pago.</td><td>Sistema + control operativo</td></tr>
+          <tr><td><code>Pedidos</code></td><td>Registro automático de pedidos web para seguimiento operativo.</td><td>Sistema + control operativo</td></tr>
           <tr><td><code>AltasAutomaticas</code></td><td>Leads entrantes para gestión comercial telefónica.</td><td>Sistema + equipo comercial</td></tr>
         </tbody>
       </table>
@@ -426,6 +426,7 @@
       <ul>
         <li><code>Nro de cliente</code></li>
         <li><code>Direccion</code></li>
+        <li><code>Provincia</code></li>
         <li><code>Localidad</code></li>
         <li><code>Celular</code></li>
         <li><code>Telefono</code> (fijo)</li>
@@ -435,6 +436,22 @@
         <li><code>Horario 2</code></li>
         <li><code>Horario 3</code></li>
         <li><code>Horario 4</code></li>
+        <li><code>Comentarios</code></li>
+      </ul>
+
+      <h4>Columnas exactas de la hoja Pedidos</h4>
+      <ul>
+        <li><code>Fecha y hora</code></li>
+        <li><code>Nro de pedido</code></li>
+        <li><code>Nro de cliente</code></li>
+        <li><code>Direccion</code></li>
+        <li><code>Provincia</code></li>
+        <li><code>Localidad</code></li>
+        <li><code>Horario</code></li>
+        <li><code>Items (JSON)</code></li>
+        <li><code>Total</code></li>
+        <li><code>Comentario</code></li>
+        <li><code>Estado</code></li>
       </ul>
 
       <h4>Criterios de carga recomendados</h4>
@@ -443,9 +460,11 @@
         <li>Un cliente por fila. No duplicar filas del mismo cliente.</li>
         <li>Celular y teléfono solo con números.</li>
         <li>Valores de activo según lista: <code>si</code> / <code>no</code>.</li>
+        <li><code>Provincia</code> debe quedar como <code>PBA</code> o <code>CABA</code>.</li>
         <li>Horarios por cliente en columnas <code>Horario 1</code> a <code>Horario 4</code>.</li>
         <li>En cargas masivas desde base externa, hoy se está usando la regla <code>PBA = Lista 2</code> y <code>CABA = Lista 1</code>.</li>
-        <li>En <code>Pedidos</code>, usar dropdown en <code>Estado</code>.</li>
+        <li>En <code>Pedidos</code>, la columna <code>Estado</code> debe usarse siempre desde el dropdown.</li>
+        <li>Los pedidos nuevos se insertan arriba de todo y quedan ordenados del más reciente al más antiguo.</li>
       </ul>
 
       <h3 class="section-title">4. Altas Automáticas</h3>
@@ -479,8 +498,9 @@
       <h4>5.1 Cargar un cliente nuevo</h4>
       <ol>
         <li>Ir a <code>Clientes</code>.</li>
-        <li>Completar <code>Nro de cliente</code>, <code>Direccion</code>, <code>Localidad</code>, <code>Celular</code>, <code>Telefono</code>, <code>Activo</code> y <code>Lista de precios</code>.</li>
+        <li>Completar <code>Nro de cliente</code>, <code>Direccion</code>, <code>Provincia</code>, <code>Localidad</code>, <code>Celular</code>, <code>Telefono</code>, <code>Activo</code> y <code>Lista de precios</code>.</li>
         <li>Asignar horarios en <code>Horario 1</code> a <code>Horario 4</code>.</li>
+        <li>Si hace falta, agregar una nota en <code>Comentarios</code>.</li>
         <li>Verificar que no exista ya una fila con el mismo cliente o la misma dirección.</li>
       </ol>
 
@@ -510,6 +530,13 @@
         <li>CANCELADO</li>
       </ul>
 
+      <h4>5.5 Cómo leer la dirección dentro de la app</h4>
+      <ul>
+        <li>Cuando la app identifica un cliente, muestra la dirección en formato <code>DIRECCION, LOCALIDAD, PROVINCIA</code>.</li>
+        <li>Ese mismo formato también aparece en la dirección recordada del dispositivo.</li>
+        <li>Si aparece <code>Tal vez quisiste decir...</code>, la sugerencia también se muestra con ese formato completo.</li>
+      </ul>
+
       <h3 class="section-title">6. Resolución De Problemas</h3>
       <div class="grid-2">
         <article class="card">
@@ -535,6 +562,7 @@
             <li>Validar URL de API en <code>src/config.js</code>.</li>
             <li>Revisar deploy de Apps Script (Web App).</li>
             <li>Controlar permisos del despliegue.</li>
+            <li>Si la app guarda pero no se ve arriba, usar el menú <code>Ayuda Ivess &gt; Ordenar pedidos existentes</code>.</li>
           </ul>
         </article>
         <article class="card">
