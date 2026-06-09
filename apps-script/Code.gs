@@ -517,8 +517,10 @@ function createOrder_(payload) {
   }
   sh.getRange(2, 1, 1, row.length).setValues([row]);
   sh.getRange(2, 1, 1, lastCol).setFontColor('#000000').setFontWeight('normal');
+  ensurePedidosEstadoValidationAtRow_(sh, 2);
   sortPedidosNewestFirst_(sh);
   ensurePedidosDataTextStyle_(sh);
+  ensurePedidosEstadoValidationAtRow_(sh, 2);
 
   return { ok: true, id_pedido: idPedido };
 }
@@ -555,11 +557,22 @@ function ensurePedidosEstadoDropdown_(sheet) {
   if (estadoCol <= 0) return;
   const totalRows = Math.max(sheet.getMaxRows(), 2);
   const range = sheet.getRange(2, estadoCol, totalRows - 1, 1);
-  const rule = SpreadsheetApp.newDataValidation()
+  const rule = buildPedidosEstadoRule_();
+  range.setDataValidation(rule);
+}
+
+function ensurePedidosEstadoValidationAtRow_(sheet, row) {
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const estadoCol = headers.indexOf('estado') + 1;
+  if (estadoCol <= 0 || row < 2) return;
+  sheet.getRange(row, estadoCol).setDataValidation(buildPedidosEstadoRule_());
+}
+
+function buildPedidosEstadoRule_() {
+  return SpreadsheetApp.newDataValidation()
     .requireValueInList(ESTADOS_PEDIDO, true)
     .setAllowInvalid(false)
     .build();
-  range.setDataValidation(rule);
 }
 
 function setupEstadoPedidosManual() {
