@@ -486,12 +486,10 @@ async function submitOrder() {
     <div class="confirm-payline"></div>
     <div class="confirm-transfer-card">
       <div class="confirm-transfer-copy">
-        <h4 class="confirm-transfer-heading">Pagá tu pedido</h4>
         <p class="confirm-pay-text">Podés abonar ahora o en el momento de entrega.<span class="confirm-pay-line2">En efectivo o por transferencia al alias: <span class="confirm-alias-pill">REGGIERI.SA</span></span></p>
       </div>
       <button id="btn-copy-alias" type="button" class="confirm-copy-btn">Copiar alias</button>
     </div>
-    <div class="confirm-note"><span>Ante cualquier consulta siempre podes <strong>hablar con un asesor</strong>.</span></div>
   `;
   const copyBtn = document.getElementById("btn-copy-alias");
   if (copyBtn) {
@@ -600,7 +598,8 @@ const btnBackSchedule = document.getElementById("btn-back-schedule");
 if (btnBackSchedule) btnBackSchedule.onclick = () => showScreen("schedule");
 document.getElementById("btn-submit").onclick = submitOrder;
 
-document.getElementById("btn-new-order").onclick = () => {
+const btnNewOrder = document.getElementById("btn-new-order");
+if (btnNewOrder) btnNewOrder.onclick = () => {
   state.cliente = null;
   state.horario = "";
   state.items = {};

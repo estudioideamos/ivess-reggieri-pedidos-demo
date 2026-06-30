@@ -677,24 +677,12 @@ button.secondary {
   min-width: 0;
 }
 
-.confirm-transfer-heading {
-  margin: 0 0 8px;
-  font-size: 18px;
-  line-height: 1;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: #ffffff;
-  font-family: "Montserrat", "Manrope", sans-serif;
-  font-weight: 900;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
-}
-
 .confirm-pay-text {
   margin: 0;
-  font-size: 12px;
-  line-height: 1.35;
+  font-size: 16px;
+  line-height: 1.45;
   color: #d8f3ff;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .confirm-pay-line2 {
@@ -1220,16 +1208,12 @@ button.secondary {
   .confirm-transfer-kicker { font-size: 10px; letter-spacing: 0.08em; }
   .confirm-pay-row { grid-template-columns: 1fr; }
   .confirm-copy-btn { width: 100%; }
-  .confirm-transfer-heading {
-    font-size: 15px;
-    margin-bottom: 7px;
-  }
   .confirm-copy-btn {
     width: 100%;
     justify-self: stretch;
     margin-top: 10px;
   }
-  .confirm-pay-text { font-size: 12px; line-height: 1.25; }
+  .confirm-pay-text { font-size: 14px; line-height: 1.35; }
   .confirm-copy-btn {
     min-width: 0;
     font-size: 13px;
