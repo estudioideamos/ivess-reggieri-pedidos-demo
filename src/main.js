@@ -132,6 +132,26 @@ function beautifyProductName(name) {
   return pretty.replace(/\s+litros/gi, "");
 }
 
+function getProductLiters(product) {
+  const name = String(product?.nombre || "");
+  const match = name.match(/(\d+(?:[.,]\d+)?)\s*litros?/i);
+  if (!match) return 0;
+  return Number(String(match[1]).replace(",", ".")) || 0;
+}
+
+function isBotellonProduct(product) {
+  return /botell/i.test(String(product?.nombre || ""));
+}
+
+function formatPricePerLiter(product) {
+  if (!isBotellonProduct(product)) return "";
+  const liters = getProductLiters(product);
+  const price = Number(product?.precio || 0);
+  if (!liters || !price) return "";
+  const perLiter = Math.round(price / liters);
+  return `${currency.format(perLiter)} por litro`;
+}
+
 async function api(path, payload) {
   if (!API_BASE_URL) return null;
   const res = await fetch(`${API_BASE_URL}?path=${encodeURIComponent(path)}`, {
@@ -344,12 +364,16 @@ function renderProducts() {
     if (!state.items[p.sku]) state.items[p.sku] = 0;
     const imageUrl = p.image_url || PRODUCT_IMAGE_BY_SKU[p.sku] || "";
     const displayName = beautifyProductName(p.nombre);
+    const perLiterLabel = formatPricePerLiter(p);
     const card = document.createElement("div");
     card.className = "card product";
     card.style.animationDelay = `${0.05 * productsList.children.length}s`;
     card.innerHTML = `
       <div class="product-media">${imageUrl ? `<img src="${imageUrl}" alt="${displayName}" class="product-image" />` : ""}</div>
-      <p class="product-price">${currency.format(p.precio)}</p>
+      <div class="product-price-wrap">
+        <p class="product-price">${currency.format(p.precio)}</p>
+        ${perLiterLabel ? `<p class="product-price-note">${perLiterLabel}</p>` : ""}
+      </div>
       <div class="qty">
         <button data-delta="-1">-</button>
         <span id="qty-${p.sku}">${state.items[p.sku]}</span>

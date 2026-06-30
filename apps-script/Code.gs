@@ -29,6 +29,56 @@ const ESTADOS_ALTA = [
   'DATOS INCOMPLETOS',
   'ALTA CONCRETADA',
 ];
+const CABA_BARRIOS = [
+  'AGRONOMIA',
+  'ALMAGRO',
+  'BALVANERA',
+  'BARRACAS',
+  'BELGRANO',
+  'BOCA',
+  'BOEDO',
+  'CABALLITO',
+  'CHACARITA',
+  'COGHLAN',
+  'COLEGIALES',
+  'CONSTITUCION',
+  'FLORES',
+  'FLORESTA',
+  'LA PATERNAL',
+  'LINIERS',
+  'MATADEROS',
+  'MONSERRAT',
+  'MONTE CASTRO',
+  'NUEVA POMPEYA',
+  'NUNEZ',
+  'PALERMO',
+  'PARQUE AVELLANEDA',
+  'PARQUE CHACABUCO',
+  'PARQUE CHAS',
+  'PARQUE PATRICIOS',
+  'PUERTO MADERO',
+  'RECOLETA',
+  'RETIRO',
+  'SAAVEDRA',
+  'SAN CRISTOBAL',
+  'SAN NICOLAS',
+  'SAN TELMO',
+  'VELEZ SARSFIELD',
+  'VERSALLES',
+  'VILLA CRESPO',
+  'VILLA DEL PARQUE',
+  'VILLA DEVOTO',
+  'VILLA GENERAL MITRE',
+  'VILLA LUGANO',
+  'VILLA LURO',
+  'VILLA ORTUZAR',
+  'VILLA PUEYRREDON',
+  'VILLA REAL',
+  'VILLA RIACHUELO',
+  'VILLA SANTA RITA',
+  'VILLA SOLDATI',
+  'VILLA URQUIZA',
+];
 const MANUAL_URL = 'https://estudioideamos.github.io/ivess-reggieri-pedidos-demo/manual.html';
 const SHEET_META_KEY = 'IVESS_EXPECTED_SHEET_NAME';
 
@@ -52,22 +102,51 @@ const REQUIRED_HEADERS = {
 };
 
 function onOpen() {
-  try {
-    const pedidosSheet = getSheet_(SHEETS.PEDIDOS);
-    sortPedidosNewestFirst_(pedidosSheet);
-    ensurePedidosDataTextStyle_(pedidosSheet);
-  } catch (_err) {
-    // Si la hoja aun no existe o no esta lista, no bloqueamos el menu.
-  }
-
   SpreadsheetApp.getUi()
     .createMenu('Ayuda Ivess')
       .addItem('Abrir manual', 'openManual_')
       .addSeparator()
+      .addItem('Reparar dropdowns de Clientes', 'setupClientesDropdownsManual')
       .addItem('Ordenar pedidos existentes', 'sortPedidosManual')
       .addItem('Activar proteccion de estructura', 'setupCriticalStructureProtection_')
       .addItem('Limpiar columnas de pago (legacy)', 'removePedidosPaymentColumnsManual')
       .addToUi();
+}
+
+function onEdit(e) {
+  try {
+    handleClientesSheetEdit_(e);
+  } catch (_err) {
+    // No interrumpimos la edicion manual por un error de automatizacion.
+  }
+}
+
+function handleClientesSheetEdit_(e) {
+  if (!e || !e.range) return;
+  const sheet = e.range.getSheet();
+  if (!sheet || sheet.getName() !== SHEETS.CLIENTES) return;
+
+  const cols = getClientesDropdownColumns_(sheet);
+  if (cols.provinciaCol <= 0 || cols.localidadCol <= 0) return;
+
+  const startRow = e.range.getRow();
+  const endRow = e.range.getLastRow();
+  const startCol = e.range.getColumn();
+  const endCol = e.range.getLastColumn();
+  const touchesProvincia = startCol <= cols.provinciaCol && endCol >= cols.provinciaCol;
+  const touchesLocalidad = startCol <= cols.localidadCol && endCol >= cols.localidadCol;
+
+  if (!touchesProvincia && !touchesLocalidad) return;
+
+  const provinciaRule = getClientesProvinciaRule_(sheet, cols.provinciaCol);
+  const localidadTemplates = getClientesLocalidadRuleTemplates_(sheet, cols.provinciaCol, cols.localidadCol);
+
+  for (let row = Math.max(startRow, 2); row <= endRow; row++) {
+    ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates);
+    if (touchesProvincia && !touchesLocalidad) {
+      sheet.getRange(row, cols.localidadCol).clearContent();
+    }
+  }
 }
 
 function openManual_() {
@@ -541,6 +620,12 @@ function sortPedidosManual() {
   SpreadsheetApp.getActive().toast('Pedidos ordenados del mas reciente al mas antiguo.', 'Ivess', 4);
 }
 
+function setupClientesDropdownsManual() {
+  const sh = getSheet_(SHEETS.CLIENTES);
+  ensureClientesDropdowns_(sh);
+  SpreadsheetApp.getActive().toast('Dropdowns de Clientes reparados.', 'Ivess', 4);
+}
+
 function ensurePedidosDataTextStyle_(sheet) {
   const lastRow = sheet.getLastRow();
   const lastCol = sheet.getLastColumn();
@@ -559,6 +644,106 @@ function ensurePedidosEstadoDropdown_(sheet) {
   const range = sheet.getRange(2, estadoCol, totalRows - 1, 1);
   const rule = buildPedidosEstadoRule_();
   range.setDataValidation(rule);
+}
+
+function ensureClientesDropdowns_(sheet) {
+  const cols = getClientesDropdownColumns_(sheet);
+  if (cols.provinciaCol <= 0 || cols.localidadCol <= 0) return;
+
+  const totalRows = Math.max(sheet.getLastRow() - 1, 1);
+  const provinciaRule = getClientesProvinciaRule_(sheet, cols.provinciaCol);
+  const localidadTemplates = getClientesLocalidadRuleTemplates_(sheet, cols.provinciaCol, cols.localidadCol);
+
+  if (provinciaRule) {
+    sheet.getRange(2, cols.provinciaCol, totalRows, 1).setDataValidation(provinciaRule);
+  }
+
+  for (let row = 2; row <= totalRows + 1; row++) {
+    ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates);
+  }
+}
+
+function ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates) {
+  if (row < 2) return;
+
+  if (provinciaRule) {
+    sheet.getRange(row, cols.provinciaCol).setDataValidation(provinciaRule);
+  }
+
+  const provincia = normalize_(sheet.getRange(row, cols.provinciaCol).getDisplayValue());
+  const localidadCell = sheet.getRange(row, cols.localidadCol);
+  const localidadRule = getClientesLocalidadRuleForProvincia_(provincia, localidadTemplates);
+
+  if (localidadRule) {
+    localidadCell.setDataValidation(localidadRule);
+  } else {
+    localidadCell.clearDataValidations();
+  }
+}
+
+function getClientesDropdownColumns_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 1);
+  const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(normalizeHeader_);
+  return {
+    provinciaCol: headers.indexOf('provincia') + 1,
+    localidadCol: headers.indexOf('localidad') + 1,
+  };
+}
+
+function getClientesProvinciaRule_(sheet, provinciaCol) {
+  const lastRow = sheet.getLastRow();
+  if (provinciaCol > 0 && lastRow >= 2) {
+    const rules = sheet.getRange(2, provinciaCol, lastRow - 1, 1).getDataValidations();
+    for (let i = 0; i < rules.length; i++) {
+      if (rules[i][0]) return rules[i][0];
+    }
+  }
+
+  return SpreadsheetApp.newDataValidation()
+    .requireValueInList(['CABA', 'PBA'], true)
+    .setAllowInvalid(false)
+    .build();
+}
+
+function getClientesLocalidadRuleTemplates_(sheet, provinciaCol, localidadCol) {
+  const templates = { byProvince: {}, fallback: null };
+  const lastRow = sheet.getLastRow();
+  if (provinciaCol <= 0 || localidadCol <= 0 || lastRow < 2) return templates;
+
+  const provincias = sheet.getRange(2, provinciaCol, lastRow - 1, 1).getDisplayValues();
+  const rules = sheet.getRange(2, localidadCol, lastRow - 1, 1).getDataValidations();
+
+  for (let i = 0; i < rules.length; i++) {
+    const rule = rules[i][0];
+    if (!rule) continue;
+
+    if (!templates.fallback) {
+      templates.fallback = rule;
+    }
+
+    const provincia = normalize_(provincias[i][0]);
+    if (provincia && !templates.byProvince[provincia]) {
+      templates.byProvince[provincia] = rule;
+    }
+  }
+
+  return templates;
+}
+
+function getClientesLocalidadRuleForProvincia_(provincia, templates) {
+  if (provincia === 'CABA') {
+    return SpreadsheetApp.newDataValidation()
+      .requireValueInList(CABA_BARRIOS, true)
+      .setAllowInvalid(false)
+      .build();
+  }
+
+  if (provincia === 'PBA') {
+    return null;
+  }
+
+  if (!provincia) return null;
+  return templates.byProvince[provincia] || templates.fallback || null;
 }
 
 function ensurePedidosEstadoValidationAtRow_(sheet, row) {
