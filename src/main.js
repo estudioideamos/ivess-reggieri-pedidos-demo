@@ -140,7 +140,12 @@ function getProductLiters(product) {
 }
 
 function isBotellonProduct(product) {
-  return /botell/i.test(String(product?.nombre || ""));
+  const sku = String(product?.sku || "").toUpperCase();
+  const name = String(product?.nombre || "");
+  const liters = getProductLiters(product);
+  if (/^BOT|^BJS/.test(sku)) return true;
+  if (/botell/i.test(name)) return true;
+  return liters >= 10;
 }
 
 function formatPricePerLiter(product) {
