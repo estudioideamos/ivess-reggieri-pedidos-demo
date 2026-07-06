@@ -91,7 +91,7 @@ const REQUIRED_HEADERS = {
     'id_horario', 'etiqueta', 'activo',
   ],
   ProductosPrecios: [
-    'sku', 'producto', 'imagen_url', 'precio_lista_1', 'precio_lista_2', 'activo_lista_1', 'activo_lista_2', 'activo',
+    'sku', 'producto', 'imagen_url', 'precio_lista_1', 'precio_lista_2', 'precio_lista_3', 'activo_lista_1', 'activo_lista_2', 'activo',
   ],
   Pedidos: [
     'fecha_y_hora', 'nro_de_pedido', 'id_cliente', 'direccion', 'provincia', 'localidad', 'horario', 'items_json', 'total', 'comentario', 'estado',
@@ -107,6 +107,7 @@ function onOpen() {
       .addItem('Abrir manual', 'openManual_')
       .addSeparator()
       .addItem('Reparar dropdowns de Clientes', 'setupClientesDropdownsManual')
+      .addItem('Preparar lista 3 de precios', 'setupPriceList3Manual')
       .addItem('Ordenar pedidos existentes', 'sortPedidosManual')
       .addItem('Activar proteccion de estructura', 'setupCriticalStructureProtection_')
       .addItem('Limpiar columnas de pago (legacy)', 'removePedidosPaymentColumnsManual')
@@ -133,16 +134,18 @@ function handleClientesSheetEdit_(e) {
   const endRow = e.range.getLastRow();
   const startCol = e.range.getColumn();
   const endCol = e.range.getLastColumn();
-  const touchesProvincia = startCol <= cols.provinciaCol && endCol >= cols.provinciaCol;
-  const touchesLocalidad = startCol <= cols.localidadCol && endCol >= cols.localidadCol;
+  const touchesProvincia = cols.provinciaCol > 0 && startCol <= cols.provinciaCol && endCol >= cols.provinciaCol;
+  const touchesLocalidad = cols.localidadCol > 0 && startCol <= cols.localidadCol && endCol >= cols.localidadCol;
+  const touchesListaPrecio = cols.listaPrecioCol > 0 && startCol <= cols.listaPrecioCol && endCol >= cols.listaPrecioCol;
 
-  if (!touchesProvincia && !touchesLocalidad) return;
+  if (!touchesProvincia && !touchesLocalidad && !touchesListaPrecio) return;
 
   const provinciaRule = getClientesProvinciaRule_(sheet, cols.provinciaCol);
   const localidadTemplates = getClientesLocalidadRuleTemplates_(sheet, cols.provinciaCol, cols.localidadCol);
+  const listaPrecioRule = buildClientesListaPrecioRule_();
 
   for (let row = Math.max(startRow, 2); row <= endRow; row++) {
-    ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates);
+    ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates, listaPrecioRule);
     if (touchesProvincia && !touchesLocalidad) {
       sheet.getRange(row, cols.localidadCol).clearContent();
     }
@@ -459,6 +462,8 @@ function normalizeHeader_(h) {
     'precio lista 1': 'precio_lista_1',
     'precio_lista_2': 'precio_lista_2',
     'precio lista 2': 'precio_lista_2',
+    'precio_lista_3': 'precio_lista_3',
+    'precio lista 3': 'precio_lista_3',
     'activo_lista_1': 'activo_lista_1',
     'activo lista 1': 'activo_lista_1',
     'activo_lista_2': 'activo_lista_2',
@@ -530,14 +535,15 @@ function findClient_(query) {
 
 function getCatalog_(listaPrecio) {
   const productos = mapByHeaders_(getSheet_(SHEETS.PRODUCTOS));
-  const lista = Number(listaPrecio || 1) === 2 ? 2 : 1;
-  const precioCol = lista === 2 ? 'precio_lista_2' : 'precio_lista_1';
-  const activoPorListaCol = lista === 2 ? 'activo_lista_2' : 'activo_lista_1';
+  const listaRaw = Number(listaPrecio || 1);
+  const lista = [1, 2, 3].indexOf(listaRaw) !== -1 ? listaRaw : 1;
+  const precioCol = lista === 3 ? 'precio_lista_3' : (lista === 2 ? 'precio_lista_2' : 'precio_lista_1');
+  const activoPorListaCol = lista === 2 ? 'activo_lista_2' : (lista === 1 ? 'activo_lista_1' : '');
 
   const catalogo = productos
     .filter((p) => {
-      const activoLista = p[activoPorListaCol];
-      if (activoLista !== '' && activoLista !== null && activoLista !== undefined) {
+      const activoLista = activoPorListaCol ? p[activoPorListaCol] : '';
+      if (activoPorListaCol && activoLista !== '' && activoLista !== null && activoLista !== undefined) {
         return isEnabled_(activoLista);
       }
       return isEnabled_(p.activo);
@@ -626,6 +632,14 @@ function setupClientesDropdownsManual() {
   SpreadsheetApp.getActive().toast('Dropdowns de Clientes reparados.', 'Ivess', 4);
 }
 
+function setupPriceList3Manual() {
+  const productosSheet = getSheet_(SHEETS.PRODUCTOS);
+  const clientesSheet = getSheet_(SHEETS.CLIENTES);
+  ensureProductosPrecioLista3Column_(productosSheet);
+  ensureClientesDropdowns_(clientesSheet);
+  SpreadsheetApp.getActive().toast('Lista 3 preparada en ProductosPrecios y Clientes.', 'Ivess', 6);
+}
+
 function ensurePedidosDataTextStyle_(sheet) {
   const lastRow = sheet.getLastRow();
   const lastCol = sheet.getLastColumn();
@@ -648,27 +662,36 @@ function ensurePedidosEstadoDropdown_(sheet) {
 
 function ensureClientesDropdowns_(sheet) {
   const cols = getClientesDropdownColumns_(sheet);
-  if (cols.provinciaCol <= 0 || cols.localidadCol <= 0) return;
+  if (cols.provinciaCol <= 0 && cols.localidadCol <= 0 && cols.listaPrecioCol <= 0) return;
 
   const totalRows = Math.max(sheet.getLastRow() - 1, 1);
   const provinciaRule = getClientesProvinciaRule_(sheet, cols.provinciaCol);
   const localidadTemplates = getClientesLocalidadRuleTemplates_(sheet, cols.provinciaCol, cols.localidadCol);
+  const listaPrecioRule = buildClientesListaPrecioRule_();
 
-  if (provinciaRule) {
+  if (provinciaRule && cols.provinciaCol > 0) {
     sheet.getRange(2, cols.provinciaCol, totalRows, 1).setDataValidation(provinciaRule);
+  }
+  if (listaPrecioRule && cols.listaPrecioCol > 0) {
+    sheet.getRange(2, cols.listaPrecioCol, totalRows, 1).setDataValidation(listaPrecioRule);
   }
 
   for (let row = 2; row <= totalRows + 1; row++) {
-    ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates);
+    ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates, listaPrecioRule);
   }
 }
 
-function ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates) {
+function ensureClientesDropdownsAtRow_(sheet, row, cols, provinciaRule, localidadTemplates, listaPrecioRule) {
   if (row < 2) return;
 
-  if (provinciaRule) {
+  if (provinciaRule && cols.provinciaCol > 0) {
     sheet.getRange(row, cols.provinciaCol).setDataValidation(provinciaRule);
   }
+  if (listaPrecioRule && cols.listaPrecioCol > 0) {
+    sheet.getRange(row, cols.listaPrecioCol).setDataValidation(listaPrecioRule);
+  }
+
+  if (cols.provinciaCol <= 0 || cols.localidadCol <= 0) return;
 
   const provincia = normalize_(sheet.getRange(row, cols.provinciaCol).getDisplayValue());
   const localidadCell = sheet.getRange(row, cols.localidadCol);
@@ -687,7 +710,15 @@ function getClientesDropdownColumns_(sheet) {
   return {
     provinciaCol: headers.indexOf('provincia') + 1,
     localidadCol: headers.indexOf('localidad') + 1,
+    listaPrecioCol: headers.indexOf('lista_precio') + 1,
   };
+}
+
+function buildClientesListaPrecioRule_() {
+  return SpreadsheetApp.newDataValidation()
+    .requireValueInList(['1', '2', '3'], true)
+    .setAllowInvalid(false)
+    .build();
 }
 
 function getClientesProvinciaRule_(sheet, provinciaCol) {
@@ -821,6 +852,18 @@ function removePedidosPaymentColumnsManual() {
 
   cols.sort(function (a, b) { return b - a; }).forEach(function (col) { sh.deleteColumn(col); });
   SpreadsheetApp.getActive().toast('Columnas de pago legacy eliminadas: ' + cols.length, 'Ivess', 6);
+}
+
+function ensureProductosPrecioLista3Column_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 1);
+  const headersRaw = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  const headers = headersRaw.map(normalizeHeader_);
+  if (headers.indexOf('precio_lista_3') !== -1) return;
+
+  const precioLista2Col = headers.indexOf('precio_lista_2') + 1;
+  const insertAfter = precioLista2Col > 0 ? precioLista2Col : lastCol;
+  sheet.insertColumnAfter(insertAfter);
+  sheet.getRange(1, insertAfter + 1).setValue('Precio lista 3');
 }
 
 function buildOrderNumber_() {

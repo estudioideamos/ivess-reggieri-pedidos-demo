@@ -295,7 +295,8 @@ function renderLookupSuggestions(suggestions) {
 }
 
 async function getProductsForClient(cliente) {
-  const lista = Number(cliente?.lista_precio || 1) === 2 ? 2 : 1;
+  const listaRaw = Number(cliente?.lista_precio || 1);
+  const lista = [1, 2, 3].includes(listaRaw) ? listaRaw : 1;
   if (catalogCache.has(lista)) return catalogCache.get(lista);
   if (API_BASE_URL) {
     try {
@@ -311,7 +312,7 @@ async function getProductsForClient(cliente) {
   const fallback = MOCK_PRODUCTS.map((p) => ({
     sku: p.sku,
     nombre: p.nombre,
-    precio: lista === 2 ? Number(p.precio_lista_2 || 0) : Number(p.precio_lista_1 || 0),
+    precio: Number(p[`precio_lista_${lista}`] || 0),
     image_url: p.image_url || PRODUCT_IMAGE_BY_SKU[p.sku] || "",
   }));
   catalogCache.set(lista, fallback);
