@@ -37,10 +37,13 @@ Recomendado: una cuenta exclusiva de Ivess Reggieri para ser duena de:
 ### ProductosPrecios
 - codigo producto
 - producto
+- image url
 - precio lista 1
 - precio lista 2
+- precio lista 3
 - activo lista 1
 - activo lista 2
+- activo
 
 ### Pedidos
 - fecha y hora
@@ -70,6 +73,14 @@ Recomendado: una cuenta exclusiva de Ivess Reggieri para ser duena de:
 - Tipo: `Aplicacion web`
 - Ejecutar como: `yo`
 - Acceso: `cualquier persona`
+
+## 4.1) Preparar lista 3
+- actualizar `apps-script/Code.gs` en el proyecto real de Apps Script
+- guardar cambios
+- si el frontend usa el Web App productivo, volver a desplegar
+- en Google Sheets correr `Ayuda Ivess > Preparar lista 3 de precios`
+- verificar columna `Precio lista 3` en `ProductosPrecios`
+- verificar dropdown `1 / 2 / 3` en `Clientes > Lista de precios`
 
 ## 5) Conectar frontend
 Completar `API_BASE_URL` en `src/config.js` con la URL del Web App publicado.

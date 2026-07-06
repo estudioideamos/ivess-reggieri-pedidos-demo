@@ -29,6 +29,10 @@ Incluye:
 - `Pedidos`
 - `AltasAutomaticas`
 
+## Nota operativa
+- `Clientes > Lista de precios` trabaja con valores `1`, `2` y `3`.
+- `ProductosPrecios` debe incluir `Precio lista 1`, `Precio lista 2` y `Precio lista 3`.
+
 ## Frontend principal
 - `index.html`
 - `pedidos.html`

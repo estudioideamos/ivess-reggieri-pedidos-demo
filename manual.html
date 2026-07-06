@@ -416,7 +416,7 @@
         <tbody>
           <tr><td><code>Clientes</code></td><td>Base maestra de clientes y parámetros por cliente.</td><td>Operación</td></tr>
           <tr><td><code>Horarios</code></td><td>Catálogo de franjas horarias disponibles.</td><td>Operación</td></tr>
-          <tr><td><code>ProductosPrecios</code></td><td>Catálogo de productos, imágenes y precios por lista.</td><td>Operación</td></tr>
+          <tr><td><code>ProductosPrecios</code></td><td>Catálogo de productos, imágenes y precios por lista (1, 2 y 3).</td><td>Operación</td></tr>
           <tr><td><code>Pedidos</code></td><td>Registro automático de pedidos web para seguimiento operativo.</td><td>Sistema + control operativo</td></tr>
           <tr><td><code>AltasAutomaticas</code></td><td>Leads entrantes para gestión comercial telefónica.</td><td>Sistema + equipo comercial</td></tr>
         </tbody>
@@ -437,6 +437,19 @@
         <li><code>Horario 3</code></li>
         <li><code>Horario 4</code></li>
         <li><code>Comentarios</code></li>
+      </ul>
+
+      <h4>Columnas exactas de la hoja ProductosPrecios</h4>
+      <ul>
+        <li><code>Codigo producto</code></li>
+        <li><code>Producto</code></li>
+        <li><code>Image URL</code></li>
+        <li><code>Precio lista 1</code></li>
+        <li><code>Precio lista 2</code></li>
+        <li><code>Precio lista 3</code></li>
+        <li><code>Activo lista 1</code></li>
+        <li><code>Activo lista 2</code></li>
+        <li><code>Activo</code></li>
       </ul>
 
       <h4>Columnas exactas de la hoja Pedidos</h4>
@@ -462,7 +475,8 @@
         <li>Valores de activo según lista: <code>si</code> / <code>no</code>.</li>
         <li><code>Provincia</code> debe quedar como <code>PBA</code> o <code>CABA</code>.</li>
         <li>Horarios por cliente en columnas <code>Horario 1</code> a <code>Horario 4</code>.</li>
-        <li>En cargas masivas desde base externa, hoy se está usando la regla <code>PBA = Lista 2</code> y <code>CABA = Lista 1</code>.</li>
+        <li>La columna <code>Lista de precios</code> en <code>Clientes</code> debe usarse con valores <code>1</code>, <code>2</code> o <code>3</code>.</li>
+        <li>El front muestra automáticamente el precio según la lista asignada a cada cliente.</li>
         <li>En <code>Pedidos</code>, la columna <code>Estado</code> debe usarse siempre desde el dropdown.</li>
         <li>Los pedidos nuevos se insertan arriba de todo y quedan ordenados del más reciente al más antiguo.</li>
       </ul>
@@ -507,8 +521,17 @@
       <h4>5.2 Actualizar precios de productos</h4>
       <ol>
         <li>Ir a <code>ProductosPrecios</code>.</li>
-        <li>Actualizar precio lista 1 y/o lista 2.</li>
+        <li>Actualizar <code>Precio lista 1</code>, <code>Precio lista 2</code> y/o <code>Precio lista 3</code> según corresponda.</li>
         <li>Confirmar que el producto quede activo en la lista correcta.</li>
+      </ol>
+
+      <h4>5.2.1 Preparar la lista 3 de precios</h4>
+      <ol>
+        <li>Actualizar <code>Code.gs</code> en Google Apps Script con la versión vigente del repositorio.</li>
+        <li>Guardar cambios y, si corresponde, hacer un nuevo despliegue del Web App.</li>
+        <li>En Google Sheets, usar el menú <code>Ayuda Ivess &gt; Preparar lista 3 de precios</code>.</li>
+        <li>Verificar que en <code>ProductosPrecios</code> aparezca la columna <code>Precio lista 3</code>.</li>
+        <li>Verificar que en <code>Clientes</code>, la columna <code>Lista de precios</code> tenga dropdown con <code>1</code>, <code>2</code> y <code>3</code>.</li>
       </ol>
 
       <h4>5.3 Borrar un pedido cargado por error</h4>
