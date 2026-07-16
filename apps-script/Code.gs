@@ -1015,6 +1015,7 @@ function applyAltasSheetLayout_(sheet) {
 }
 
 function ensureAltasDropdowns_(sheet) {
+  const lastRow = sheet.getLastRow();
   const totalRows = Math.max(sheet.getMaxRows(), 2);
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(normalizeHeader_);
   const localidadCol = headers.indexOf('localidad') + 1;
@@ -1027,7 +1028,24 @@ function ensureAltasDropdowns_(sheet) {
       .requireValueInList(localidades, true)
       .setAllowInvalid(false)
       .build();
-    sheet.getRange(2, localidadCol, totalRows - 1, 1).setDataValidation(localidadRule);
+    const allowed = {};
+    localidades.forEach(function (loc) {
+      allowed[normalize_(loc)] = true;
+    });
+
+    if (lastRow >= 2) {
+      const existingRange = sheet.getRange(2, localidadCol, lastRow - 1, 1);
+      const existingValues = existingRange.getDisplayValues();
+      const validations = existingValues.map(function (row) {
+        const key = normalize_(row[0]);
+        return [!key || allowed[key] ? localidadRule : null];
+      });
+      existingRange.setDataValidations(validations);
+    }
+
+    if (totalRows > lastRow) {
+      sheet.getRange(lastRow + 1, localidadCol, totalRows - lastRow, 1).setDataValidation(localidadRule);
+    }
   }
 
   // Estado operativo para seguimiento telefonico.
