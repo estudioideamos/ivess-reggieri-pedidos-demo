@@ -1145,7 +1145,7 @@ function sanitizeAltasLocalidades_(localidades) {
     if (!raw) return;
     const key = normalize_(raw);
     if (!key || key === 'BUENOS AIRES') return;
-    const finalValue = key;
+    const finalValue = key === normalize_('CRUCESITA') ? 'CRUCECITA' : key;
     byKey[normalize_(finalValue)] = finalValue;
   });
   byKey[normalize_('CRUCECITA')] = 'CRUCECITA';

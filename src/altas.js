@@ -62,7 +62,8 @@ function sanitizeLocalidades(localidades) {
     if (!raw) return;
     const normalized = normalizeLocalidad(raw);
     if (!normalized || normalized === "BUENOS AIRES") return;
-    byKey.set(normalized, normalized);
+    const finalValue = normalized === normalizeLocalidad("CRUCESITA") ? "CRUCECITA" : normalized;
+    byKey.set(normalizeLocalidad(finalValue), finalValue);
   });
   byKey.set(normalizeLocalidad("CRUCECITA"), "CRUCECITA");
   byKey.set(normalizeLocalidad("TURDERA"), "TURDERA");
