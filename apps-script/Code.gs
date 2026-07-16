@@ -1126,6 +1126,13 @@ function getLocalidadesFromClientes_() {
     }
   }
 
+  // En altas automaticas siempre mostramos todos los barrios de CABA,
+  // aunque todavia no existan clientes cargados en alguno de ellos.
+  CABA_BARRIOS.forEach(function (barrio) {
+    const key = normalize_(barrio);
+    if (!unique[key]) unique[key] = barrio;
+  });
+
   const sanitized = sanitizeAltasLocalidades_(Object.keys(unique).map(function (k) { return unique[k]; }));
   return sanitized
     .sort(function (a, b) { return a.localeCompare(b, 'es'); });
