@@ -571,9 +571,6 @@ function createOrder_(payload) {
   }
   const itemsPretty = formatItemsForSheet_(itemsRaw);
   const total = Number(payload.total || 0);
-  if (!(total > 0)) {
-    return { ok: false, error: 'El total del pedido debe ser mayor a cero' };
-  }
 
   const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(normalizeHeader_);
   const row = headers.map(function (key) {

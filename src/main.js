@@ -424,10 +424,6 @@ async function submitOrder() {
     return;
   }
   const totalNow = calcTotal();
-  if (!(totalNow > 0)) {
-    alert("El total del pedido debe ser mayor a cero.");
-    return;
-  }
   const payload = {
     id_cliente: state.cliente.id_cliente,
     direccion: state.cliente.direccion,

@@ -25,16 +25,6 @@
       letter-spacing: 0.3px;
     }
 
-    .phone-row {
-      display: grid;
-      grid-template-columns: minmax(140px, 42%) minmax(0, 1fr);
-      gap: 10px;
-    }
-
-    .phone-row .input {
-      min-width: 0;
-    }
-
     .alta-note {
       color: #bfe4ff;
       font-size: 12px;
@@ -77,12 +67,6 @@
       margin: 0 auto;
     }
 
-    @media (max-width: 520px) {
-      .phone-row {
-        grid-template-columns: minmax(132px, 44%) minmax(0, 1fr);
-        gap: 8px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -108,12 +92,9 @@
             <option value="">Seleccioná tu localidad</option>
           </select>
 
-          <label>Teléfono celular</label>
-          <div class="phone-row">
-            <input id="alta-cod-area" class="input" type="tel" inputmode="numeric" autocomplete="tel-area-code" placeholder="Cod. de área" />
-            <input id="alta-celular" class="input" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="Número celular" />
-          </div>
-          <p class="alta-note">Ingresalo sin 0 ni 15. Ej: 11 + 45551234.</p>
+          <label for="alta-telefono">Teléfono celular</label>
+          <input id="alta-telefono" class="input" type="tel" inputmode="numeric" autocomplete="tel" placeholder="Ej: 1145551234" />
+          <p class="alta-note">Ingresalo completo, sin 0 ni 15. Ej: 1145551234.</p>
 
           <label for="alta-comentario">Comentario</label>
           <textarea id="alta-comentario" class="input" rows="3" placeholder="Ej: Portón gris, timbre de abajo, horario preferido, etc."></textarea>
@@ -133,6 +114,6 @@
       <footer class="dev-credit">DESARROLLO DE <strong><a href="https://ideamos.com.ar" target="_blank" rel="noopener noreferrer">ESTUDIO IDEAMOS</a></strong> © 2026</footer>
     </main>
   </div>
-  <script type="module" src="./src/altas.js?v=20260716-5"></script>
+  <script type="module" src="./src/altas.js?v=20260716-6"></script>
 </body>
 </html>

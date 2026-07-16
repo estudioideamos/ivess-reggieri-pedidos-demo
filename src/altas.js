@@ -5,14 +5,24 @@ const submitBtn = document.getElementById("alta-submit");
 const feedback = document.getElementById("alta-feedback");
 const direccionInput = document.getElementById("alta-direccion");
 const localidadInput = document.getElementById("alta-localidad");
-const codAreaInput = document.getElementById("alta-cod-area");
-const celularInput = document.getElementById("alta-celular");
+const telefonoInput = document.getElementById("alta-telefono");
 const comentarioInput = document.getElementById("alta-comentario");
 let allowedLocalidades = [];
 let submitLockedAfterSuccess = false;
 
 function onlyDigits(value) {
   return String(value || "").replace(/\D+/g, "");
+}
+
+function splitPhoneParts(value) {
+  const digits = onlyDigits(value);
+  if (!digits) return { codigo_area: "", celular: "", telefono_completo: "" };
+  if (digits.length <= 8) {
+    return { codigo_area: "", celular: digits, telefono_completo: digits };
+  }
+  const codigo_area = digits.slice(0, digits.length - 8);
+  const celular = digits.slice(-8);
+  return { codigo_area, celular, telefono_completo: digits };
 }
 
 function setFeedback(message, isError) {
@@ -52,8 +62,7 @@ function sanitizeLocalidades(localidades) {
     if (!raw) return;
     const normalized = normalizeLocalidad(raw);
     if (!normalized || normalized === "BUENOS AIRES") return;
-    const finalValue = normalized;
-    byKey.set(normalizeLocalidad(finalValue), finalValue);
+    byKey.set(normalized, normalized);
   });
   byKey.set(normalizeLocalidad("CRUCECITA"), "CRUCECITA");
   byKey.set(normalizeLocalidad("TURDERA"), "TURDERA");
@@ -90,15 +99,9 @@ async function preloadLocalidades() {
   }
 }
 
-if (codAreaInput) {
-  codAreaInput.addEventListener("input", () => {
-    codAreaInput.value = onlyDigits(codAreaInput.value).slice(0, 5);
-  });
-}
-
-if (celularInput) {
-  celularInput.addEventListener("input", () => {
-    celularInput.value = onlyDigits(celularInput.value).slice(0, 10);
+if (telefonoInput) {
+  telefonoInput.addEventListener("input", () => {
+    telefonoInput.value = onlyDigits(telefonoInput.value).slice(0, 10);
   });
 }
 
@@ -124,12 +127,17 @@ if (form) {
 
     const direccion = String(direccionInput?.value || "").trim();
     const localidad = String(localidadInput?.value || "").trim();
-    const codigo_area = onlyDigits(codAreaInput?.value || "");
-    const celular = onlyDigits(celularInput?.value || "");
+    const telefono = onlyDigits(telefonoInput?.value || "");
     const comentario = String(comentarioInput?.value || "").trim();
+    const { codigo_area, celular } = splitPhoneParts(telefono);
 
-    if (!direccion || !localidad || !codigo_area || !celular) {
+    if (!direccion || !localidad || !telefono) {
       setFeedback("Completá todos los campos para continuar.", true);
+      return;
+    }
+
+    if (telefono.length < 10) {
+      setFeedback("Ingresá el teléfono completo, incluyendo código de área, sin 0 ni 15.", true);
       return;
     }
 
@@ -151,7 +159,7 @@ if (form) {
       const result = await api("createLead", { direccion, localidad, codigo_area, celular, comentario });
       if (!result?.ok) throw new Error(result?.error || "No se pudo guardar");
       form.reset();
-      setFeedback("Solicitud enviada con exito. Ya recibimos tus datos y te vamos a contactar a la brevedad. Si queres enviar otra solicitud, primero completá nuevamente el formulario.", false);
+      setFeedback("Solicitud enviada con éxito. Ya recibimos tus datos y te vamos a contactar a la brevedad. Si querés enviar otra solicitud, primero completá nuevamente el formulario.", false);
       lockSubmitAfterSuccess();
     } catch (_err) {
       setFeedback("No pudimos enviar la solicitud. Probá de nuevo en unos minutos.", true);
