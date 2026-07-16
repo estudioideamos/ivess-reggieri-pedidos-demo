@@ -42,6 +42,36 @@
       font-weight: 600;
     }
 
+    .alta-feedback {
+      display: none;
+      margin-top: 4px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+      font-family: "Montserrat", "Manrope", sans-serif;
+      font-size: 13px;
+      border: 1px solid transparent;
+    }
+
+    .alta-feedback.is-visible {
+      display: block;
+    }
+
+    .alta-feedback.is-error {
+      color: #ffe4e4;
+      background: rgba(169, 36, 36, 0.24);
+      border-color: rgba(255, 162, 162, 0.42);
+    }
+
+    .alta-feedback.is-success {
+      color: #e7fff1;
+      background: rgba(26, 132, 74, 0.24);
+      border-color: rgba(152, 255, 197, 0.42);
+      font-size: 14px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
     .alta-content {
       max-width: 760px;
       margin: 0 auto;
@@ -91,7 +121,7 @@
           <div class="actions">
             <button id="alta-submit" type="submit" style="width:100%">Enviar solicitud</button>
           </div>
-          <p id="alta-feedback" class="alta-note" style="margin-top:0"></p>
+          <p id="alta-feedback" class="alta-feedback" style="margin-top:0"></p>
         </form>
 
         <a class="advisor-link" href="https://wa.me/5491133053315?text=Hola%20Ivess%20Reggieri%2C%20quiero%20darme%20de%20alta%20como%20cliente..." target="_blank" rel="noopener noreferrer"><img src="./assets/whatsapp.svg" alt="" class="advisor-link-icon" /> Hablar con un asesor</a>
@@ -103,6 +133,6 @@
       <footer class="dev-credit">DESARROLLO DE <strong><a href="https://ideamos.com.ar" target="_blank" rel="noopener noreferrer">ESTUDIO IDEAMOS</a></strong> © 2026</footer>
     </main>
   </div>
-  <script type="module" src="./src/altas.js?v=20260716-3"></script>
+  <script type="module" src="./src/altas.js?v=20260716-4"></script>
 </body>
 </html>

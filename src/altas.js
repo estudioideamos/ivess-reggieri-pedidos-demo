@@ -9,6 +9,7 @@ const codAreaInput = document.getElementById("alta-cod-area");
 const celularInput = document.getElementById("alta-celular");
 const comentarioInput = document.getElementById("alta-comentario");
 let allowedLocalidades = [];
+let submitLockedAfterSuccess = false;
 
 function onlyDigits(value) {
   return String(value || "").replace(/\D+/g, "");
@@ -17,7 +18,23 @@ function onlyDigits(value) {
 function setFeedback(message, isError) {
   if (!feedback) return;
   feedback.textContent = message || "";
-  feedback.style.color = isError ? "#ffd2d2" : "#bfffd8";
+  feedback.classList.toggle("is-visible", Boolean(message));
+  feedback.classList.toggle("is-error", Boolean(message) && Boolean(isError));
+  feedback.classList.toggle("is-success", Boolean(message) && !isError);
+}
+
+function resetSubmitState() {
+  if (!submitBtn) return;
+  submitLockedAfterSuccess = false;
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Enviar solicitud";
+}
+
+function lockSubmitAfterSuccess() {
+  if (!submitBtn) return;
+  submitLockedAfterSuccess = true;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Solicitud enviada";
 }
 
 function normalizeLocalidad(value) {
@@ -86,6 +103,21 @@ if (celularInput) {
 }
 
 if (form) {
+  form.querySelectorAll("input, select, textarea").forEach((field) => {
+    field.addEventListener("input", () => {
+      if (!submitLockedAfterSuccess) return;
+      setFeedback("", false);
+      resetSubmitState();
+    });
+    field.addEventListener("change", () => {
+      if (!submitLockedAfterSuccess) return;
+      setFeedback("", false);
+      resetSubmitState();
+    });
+  });
+}
+
+if (form) {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     setFeedback("", false);
@@ -119,12 +151,15 @@ if (form) {
       const result = await api("createLead", { direccion, localidad, codigo_area, celular, comentario });
       if (!result?.ok) throw new Error(result?.error || "No se pudo guardar");
       form.reset();
-      setFeedback("Solicitud enviada. Te vamos a contactar a la brevedad.", false);
+      setFeedback("Solicitud enviada con exito. Ya recibimos tus datos y te vamos a contactar a la brevedad. Si queres enviar otra solicitud, primero completá nuevamente el formulario.", false);
+      lockSubmitAfterSuccess();
     } catch (_err) {
       setFeedback("No pudimos enviar la solicitud. Probá de nuevo en unos minutos.", true);
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = prev;
+      if (!submitLockedAfterSuccess) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = prev;
+      }
     }
   });
 }
