@@ -1028,6 +1028,10 @@ function ensureAltasDropdowns_(sheet) {
       .requireValueInList(localidades, true)
       .setAllowInvalid(false)
       .build();
+    const localidadLegacyRule = SpreadsheetApp.newDataValidation()
+      .requireValueInList(localidades, true)
+      .setAllowInvalid(true)
+      .build();
     const allowed = {};
     localidades.forEach(function (loc) {
       allowed[normalize_(loc)] = true;
@@ -1038,7 +1042,7 @@ function ensureAltasDropdowns_(sheet) {
       const existingValues = existingRange.getDisplayValues();
       const validations = existingValues.map(function (row) {
         const key = normalize_(row[0]);
-        return [!key || allowed[key] ? localidadRule : null];
+        return [!key || allowed[key] ? localidadRule : localidadLegacyRule];
       });
       existingRange.setDataValidations(validations);
     }
