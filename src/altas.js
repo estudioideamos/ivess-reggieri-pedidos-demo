@@ -72,7 +72,7 @@ function sanitizeLocalidades(localidades) {
 function renderLocalidadesOptions(localidades) {
   if (!localidadInput) return;
   localidadInput.innerHTML = [
-    '<option value="">Seleccioná tu localidad</option>',
+    '<option value="">Seleccion\u00e1 tu localidad</option>',
     ...localidades.map((loc) => `<option value="${String(loc).replace(/"/g, "&quot;")}">${loc}</option>`),
   ].join("");
 }
@@ -95,7 +95,7 @@ async function preloadLocalidades() {
     allowedLocalidades = localidades.map((loc) => normalizeLocalidad(loc));
     renderLocalidadesOptions(localidades);
   } catch (_err) {
-    setFeedback("No pudimos cargar las localidades. Probá de nuevo en unos minutos.", true);
+    setFeedback("No pudimos cargar las localidades. Prob\u00e1 de nuevo en unos minutos.", true);
   }
 }
 
@@ -132,17 +132,17 @@ if (form) {
     const { codigo_area, celular } = splitPhoneParts(telefono);
 
     if (!direccion || !localidad || !telefono) {
-      setFeedback("Completá todos los campos para continuar.", true);
+      setFeedback("Complet\u00e1 todos los campos para continuar.", true);
       return;
     }
 
     if (telefono.length < 10) {
-      setFeedback("Ingresá el teléfono completo, incluyendo código de área, sin 0 ni 15.", true);
+      setFeedback("Ingres\u00e1 el tel\u00e9fono completo, incluyendo c\u00f3digo de \u00e1rea, sin 0 ni 15.", true);
       return;
     }
 
     if (allowedLocalidades.length && !allowedLocalidades.includes(normalizeLocalidad(localidad))) {
-      setFeedback("Seleccioná una localidad válida del menú desplegable.", true);
+      setFeedback("Seleccion\u00e1 una localidad v\u00e1lida del men\u00fa desplegable.", true);
       return;
     }
 
@@ -159,10 +159,10 @@ if (form) {
       const result = await api("createLead", { direccion, localidad, codigo_area, celular, comentario });
       if (!result?.ok) throw new Error(result?.error || "No se pudo guardar");
       form.reset();
-      setFeedback("Solicitud enviada con éxito. Ya recibimos tus datos y te vamos a contactar a la brevedad. Si querés enviar otra solicitud, primero completá nuevamente el formulario.", false);
+      setFeedback("Solicitud enviada con \u00e9xito. Ya recibimos tus datos y te vamos a contactar a la brevedad.", false);
       lockSubmitAfterSuccess();
     } catch (_err) {
-      setFeedback("No pudimos enviar la solicitud. Probá de nuevo en unos minutos.", true);
+      setFeedback("No pudimos enviar la solicitud. Prob\u00e1 de nuevo en unos minutos.", true);
     } finally {
       if (!submitLockedAfterSuccess) {
         submitBtn.disabled = false;
