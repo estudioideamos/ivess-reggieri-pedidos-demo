@@ -912,7 +912,7 @@ function getLocalidades_() {
 
 function createLead_(payload) {
   const direccion = String(payload.direccion || '').trim().toUpperCase();
-  const localidad = String(payload.localidad || '').trim();
+  const localidad = String(payload.localidad || '').trim().toUpperCase();
   const codigoArea = String(payload.codigo_area || '').trim();
   const celular = String(payload.celular || '').trim();
   const comentario = String(payload.comentario || '').trim();
@@ -1105,11 +1105,11 @@ function sanitizeAltasLocalidades_(localidades) {
     if (!raw) return;
     const key = normalize_(raw);
     if (!key || key === 'BUENOS AIRES') return;
-    const finalValue = key === 'CRUZECITA' ? 'Crucecita' : raw;
+    const finalValue = key;
     byKey[normalize_(finalValue)] = finalValue;
   });
-  byKey[normalize_('Crucecita')] = 'Crucecita';
-  byKey[normalize_('Turdera')] = 'Turdera';
+  byKey[normalize_('CRUCECITA')] = 'CRUCECITA';
+  byKey[normalize_('TURDERA')] = 'TURDERA';
   return Object.keys(byKey).map(function (k) { return byKey[k]; });
 }
 

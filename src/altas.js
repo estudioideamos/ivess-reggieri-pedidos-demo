@@ -52,11 +52,11 @@ function sanitizeLocalidades(localidades) {
     if (!raw) return;
     const normalized = normalizeLocalidad(raw);
     if (!normalized || normalized === "BUENOS AIRES") return;
-    const finalValue = normalized === "CRUZECITA" ? "Crucecita" : raw;
+    const finalValue = normalized;
     byKey.set(normalizeLocalidad(finalValue), finalValue);
   });
-  byKey.set(normalizeLocalidad("Crucecita"), "Crucecita");
-  byKey.set(normalizeLocalidad("Turdera"), "Turdera");
+  byKey.set(normalizeLocalidad("CRUCECITA"), "CRUCECITA");
+  byKey.set(normalizeLocalidad("TURDERA"), "TURDERA");
   return Array.from(byKey.values()).sort((a, b) => a.localeCompare(b, "es"));
 }
 
