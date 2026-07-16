@@ -74,8 +74,9 @@
           <input id="alta-direccion" class="input" type="text" autocomplete="street-address" placeholder="Ej: Av. Corrientes 1234" />
 
           <label for="alta-localidad">Localidad</label>
-          <input id="alta-localidad" class="input" type="text" autocomplete="address-level2" placeholder="Ej: Ramos Mejía" list="alta-localidades-list" />
-          <datalist id="alta-localidades-list"></datalist>
+          <select id="alta-localidad" class="input" autocomplete="address-level2">
+            <option value="">Seleccioná tu localidad</option>
+          </select>
 
           <label>Teléfono celular</label>
           <div class="phone-row">
@@ -99,6 +100,6 @@
       <footer class="dev-credit">DESARROLLO DE <strong><a href="https://ideamos.com.ar" target="_blank" rel="noopener noreferrer">ESTUDIO IDEAMOS</a></strong> © 2026</footer>
     </main>
   </div>
-  <script type="module" src="./src/altas.js?v=20260526-1"></script>
+  <script type="module" src="./src/altas.js?v=20260716-2"></script>
 </body>
 </html>

@@ -5,9 +5,9 @@ const submitBtn = document.getElementById("alta-submit");
 const feedback = document.getElementById("alta-feedback");
 const direccionInput = document.getElementById("alta-direccion");
 const localidadInput = document.getElementById("alta-localidad");
-const localidadesList = document.getElementById("alta-localidades-list");
 const codAreaInput = document.getElementById("alta-cod-area");
 const celularInput = document.getElementById("alta-celular");
+let allowedLocalidades = [];
 
 function onlyDigits(value) {
   return String(value || "").replace(/\D+/g, "");
@@ -17,6 +17,37 @@ function setFeedback(message, isError) {
   if (!feedback) return;
   feedback.textContent = message || "";
   feedback.style.color = isError ? "#ffd2d2" : "#bfffd8";
+}
+
+function normalizeLocalidad(value) {
+  return String(value || "")
+    .trim()
+    .toUpperCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function sanitizeLocalidades(localidades) {
+  const byKey = new Map();
+  (localidades || []).forEach((item) => {
+    const raw = String(item || "").trim();
+    if (!raw) return;
+    const normalized = normalizeLocalidad(raw);
+    if (!normalized || normalized === "BUENOS AIRES") return;
+    const finalValue = normalized === "CRUZECITA" ? "Crucecita" : raw;
+    byKey.set(normalizeLocalidad(finalValue), finalValue);
+  });
+  byKey.set(normalizeLocalidad("Crucecita"), "Crucecita");
+  byKey.set(normalizeLocalidad("Turdera"), "Turdera");
+  return Array.from(byKey.values()).sort((a, b) => a.localeCompare(b, "es"));
+}
+
+function renderLocalidadesOptions(localidades) {
+  if (!localidadInput) return;
+  localidadInput.innerHTML = [
+    '<option value="">Seleccioná tu localidad</option>',
+    ...localidades.map((loc) => `<option value="${String(loc).replace(/"/g, "&quot;")}">${loc}</option>`),
+  ].join("");
 }
 
 async function api(path, payload) {
@@ -30,16 +61,14 @@ async function api(path, payload) {
 }
 
 async function preloadLocalidades() {
-  if (!API_BASE_URL || !localidadesList) return;
+  if (!API_BASE_URL || !localidadInput) return;
   try {
     const response = await api("getLocalidades", {});
-    const localidades = Array.isArray(response?.localidades) ? response.localidades : [];
-    localidadesList.innerHTML = localidades
-      .filter((v) => String(v || "").trim())
-      .map((loc) => `<option value="${String(loc).replace(/"/g, "&quot;")}"></option>`)
-      .join("");
+    const localidades = sanitizeLocalidades(Array.isArray(response?.localidades) ? response.localidades : []);
+    allowedLocalidades = localidades.map((loc) => normalizeLocalidad(loc));
+    renderLocalidadesOptions(localidades);
   } catch (_err) {
-    // Si falla, el usuario puede seguir escribiendo manualmente.
+    setFeedback("No pudimos cargar las localidades. Probá de nuevo en unos minutos.", true);
   }
 }
 
@@ -67,6 +96,11 @@ if (form) {
 
     if (!direccion || !localidad || !codigo_area || !celular) {
       setFeedback("Completá todos los campos para continuar.", true);
+      return;
+    }
+
+    if (allowedLocalidades.length && !allowedLocalidades.includes(normalizeLocalidad(localidad))) {
+      setFeedback("Seleccioná una localidad válida del menú desplegable.", true);
       return;
     }
 

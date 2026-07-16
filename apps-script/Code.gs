@@ -1072,10 +1072,26 @@ function getLocalidadesFromClientes_() {
     }
   }
 
-  return Object.keys(unique)
-    .map(function (k) { return unique[k]; })
+  const sanitized = sanitizeAltasLocalidades_(Object.keys(unique).map(function (k) { return unique[k]; }));
+  return sanitized
     .sort(function (a, b) { return a.localeCompare(b, 'es'); });
 }
+
+function sanitizeAltasLocalidades_(localidades) {
+  const byKey = {};
+  (localidades || []).forEach(function (item) {
+    const raw = String(item || '').trim();
+    if (!raw) return;
+    const key = normalize_(raw);
+    if (!key || key === 'BUENOS AIRES') return;
+    const finalValue = key === 'CRUZECITA' ? 'Crucecita' : raw;
+    byKey[normalize_(finalValue)] = finalValue;
+  });
+  byKey[normalize_('Crucecita')] = 'Crucecita';
+  byKey[normalize_('Turdera')] = 'Turdera';
+  return Object.keys(byKey).map(function (k) { return byKey[k]; });
+}
+
 function jsonResponse(data, statusCode) {
   const out = ContentService.createTextOutput(JSON.stringify(data));
   out.setMimeType(ContentService.MimeType.JSON);
