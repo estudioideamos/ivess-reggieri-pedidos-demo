@@ -107,6 +107,7 @@ function onOpen() {
       .addItem('Abrir manual', 'openManual_')
       .addSeparator()
       .addItem('Reparar dropdowns de Clientes', 'setupClientesDropdownsManual')
+      .addItem('Reparar AltasAutomaticas', 'setupAltasAutomaticasManual')
       .addItem('Preparar lista 3 de precios', 'setupPriceList3Manual')
       .addItem('Ordenar pedidos existentes', 'sortPedidosManual')
       .addItem('Activar proteccion de estructura', 'setupCriticalStructureProtection_')
@@ -972,6 +973,8 @@ function setupAltasAutomaticasManual() {
   const sh = getOrCreateAltasSheet_();
   applyAltasSheetLayout_(sh);
   ensureAltasDropdowns_(sh);
+  normalizeExistingAltasLocalidades_(sh);
+  SpreadsheetApp.getActive().toast('AltasAutomaticas reparada: comentario presente y localidades en mayusculas.', 'Ivess', 6);
 }
 
 function applyAltasSheetLayout_(sheet) {
@@ -1047,6 +1050,21 @@ function ensureAltasComentarioColumn_(sheet) {
   const insertAfter = telefonoCol > 0 ? telefonoCol : lastCol;
   sheet.insertColumnAfter(insertAfter);
   sheet.getRange(1, insertAfter + 1).setValue('Comentario');
+}
+
+function normalizeExistingAltasLocalidades_(sheet) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return;
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const localidadCol = headers.indexOf('localidad') + 1;
+  if (localidadCol <= 0) return;
+
+  const range = sheet.getRange(2, localidadCol, lastRow - 1, 1);
+  const values = range.getValues().map(function (row) {
+    return [String(row[0] || '').trim().toUpperCase()];
+  });
+  range.setValues(values);
 }
 
 function getLocalidadesFromClientes_() {
