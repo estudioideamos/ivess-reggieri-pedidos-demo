@@ -97,7 +97,7 @@ const REQUIRED_HEADERS = {
     'fecha_y_hora', 'nro_de_pedido', 'id_cliente', 'direccion', 'provincia', 'localidad', 'horario', 'items_json', 'total', 'comentario', 'estado',
   ],
   AltasAutomaticas: [
-    'fecha_y_hora', 'direccion', 'localidad', 'codigo_area', 'celular', 'telefono_completo', 'origen', 'estado',
+    'fecha_y_hora', 'direccion', 'localidad', 'codigo_area', 'celular', 'telefono_completo', 'comentario', 'origen', 'estado',
   ],
 };
 
@@ -915,6 +915,7 @@ function createLead_(payload) {
   const localidad = String(payload.localidad || '').trim();
   const codigoArea = String(payload.codigo_area || '').trim();
   const celular = String(payload.celular || '').trim();
+  const comentario = String(payload.comentario || '').trim();
 
   if (!direccion) return { ok: false, error: 'Falta direccion' };
   if (!localidad) return { ok: false, error: 'Falta localidad' };
@@ -925,17 +926,21 @@ function createLead_(payload) {
   applyAltasSheetLayout_(sh);
   ensureAltasDropdowns_(sh);
   const telefonoCompleto = codigoArea + celular;
+  const headers = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].map(normalizeHeader_);
+  const row = headers.map(function (key) {
+    if (key === 'fecha_y_hora' || key === 'fecha') return new Date();
+    if (key === 'direccion') return direccion;
+    if (key === 'localidad') return localidad;
+    if (key === 'codigo_area') return codigoArea;
+    if (key === 'celular') return celular;
+    if (key === 'telefono_completo') return telefonoCompleto;
+    if (key === 'comentario') return comentario;
+    if (key === 'origen') return 'WEB_ALTAS';
+    if (key === 'estado') return 'NUEVO';
+    return '';
+  });
 
-  sh.appendRow([
-    new Date(),
-    direccion,
-    localidad,
-    codigoArea,
-    celular,
-    telefonoCompleto,
-    'WEB_ALTAS',
-    'NUEVO',
-  ]);
+  sh.appendRow(row);
 
   return { ok: true };
 }
@@ -955,10 +960,13 @@ function getOrCreateAltasSheet_() {
       'Codigo area',
       'Celular',
       'Telefono completo',
+      'Comentario',
       'Origen',
       'Estado',
     ]);
   }
+
+  ensureAltasComentarioColumn_(sh);
 
   return sh;
 }
@@ -970,7 +978,7 @@ function setupAltasAutomaticasManual() {
 }
 
 function applyAltasSheetLayout_(sheet) {
-  const lastCol = Math.max(sheet.getLastColumn(), 8);
+  const lastCol = Math.max(sheet.getLastColumn(), 9);
 
   sheet.setFrozenRows(1);
   if (!sheet.getFilter()) {
@@ -991,8 +999,9 @@ function applyAltasSheetLayout_(sheet) {
   sheet.setColumnWidth(4, 120); // Codigo area
   sheet.setColumnWidth(5, 140); // Celular
   sheet.setColumnWidth(6, 160); // Telefono completo
-  sheet.setColumnWidth(7, 130); // Origen
-  sheet.setColumnWidth(8, 180); // Estado
+  sheet.setColumnWidth(7, 280); // Comentario
+  sheet.setColumnWidth(8, 130); // Origen
+  sheet.setColumnWidth(9, 180); // Estado
 
   // Intercalado de colores para lectura (blanco + celeste suave).
   const bodyRows = Math.max(sheet.getMaxRows() - 1, 1);
@@ -1029,6 +1038,18 @@ function ensureAltasDropdowns_(sheet) {
   if (estadoCol > 0) {
     sheet.getRange(2, estadoCol, totalRows - 1, 1).setDataValidation(estadoRule);
   }
+}
+
+function ensureAltasComentarioColumn_(sheet) {
+  const lastCol = Math.max(sheet.getLastColumn(), 1);
+  const headersRaw = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+  const headers = headersRaw.map(normalizeHeader_);
+  if (headers.indexOf('comentario') !== -1) return;
+
+  const telefonoCol = headers.indexOf('telefono_completo') + 1;
+  const insertAfter = telefonoCol > 0 ? telefonoCol : lastCol;
+  sheet.insertColumnAfter(insertAfter);
+  sheet.getRange(1, insertAfter + 1).setValue('Comentario');
 }
 
 function getLocalidadesFromClientes_() {

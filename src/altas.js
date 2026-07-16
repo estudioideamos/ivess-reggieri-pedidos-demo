@@ -7,6 +7,7 @@ const direccionInput = document.getElementById("alta-direccion");
 const localidadInput = document.getElementById("alta-localidad");
 const codAreaInput = document.getElementById("alta-cod-area");
 const celularInput = document.getElementById("alta-celular");
+const comentarioInput = document.getElementById("alta-comentario");
 let allowedLocalidades = [];
 
 function onlyDigits(value) {
@@ -93,6 +94,7 @@ if (form) {
     const localidad = String(localidadInput?.value || "").trim();
     const codigo_area = onlyDigits(codAreaInput?.value || "");
     const celular = onlyDigits(celularInput?.value || "");
+    const comentario = String(comentarioInput?.value || "").trim();
 
     if (!direccion || !localidad || !codigo_area || !celular) {
       setFeedback("Completá todos los campos para continuar.", true);
@@ -114,7 +116,7 @@ if (form) {
     submitBtn.textContent = "Enviando...";
 
     try {
-      const result = await api("createLead", { direccion, localidad, codigo_area, celular });
+      const result = await api("createLead", { direccion, localidad, codigo_area, celular, comentario });
       if (!result?.ok) throw new Error(result?.error || "No se pudo guardar");
       form.reset();
       setFeedback("Solicitud enviada. Te vamos a contactar a la brevedad.", false);
